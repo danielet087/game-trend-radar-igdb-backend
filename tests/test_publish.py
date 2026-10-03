@@ -6,7 +6,7 @@ import pytest
 import requests
 
 from nintendo_backend.catalog import build_documents
-from scripts.publish import ALLOWED_PATHS, BACKEND, FILES, FRONTEND, GitHub, PublishError, main, publish, validate_bundle
+from scripts.publish import ALLOWED_PATHS, BACKEND, FILES, FRONTEND, GitHub, PublishError, _serialize, main, publish, validate_bundle
 
 NOW = datetime(2026, 10, 3, 16, 15, tzinfo=timezone.utc)
 CHECKED = "2026-10-03T16:05:00Z"
@@ -68,6 +68,32 @@ def test_frontend_permission_failure_cannot_publish_backend_or_report_complete()
     with pytest.raises(PublishError):
         publish(bundle(), client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
     assert not any(call[0] == "commit" for call in client.calls)
+
+
+def test_backend_read_access_with_denied_contents_write_uses_same_durable_fallback():
+    class WriteDenied(RecordingClient):
+        def commit_files(self, repo, files, message):
+            if repo == BACKEND:
+                raise PublishError("github_http_error", 403)
+            return super().commit_files(repo, files, message)
+    client = WriteDenied()
+    result = publish(bundle(), client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert result["backend_mirror"] == "blocked" and result["complete"] is True
+    assert any(call[:2] == ("commit", FRONTEND) for call in client.calls)
+
+
+def test_frontend_write_denial_raises_after_preserving_only_prepared_backend_state():
+    class WriteDenied(RecordingClient):
+        def commit_files(self, repo, files, message):
+            if repo == FRONTEND:
+                raise PublishError("github_http_error", 403)
+            return super().commit_files(repo, files, message)
+    client = WriteDenied()
+    with pytest.raises(PublishError):
+        publish(bundle(), client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    commits = [call for call in client.calls if call[0] == "commit"]
+    assert len(commits) == 1 and commits[0][1] == BACKEND
+    assert commits[0][2]["data/nintendo_refresh_status.json"]["complete"] is False
 
 
 @pytest.mark.parametrize("mutation", [
@@ -161,6 +187,40 @@ def test_repository_whitelist_never_sends_credentials_to_another_host():
     with pytest.raises(PublishError, match="unapproved_repository"):
         client.request("GET", "/repos/unapproved/repository")
     assert session.requests == []
+
+
+def test_dense_candidate_ledger_compacts_transport_without_losing_raw_evidence():
+    data = bundle()
+    master = data["nintendo_master.json"]
+    # Real IGDB references contain many nested records. This fixture checks the
+    # request budget and round trip, including non-ASCII and quoted evidence.
+    master["games"]["igdb:12345"]["raw"]["age_ratings"] = [
+        {"id": index, "rating_content_descriptions": [
+            {"description": "繁體中文 \"證據\"", "description_type": {"id": sub, "name": "Mild fantasy violence"}}
+            for sub in range(5)]} for index in range(100)]
+    files = _serialize(data)
+    compact = files["data/nintendo_master.json"]
+    assert json.loads(compact) == master
+    pretty = json.dumps(master, ensure_ascii=False, indent=2) + "\n"
+    compact_request = json.dumps({"content": compact, "encoding": "utf-8"}).encode()
+    pretty_request = json.dumps({"content": pretty, "encoding": "utf-8"}).encode()
+    assert len(compact_request) < len(pretty_request) * 0.65
+    assert files["data/nintendo_upcoming.json"].count("\n") > 2
+
+
+@pytest.mark.parametrize("method,suffix,operation", [("POST", "/git/blobs", "blob"),
+    ("POST", "/git/trees", "tree"), ("POST", "/git/commits", "commit"),
+    ("PATCH", "/git/refs/heads/main", "ref"), ("GET", "", "read")])
+def test_http_failure_identifies_only_fixed_operation_and_sanitized_error_detail(method, suffix, operation):
+    class FailedSession:
+        def request(self, *args, **kwargs):
+            return Response(422, {"message": "Invalid request SECRET-CREDENTIAL and private response"})
+    client = GitHub("SECRET-CREDENTIAL", FailedSession())
+    with pytest.raises(PublishError) as caught:
+        client.request(method, "/repos/" + FRONTEND + suffix, {})
+    error = caught.value
+    assert error.reason == f"github_{operation}_http_error" and error.status == 422
+    assert error.detail == "invalid_request" and "SECRET" not in str(error)
 
 
 def test_main_does_not_print_request_exception_or_credentials(tmp_path, monkeypatch, capsys):

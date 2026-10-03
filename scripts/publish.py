@@ -22,10 +22,11 @@ SHA = re.compile(r"[0-9a-f]{40}\Z")
 
 
 class PublishError(Exception):
-    def __init__(self, reason: str, status: int | None = None):
+    def __init__(self, reason: str, status: int | None = None, detail: str | None = None):
         super().__init__(reason)
         self.reason = reason
         self.status = status
+        self.detail = detail
 
 
 def _sha(value) -> str:
@@ -34,11 +35,49 @@ def _sha(value) -> str:
     return value
 
 
+def _http_operation(method: str, path: str) -> str:
+    if method == "POST" and path.endswith("/git/blobs"):
+        return "blob"
+    if method == "POST" and path.endswith("/git/trees"):
+        return "tree"
+    if method == "POST" and path.endswith("/git/commits"):
+        return "commit"
+    if method == "PATCH" and path.endswith("/git/refs/heads/main"):
+        return "ref"
+    return "read"
+
+
+def _http_detail(response) -> str | None:
+    """Map known error wording to an enum; never emit any response text."""
+    try:
+        payload = response.json()
+    except Exception:
+        return None
+    message = payload.get("message") if isinstance(payload, dict) else None
+    if not isinstance(message, str):
+        return None
+    normalized = message.casefold()
+    size_words = ("too large", "too big", "larger than", "exceed")
+    if "blob" in normalized and any(word in normalized for word in size_words):
+        return "blob_size_limit"
+    if "content" in normalized and any(word in normalized for word in size_words):
+        return "content_size_limit"
+    if "invalid request" in normalized:
+        return "invalid_request"
+    if "not a fast forward" in normalized or "reference update failed" in normalized:
+        return "non_fast_forward"
+    if "validation failed" in normalized:
+        return "validation_failed"
+    return None
+
+
 class GitHub:
     """Only fixed repositories and fixed API hosts are reachable with the token."""
 
     def __init__(self, token: str, session=None):
         self.session = session or requests.Session()
+        if session is None:
+            self.session.trust_env = False
         self.token = token
 
     def request(self, method: str, path: str, payload=None):
@@ -54,7 +93,8 @@ class GitHub:
         except requests.RequestException:
             raise PublishError("github_connection_failed") from None
         if response.status_code not in {200, 201}:
-            raise PublishError("github_http_error", response.status_code)
+            raise PublishError(f"github_{_http_operation(method, path)}_http_error", response.status_code,
+                               _http_detail(response))
         try:
             result = response.json()
         except (ValueError, requests.RequestException):
@@ -203,7 +243,13 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
 
 def _serialize(bundle: dict[str, dict]) -> dict[str, str]:
     try:
-        return {"data/" + name: json.dumps(bundle[name], ensure_ascii=False, allow_nan=False, indent=2) + "\n" for name in FILES}
+        # The full raw + normalized candidate ledger is large. Compact storage
+        # retains every field while reducing the GitHub blob request size;
+        # public catalog and status remain readable.
+        return {"data/" + name: json.dumps(
+            bundle[name], ensure_ascii=False, allow_nan=False,
+            **({"separators": (",", ":")} if name == "nintendo_master.json" else {"indent": 2})) + "\n"
+                for name in FILES}
     except (ValueError, TypeError):
         raise PublishError("invalid_output_file") from None
 
@@ -233,6 +279,8 @@ def publish(bundle: dict[str, dict], client: GitHub, *, now: datetime, slot: str
     except PublishError as error:
         backend_mirror = "blocked"
         backend_error = {"reason": error.reason, "http_status": error.status}
+        if error.detail:
+            backend_error["detail"] = error.detail
         code = f"HTTP {error.status}" if type(error.status) is int else "GitHub request failed"
         print(f"::warning::Nintendo backend mirror unavailable ({code}); the frontend master remains the durable collection state.")
     published = deepcopy(bundle)
@@ -275,7 +323,10 @@ def main(argv: list[str] | None = None) -> int:
                 handle.write("- 續查狀態：前端 nintendo_master.json（已持久化）\n")
         return 0
     except PublishError as error:
-        print(json.dumps({"status": "error", "reason": error.reason, "http_status": error.status}))
+        failure = {"status": "error", "reason": error.reason, "http_status": error.status}
+        if error.detail:
+            failure["detail"] = error.detail
+        print(json.dumps(failure))
         return 1
     except Exception:
         # Network bodies, URLs, exception text and credential material are never logged.
