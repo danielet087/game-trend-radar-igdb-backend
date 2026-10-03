@@ -1,0 +1,179 @@
+from copy import deepcopy
+from datetime import date, datetime, timezone
+import json
+
+import pytest
+import requests
+
+from nintendo_backend.catalog import build_documents
+from scripts.publish import ALLOWED_PATHS, BACKEND, FILES, FRONTEND, GitHub, PublishError, main, publish, validate_bundle
+
+NOW = datetime(2026, 10, 3, 16, 15, tzinfo=timezone.utc)
+CHECKED = "2026-10-03T16:05:00Z"
+
+
+def bundle():
+    raw = {"id": 12345, "name": "Nintendo test adventure", "hypes": 30, "category": 0,
+           "platforms": [{"id": 130, "name": "Nintendo Switch"}], "summary": "A family adventure across an island.",
+           "url": "https://www.igdb.com/games/nintendo-test-adventure",
+           "release_dates": [{"id": 77, "platform": {"id": 130}, "category": 0,
+                              "date": int(datetime(2026, 10, 15, tzinfo=timezone.utc).timestamp()), "region": 8}]}
+    docs = build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED)
+    return dict(zip(FILES, docs))
+
+
+class RecordingClient:
+    def __init__(self, backend_error=None, frontend_error=None):
+        self.backend_error = backend_error
+        self.frontend_error = frontend_error
+        self.calls = []
+
+    def preflight(self, repo):
+        self.calls.append(("preflight", repo))
+        if repo == BACKEND and self.backend_error:
+            raise self.backend_error
+        if repo == FRONTEND and self.frontend_error:
+            raise self.frontend_error
+
+    def commit_files(self, repo, files, message):
+        assert set(files) == ALLOWED_PATHS
+        self.calls.append(("commit", repo, {path: json.loads(content) for path, content in files.items()}))
+        return "a" * 40 if repo == BACKEND else "b" * 40
+
+
+def test_backend_permission_failure_still_persists_complete_frontend_master(capsys):
+    client = RecordingClient(backend_error=PublishError("github_http_error", 403))
+    result = publish(bundle(), client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert result["complete"] is True and result["backend_mirror"] == "blocked"
+    frontend = next(call[2] for call in client.calls if call[:2] == ("commit", FRONTEND))
+    assert frontend["data/nintendo_master.json"]["games"]["igdb:12345"]["raw"]["hypes"] == 30
+    receipt = frontend["data/nintendo_refresh_status.json"]
+    assert receipt["status"] == "published" and receipt["published_run_id"] == "1234"
+    assert receipt["backend_error"] == {"reason": "github_http_error", "http_status": 403}
+    assert "::warning::" in capsys.readouterr().out
+
+
+def test_backend_state_saved_before_frontend_and_does_not_claim_publication():
+    client = RecordingClient()
+    result = publish(bundle(), client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    commits = [call for call in client.calls if call[0] == "commit"]
+    assert [call[1] for call in commits] == [BACKEND, FRONTEND]
+    assert commits[0][2]["data/nintendo_refresh_status.json"]["status"] == "prepared"
+    assert commits[0][2]["data/nintendo_refresh_status.json"]["complete"] is False
+    assert result["backend_mirror"] == "published"
+
+
+def test_frontend_permission_failure_cannot_publish_backend_or_report_complete():
+    client = RecordingClient(frontend_error=PublishError("repository_write_denied", 403))
+    with pytest.raises(PublishError):
+        publish(bundle(), client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert not any(call[0] == "commit" for call in client.calls)
+
+
+@pytest.mark.parametrize("mutation", [
+    lambda data: data["nintendo_refresh_status.json"].update(complete=False),
+    lambda data: data["nintendo_refresh_status.json"].update(pending_count=1),
+    lambda data: data["nintendo_refresh_status.json"].update(public_count=99),
+    lambda data: data["nintendo_master.json"]["source"].update(complete=False),
+    lambda data: data["nintendo_upcoming.json"]["games"][0].update(hypes=True),
+    lambda data: data["nintendo_upcoming.json"]["games"][0]["releases"][0].update(date="2027-11-01"),
+    lambda data: data["nintendo_upcoming.json"]["games"].append(deepcopy(data["nintendo_upcoming.json"]["games"][0])),
+    lambda data: data["nintendo_upcoming.json"]["games"][0]["exclusivity"].update(status="confirmed"),
+    lambda data: data["nintendo_master.json"]["games"]["igdb:12345"]["raw"].update(hypes=29),
+    lambda data: data["nintendo_master.json"]["games"]["igdb:12345"]["raw"].update(summary="A hentai sex game", themes=[{"name": "Erotic"}]),
+    lambda data: data["nintendo_upcoming.json"]["games"][0]["exclusivity"].update(
+        status="confirmed", platform="NS", source="Nintendo official", url="https://www.nintendo.com/",
+        evidence="Only on Nintendo Switch", checked_at=CHECKED, evidence_title="Nintendo test adventure", evidence_method="product_metadata"),
+    lambda data: data["nintendo_upcoming.json"]["games"][0].update(display_name="Unverified relabel"),
+    lambda data: data["nintendo_master.json"]["games"]["igdb:12345"].update(hypes=5000),
+    lambda data: data["nintendo_refresh_status.json"].update(public_count=True),
+])
+def test_gate_rejects_incomplete_or_ineligible_data_before_remote_writes(mutation):
+    data = bundle()
+    mutation(data)
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+def test_unmodified_bundle_passes_full_formal_qualification_gate():
+    validate_bundle(bundle(), now=NOW)
+
+
+class Response:
+    def __init__(self, status, payload):
+        self.status_code, self.payload = status, payload
+
+    def json(self):
+        return self.payload
+
+
+class ConcurrentSession:
+    def __init__(self):
+        self.head_reads = 0
+        self.requests = []
+        self.ref_writes = 0
+
+    def request(self, method, url, **kwargs):
+        self.requests.append((method, url, kwargs))
+        assert url.startswith("https://api.github.com/repos/" + FRONTEND + "/")
+        assert kwargs["allow_redirects"] is False
+        if url.endswith("/git/ref/heads/main"):
+            self.head_reads += 1
+            return Response(200, {"object": {"sha": str(self.head_reads) * 40}})
+        if "/git/commits/" in url:
+            return Response(200, {"tree": {"sha": "a" * 39 + str(self.head_reads)}})
+        if url.endswith("/git/blobs"):
+            return Response(201, {"sha": "b" * 40})
+        if url.endswith("/git/trees"):
+            return Response(201, {"sha": "c" * 40})
+        if url.endswith("/git/commits"):
+            return Response(201, {"sha": "d" * 39 + str(self.head_reads)})
+        if url.endswith("/git/refs/heads/main"):
+            self.ref_writes += 1
+            return Response(422 if self.ref_writes == 1 else 200, {"object": {"sha": kwargs["json"]["sha"]}})
+        raise AssertionError("Unexpected request")
+
+
+def test_fast_forward_conflict_rebuilds_tree_from_new_head_and_preserves_other_paths():
+    session = ConcurrentSession()
+    client = GitHub("masked-secret", session)
+    files = {path: "{}\n" for path in ALLOWED_PATHS}
+    result = client.commit_files(FRONTEND, files, "Publish Nintendo")
+    assert result == "d" * 39 + "2"
+    trees = [item[2]["json"] for item in session.requests if item[1].endswith("/git/trees")]
+    assert [tree["base_tree"] for tree in trees] == ["a" * 39 + "1", "a" * 39 + "2"]
+    assert all({row["path"] for row in tree["tree"]} == ALLOWED_PATHS for tree in trees)
+    refs = [item[2]["json"] for item in session.requests if item[0] == "PATCH"]
+    assert all(ref["force"] is False for ref in refs)
+
+
+def test_path_whitelist_rejects_overwriting_steam_data():
+    client = GitHub("masked-secret", ConcurrentSession())
+    with pytest.raises(PublishError, match="unapproved_publication_paths"):
+        client.commit_files(FRONTEND, {"data/steam_upcoming.json": "{}"}, "Unsafe")
+
+
+def test_repository_whitelist_never_sends_credentials_to_another_host():
+    session = ConcurrentSession()
+    client = GitHub("masked-secret", session)
+    with pytest.raises(PublishError, match="unapproved_repository"):
+        client.request("GET", "/repos/unapproved/repository")
+    assert session.requests == []
+
+
+def test_main_does_not_print_request_exception_or_credentials(tmp_path, monkeypatch, capsys):
+    for name, payload in bundle().items():
+        (tmp_path / name).write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setenv("FRONTEND_REPO_TOKEN", "DO-NOT-LOG-THIS-TOKEN")
+    monkeypatch.setenv("GITHUB_RUN_ID", "1234")
+    def fail(*args, **kwargs):
+        raise requests.ConnectionError("DO-NOT-LOG-THIS-TOKEN and response body")
+    monkeypatch.setattr("scripts.publish.GitHub.preflight", fail)
+    # Use a runtime-current window so the gate reaches the failing transport.
+    monkeypatch.setattr("scripts.publish.validate_bundle", lambda *args, **kwargs: None)
+    monkeypatch.setattr("scripts.guard.target_slot", lambda *args, **kwargs: CHECKED)
+    assert main(["--output-dir", str(tmp_path), "--target-slot", CHECKED]) == 1
+    output = capsys.readouterr().out
+    assert "publication_failed" in output and "DO-NOT-LOG" not in output and "response body" not in output
