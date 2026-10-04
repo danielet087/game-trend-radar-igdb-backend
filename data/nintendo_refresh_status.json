@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T06:58:10Z",
+  "generated_at": "2026-10-04T07:11:38Z",
   "complete": false,
   "status": "prepared",
   "candidate_count": 5008,
@@ -38,7 +38,7 @@
     "multi_platform": 18,
     "unknown": 0
   },
-  "target_slot": "2026-10-04T06:57:19Z",
+  "target_slot": "2026-10-04T07:10:27Z",
   "trigger_source": "manual",
   "run_id": "37137013480",
   "backend_mirror": "published"
