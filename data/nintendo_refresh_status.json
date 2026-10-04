@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T07:11:38Z",
+  "generated_at": "2026-10-04T13:00:33Z",
   "complete": false,
   "status": "prepared",
   "candidate_count": 5008,
@@ -18,7 +18,7 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 5409,
+    "discovery_release_count": 5410,
     "request_count": 66,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -38,8 +38,8 @@
     "multi_platform": 18,
     "unknown": 0
   },
-  "target_slot": "2026-10-04T07:10:27Z",
+  "target_slot": "2026-10-04T12:59:38Z",
   "trigger_source": "manual",
-  "run_id": "37137013480",
+  "run_id": "37204015809",
   "backend_mirror": "published"
 }
