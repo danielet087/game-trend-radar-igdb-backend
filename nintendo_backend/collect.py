@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 from .catalog import build_documents
 from .chinese_names import SteamNameClient, enrich_documents, load_registry
 from .igdb import CollectionError, IGDBClient, paginated_releases
+from .taiwan_releases import load_registry as load_release_registry
 
 GAME_FIELDS = (
     "id,name,hypes,url,category,game_type.type,status,game_status.status,summary,storyline,"
@@ -43,7 +44,7 @@ def load_existing(path):
 
 
 def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
-            name_registry=None, name_client=None):
+            name_registry=None, name_client=None, release_registry=None):
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
@@ -71,6 +72,7 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
         checked_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     master, catalog, status = build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
                            name_registry=name_registry,
+                           release_registry=release_registry,
                            source={"discovery_release_count": len(releases), "request_count": client.request_count,
                                    "retry_count": client.retry_count, "platform_ids_verified": [130, 508],
                                    "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"})
@@ -98,16 +100,19 @@ def main(argv=None):
     parser.add_argument("--output-dir", default="output")
     parser.add_argument("--existing", default="data/nintendo_master.json")
     parser.add_argument("--chinese-names", default="data/chinese_names.json")
+    parser.add_argument("--taiwan-releases", default="data/nintendo_release_dates.json")
     parser.add_argument("--today", type=date.fromisoformat, default=None)
     args = parser.parse_args(argv)
     out = Path(args.output_dir)
     try:
         previous = load_existing(args.existing)
         name_registry = load_registry(args.chinese_names)
+        release_registry = load_release_registry(args.taiwan_releases)
         client = IGDBClient(os.environ.get("TWITCH_CLIENT_ID", ""), os.environ.get("TWITCH_CLIENT_SECRET", ""))
         start = args.today or datetime.now(ZoneInfo("Asia/Taipei")).date()
         master, catalog, status = collect(client, start=start, previous=previous,
-                                         name_registry=name_registry, name_client=SteamNameClient())
+                                         name_registry=name_registry, name_client=SteamNameClient(),
+                                         release_registry=release_registry)
         # All API, completeness and qualification gates have passed before any data write.
         write_json_atomic(out / "nintendo_master.json", master)
         write_json_atomic(out / "nintendo_upcoming.json", catalog)

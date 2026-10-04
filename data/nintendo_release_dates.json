@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "games": {
+    "igdb:381222": {
+      "igdb_id": 381222,
+      "name_en": "Order of the Sinking Star",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-10-09",
+          "source": "任天堂台灣官方發售日程",
+          "url": "https://www.nintendo.com/tw/schedule",
+          "verified_source_date": "2026-10-08",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:378225": {
+      "igdb_id": 378225,
+      "name_en": "Armatus",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2027-01-08",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2027-01-07",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:381235": {
+      "igdb_id": 381235,
+      "name_en": "Tomb Raider: Legacy of Atlantis",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2027-02-13",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2027-02-12",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:314449": {
+      "igdb_id": 314449,
+      "name_en": "Hela: Of Mice & Magic",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-12-01",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2026-12-01",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:404044": {
+      "igdb_id": 404044,
+      "name_en": "Rayman Legends Retold",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-12-03",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2026-12-03",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:279661": {
+      "igdb_id": 279661,
+      "name_en": "Monster Hunter Wilds",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-12-04",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2026-12-04",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:405460": {
+      "igdb_id": 405460,
+      "name_en": "The Legend of Zelda: Ocarina of Time",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-11-05",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2026-11-05",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:348210": {
+      "igdb_id": 348210,
+      "name_en": "Persona 4 Revival",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2027-05-20",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2027-05-20",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:26602": {
+      "igdb_id": 26602,
+      "name_en": "Metaphor: ReFantazio",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-11-12",
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "verified_source_date": "2026-11-12",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    },
+    "igdb:389434": {
+      "igdb_id": 389434,
+      "name_en": "Castlevania: Belmont's Curse",
+      "releases": [
+        {
+          "platform": "NS",
+          "date": "2026-10-15",
+          "source": "KONAMI 官方亞洲繁中 Nintendo Switch 發售公告（台灣 CSRR 分級）",
+          "url": "https://www.konami.com/games/castlevania/belmonts_curse/asia/zh-tw/",
+          "verified_source_date": "2026-10-15",
+          "verified_at": "2026-10-04T04:20:18Z"
+        }
+      ]
+    }
+  }
+}

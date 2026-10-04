@@ -130,6 +130,57 @@ def test_unmodified_bundle_passes_full_formal_qualification_gate():
 
 
 @pytest.fixture
+def taiwan_date_bundle(tmp_path, monkeypatch):
+    assert P.TAIWAN_RELEASE_REGISTRY.is_absolute()
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    registry = {"igdb:12345": {"igdb_id": 12345, "name_en": raw["name"], "releases": [{
+        "platform": "NS", "date": "2026-10-16", "verified_source_date": "2026-10-15",
+        "verified_at": CHECKED, "source": "Nintendo Taiwan official product",
+        "url": "https://www.nintendo.com/tw/schedule"}]}}
+    path = tmp_path / "nintendo_release_dates.json"
+    path.write_text(json.dumps({"schema_version": 1, "games": registry}))
+    monkeypatch.setattr(P, "TAIWAN_RELEASE_REGISTRY", path)
+    data = dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+                                           release_registry=registry)))
+    return data, path
+
+
+def test_gate_accepts_only_repository_verified_taiwan_date_and_source(taiwan_date_bundle, tmp_path, monkeypatch):
+    data, _ = taiwan_date_bundle
+    outside = tmp_path / "outside-checkout"
+    outside.mkdir()
+    monkeypatch.chdir(outside)
+    validate_bundle(data, now=NOW)
+    public = data["nintendo_upcoming.json"]["games"][0]["releases"][0]
+    assert public["date"] == "2026-10-16" and public["source_date"] == "2026-10-15"
+    assert public["taiwan_release_confirmed"] is True
+
+
+@pytest.mark.parametrize("field,value", [
+    ("date", "2026-10-17"), ("official_source_url", "https://www.nintendo.com/tw/fake-product"),
+    ("official_source_name", "A self-attested announcement"), ("source_timestamp", 1000000000),
+    ("time_zone", "UTC"), ("timestamp_taipei_date", "2026-10-18"),
+])
+def test_matching_master_and_public_cannot_forge_taiwan_date_evidence(taiwan_date_bundle, field, value):
+    data, _ = taiwan_date_bundle
+    for row in (data["nintendo_master.json"]["games"]["igdb:12345"], data["nintendo_upcoming.json"]["games"][0]):
+        row["releases"][0][field] = value
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+def test_registry_removed_or_changed_source_date_cannot_keep_taiwan_confirmation(taiwan_date_bundle):
+    data, path = taiwan_date_bundle
+    path.write_text('{"schema_version":1,"games":{}}')
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+@pytest.fixture
 def official_name_bundle(tmp_path, monkeypatch):
     assert P.CHINESE_NAME_REGISTRY.is_absolute()
     raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])

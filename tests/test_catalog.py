@@ -3,7 +3,7 @@ from datetime import date, datetime, timezone
 
 import pytest
 
-from nintendo_backend.catalog import build_documents, normalize_game
+from nintendo_backend.catalog import build_documents, normalize_game, release_record
 from nintendo_backend.igdb import CollectionError
 
 START = date(2026, 10, 4)
@@ -50,8 +50,10 @@ def test_platform_dates_track_later_port_without_global_first_release():
                first_release_date=1000000000,
                release_dates=[release("2025-04-01", 130), release("2027-03-01", 508)])
     row = normalize_game(raw, START, END, CHECKED)
-    assert row["releases"] == [{"date": "2027-03-01", "platform": "NS2", "precision": "day",
-                                "region": "worldwide", "source": "IGDB", "date_basis": "regional_calendar_day"}]
+    published = row["releases"][0]
+    assert [(item["date"], item["platform"]) for item in row["releases"]] == [("2027-03-01", "NS2")]
+    assert published["region"] == "worldwide" and published["source"] == "IGDB"
+    assert published["date_basis"] == "regional_calendar_day"
     assert [p["code"] for p in row["platforms"]] == ["NS", "NS2"]
     assert row["exclusivity"]["status"] == "multi_platform"
 
@@ -92,6 +94,91 @@ def test_new_date_format_and_region_override_legacy_fields():
                                release_region={"id": 42, "region": "Asia"})]), START, END, CHECKED)
     assert row["releases"][0]["precision"] == "day"
     assert row["releases"][0]["region"] == "asia"
+
+
+def test_igdb_calendar_timestamp_is_audited_in_taipei_without_inventing_taiwan_availability():
+    raw = release("2027-03-01", region=8)
+    original = deepcopy(raw)
+    row = release_record(raw)
+    assert row["date"] == row["source_date"] == row["timestamp_taipei_date"] == "2027-03-01"
+    assert row["source_timestamp"] == raw["date"]
+    assert row["source_region"] == "worldwide"
+    assert row["time_zone"] == "Asia/Taipei"
+    assert row["timezone_status"] == "same_calendar_day"
+    assert row["taiwan_release_confirmed"] is False
+    assert row["official_source_url"] is None
+    assert raw == original
+
+
+def test_date_parts_without_timestamp_remain_calendar_day_not_synthetic_instant():
+    row = normalize_game(game(release_dates=[release("2027-03-01", date=None)]), START, END, CHECKED)
+    published = row["releases"][0]
+    assert published["date"] == published["source_date"] == "2027-03-01"
+    assert published["source_timestamp"] is None and published["timestamp_taipei_date"] is None
+    assert published["timezone_status"] == "date_only"
+    assert published["taiwan_release_confirmed"] is False
+
+
+def test_unknown_day_precision_timestamp_crossing_taipei_day_requires_review():
+    stamp = int(datetime(2027, 3, 1, 20, tzinfo=timezone.utc).timestamp())
+    row = normalize_game(game(release_dates=[release("2027-03-01", date=stamp)]), START, END, CHECKED)
+    original = row["release_records"][0]
+    assert original["date"] == original["source_date"] == "2027-03-01"
+    assert original["timestamp_taipei_date"] == "2027-03-02"
+    assert original["timezone_status"] == "requires_time_evidence"
+    assert row["releases"] == [] and row["calendar_eligible"] is False
+
+
+def official_registry(day="2027-03-02", platform="NS2"):
+    return {"igdb:123": {"igdb_id": 123, "name_en": "A normal tactical game", "releases": [{
+        "platform": platform, "date": day, "source": "Official Taiwan product page",
+        "url": "https://www.nintendo.com/tw/schedule", "verified_source_date": "2027-03-01",
+        "verified_at": CHECKED}]}}
+
+
+def test_official_taiwan_date_prioritizes_regional_availability_and_keeps_igdb_original():
+    row = normalize_game(game(), START, END, CHECKED, release_registry=official_registry())
+    published = row["releases"][0]
+    assert published["date"] == "2027-03-02"
+    assert published["region"] == "taiwan"
+    assert published["source_date"] == "2027-03-01" and published["source_region"] == "worldwide"
+    assert published["timestamp_taipei_date"] == "2027-03-01"
+    assert published["date_basis"] == "taiwan_official_calendar_day"
+    assert published["timezone_status"] == "taiwan_official_date"
+    assert published["taiwan_release_confirmed"] is True
+    assert published["official_source_url"] == "https://www.nintendo.com/tw/schedule"
+    assert row["release_records"][0]["date"] == "2027-03-01"
+
+
+def test_official_taiwan_date_resolves_ambiguous_timestamp_without_faking_unlock_time():
+    stamp = int(datetime(2027, 3, 1, 20, tzinfo=timezone.utc).timestamp())
+    raw = game(release_dates=[release("2027-03-01", date=stamp)])
+    row = normalize_game(raw, START, END, CHECKED, release_registry=official_registry())
+    assert row["calendar_eligible"] is True and row["releases"][0]["date"] == "2027-03-02"
+    assert row["release_records"][0]["timezone_status"] == "requires_time_evidence"
+    assert row["releases"][0]["source_timestamp"] == stamp
+
+
+def test_official_taiwan_date_binds_exact_identity_and_platform():
+    for changes in ({"id": 124}, {"name": "A normal tactical game: Remastered"},
+                    {"platforms": [{"id": 130}], "release_dates": [release(platform=130)]}):
+        row = normalize_game(game(**changes), START, END, CHECKED, release_registry=official_registry())
+        assert all(item["taiwan_release_confirmed"] is False for item in row["releases"])
+
+
+def test_past_official_taiwan_release_does_not_fall_back_to_future_worldwide_date():
+    row = normalize_game(game(), START, END, CHECKED, release_registry=official_registry("2026-09-01"))
+    assert row["releases"] == [] and row["calendar_eligible"] is False
+
+
+def test_changed_igdb_date_invalidates_old_official_snapshot_without_freezing_postponements():
+    row = normalize_game(game(release_dates=[release("2027-04-01")]), START, END, CHECKED,
+                         release_registry=official_registry())
+    assert row["releases"][0]["date"] == "2027-04-01"
+    assert row["releases"][0]["taiwan_release_confirmed"] is False
+    aligned = normalize_game(game(release_dates=[release("2027-03-02")]), START, END, CHECKED,
+                             release_registry=official_registry())
+    assert aligned["releases"][0]["taiwan_release_confirmed"] is True
 
 
 def test_regional_priority_and_equal_priority_conflict():
