@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T13:58:41Z",
+  "generated_at": "2026-10-04T15:12:06Z",
   "window": {
     "start": "2026-10-04",
     "end": "2027-10-04",
@@ -40,6 +40,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "tchinese"
       },
+      "steam_appid": 4078430,
       "hypes": 80,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -96,21 +97,22 @@
           "date": "2026-10-06",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-10-06",
           "source_timestamp": 1791244800,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-10-06",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
-          "official_product_id": null,
-          "official_release_time_utc": null
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
+          "official_product_id": "UP8737-PPSA28416_00-SWGALACTICRACER1",
+          "official_concept_id": null,
+          "official_release_time_utc": "2026-10-06T09:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobihx.jpg",
@@ -154,14 +156,15 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 4078430
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:2933",
@@ -305,20 +308,21 @@
           "date": "2026-10-08",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-10-08",
           "source_timestamp": 1791417600,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-10-08",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/schedule",
+          "official_source_name": "任天堂台灣官方發售日程（Nintendo Switch 2，KINGDOM HEARTS III + Re Mind (DLC)）",
+          "official_verified_at": "2026-10-04T15:03:21Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -339,6 +343,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -388,7 +393,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -502,27 +507,29 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
           "date": "2026-10-08",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-10-08",
           "source_timestamp": 1791417600,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-10-08",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10017331",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10017331",
+          "official_release_time_utc": "2026-10-07T16:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaxvl.jpg",
@@ -557,12 +564,14 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10017331",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10017331"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -717,6 +726,7 @@
           "official_source_name": "任天堂台灣官方發售日程",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -737,6 +747,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -780,7 +791,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -939,20 +950,21 @@
           "date": "2026-10-09",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-10-09",
           "source_timestamp": 1791504000,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-10-09",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/schedule",
+          "official_source_name": "任天堂台灣官方發售日程（Nintendo Switch 2，Dragon's Dogma 2: Dark Arisen）",
+          "official_verified_at": "2026-10-04T15:03:21Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -993,7 +1005,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1014,6 +1026,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "schinese"
       },
+      "steam_appid": 2828710,
       "hypes": 84,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -1067,24 +1080,25 @@
       },
       "releases": [
         {
-          "date": "2026-10-13",
+          "date": "2026-10-14",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-10-13",
           "source_timestamp": 1791849600,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-10-13",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10016571",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10016571",
+          "official_release_time_utc": "2026-10-13T18:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaazc.jpg",
@@ -1125,14 +1139,15 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10016571",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10016571"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 2828710
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:389434",
@@ -1312,6 +1327,7 @@
           "official_source_name": "KONAMI 官方亞洲繁中 Nintendo Switch 發售公告（台灣 CSRR 分級）",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -1332,6 +1348,7 @@
           "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
           "official_verified_at": "2026-10-04T13:46:24Z",
           "official_product_id": "JP0101-PPSA35399_00-CVBCAPP000000000",
+          "official_concept_id": null,
           "official_release_time_utc": "2026-10-14T16:00:00Z"
         }
       ],
@@ -1374,7 +1391,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1553,20 +1570,21 @@
           "date": "2026-10-16",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-10-16",
           "source_timestamp": 1792108800,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-10-16",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/schedule",
+          "official_source_name": "任天堂台灣官方發售日程（Nintendo Switch 2，Resident Evil 2 Deluxe Edition）",
+          "official_verified_at": "2026-10-04T15:03:21Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -1616,7 +1634,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1779,6 +1797,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -1837,7 +1856,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1858,6 +1877,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "tchinese"
       },
+      "steam_appid": 4115450,
       "hypes": 215,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -1924,6 +1944,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -1976,9 +1997,8 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 4115450
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:361880",
@@ -1998,6 +2018,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "schinese"
       },
+      "steam_appid": 2863680,
       "hypes": 43,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -2064,6 +2085,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -2110,9 +2132,8 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 2863680
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:405460",
@@ -2221,7 +2242,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-04T13:59:27Z",
+        "checked_at": "2026-10-04T15:12:51Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -2244,6 +2265,7 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -2269,7 +2291,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2432,6 +2454,7 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -2484,7 +2507,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2562,6 +2585,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -2614,7 +2638,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2765,27 +2789,29 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
           "date": "2026-12-01",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-12-01",
           "source_timestamp": 1796083200,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-12-01",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10012485",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10012485",
+          "official_release_time_utc": "2026-12-01T10:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coax99.jpg",
@@ -2823,12 +2849,14 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10012485",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10012485"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2943,6 +2971,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -2995,7 +3024,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3154,6 +3183,7 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -3174,6 +3204,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -3217,7 +3248,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3376,6 +3407,7 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -3419,7 +3451,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3609,40 +3641,42 @@
           "date": "2026-12-10",
           "platform": "NS",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-12-10",
           "source_timestamp": 1796860800,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-12-10",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/topics/article/7tfkAGMc0TlDiEP21mc0RK",
+          "official_source_name": "任天堂台灣官方遊戲軟體廠商資訊（雷頓教授與蒸氣新世界，逐一列明 NS 與 NS2）",
+          "official_verified_at": "2026-10-04T15:05:17Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
           "date": "2026-12-10",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2026-12-10",
           "source_timestamp": 1796860800,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2026-12-10",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/topics/article/7tfkAGMc0TlDiEP21mc0RK",
+          "official_source_name": "任天堂台灣官方遊戲軟體廠商資訊（雷頓教授與蒸氣新世界，逐一列明 NS 與 NS2）",
+          "official_verified_at": "2026-10-04T15:05:17Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -3663,6 +3697,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -3682,7 +3717,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3841,27 +3876,29 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
-          "date": "2027-01-07",
+          "date": "2027-01-08",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2027-01-07",
           "source_timestamp": 1799280000,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2027-01-07",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10017555",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10017555",
+          "official_release_time_utc": "2027-01-07T17:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coave0.jpg",
@@ -3890,12 +3927,14 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10017555",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10017555"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3916,6 +3955,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "tchinese"
       },
+      "steam_appid": 4814120,
       "hypes": 90,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -3976,21 +4016,22 @@
           "date": "2027-01-15",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2027-01-15",
           "source_timestamp": 1799971200,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2027-01-15",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10009022",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10009022",
+          "official_release_time_utc": "2027-01-15T10:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocrlo.jpg",
@@ -4040,14 +4081,15 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10009022",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10009022"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 4814120
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:325599",
@@ -4134,6 +4176,7 @@
           "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
           "official_verified_at": "2026-10-04T13:46:24Z",
           "official_product_id": "JP0177-PPSA34972_00-MAINGAME00000000",
+          "official_concept_id": null,
           "official_release_time_utc": "2027-01-14T16:00:00Z"
         }
       ],
@@ -4170,7 +4213,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4191,6 +4234,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "schinese"
       },
+      "steam_appid": 1637460,
       "hypes": 31,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -4243,21 +4287,22 @@
           "date": "2027-01-15",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2027-01-15",
           "source_timestamp": 1799971200,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2027-01-15",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10005291",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10005291",
+          "official_release_time_utc": "2027-01-14T16:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cob0ej.jpg",
@@ -4289,14 +4334,15 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10005291",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10005291"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 1637460
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:261146",
@@ -4377,6 +4423,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -4423,7 +4470,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4503,6 +4550,7 @@
           "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
           "official_verified_at": "2026-10-04T13:46:24Z",
           "official_product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "official_concept_id": null,
           "official_release_time_utc": "2027-01-27T16:00:00Z"
         }
       ],
@@ -4539,7 +4587,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4560,6 +4608,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "tchinese"
       },
+      "steam_appid": 2590240,
       "hypes": 108,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -4630,6 +4679,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -4685,9 +4735,8 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 2590240
+      "checked_at": "2026-10-04T15:12:06Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:381235",
@@ -4841,6 +4890,7 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -4861,6 +4911,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -4895,7 +4946,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4975,6 +5026,7 @@
           "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
           "official_verified_at": "2026-10-04T13:53:59Z",
           "official_product_id": "UP9000-PPSA19249_00-LAUFEY0000000000",
+          "official_concept_id": null,
           "official_release_time_utc": "2027-02-15T16:00:00Z"
         }
       ],
@@ -5011,7 +5063,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5176,6 +5228,7 @@
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
           "official_verified_at": "2026-10-04T04:20:18Z",
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -5196,6 +5249,7 @@
           "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
           "official_verified_at": "2026-10-04T13:20:00Z",
           "official_product_id": "JP0005-PPSA23593_00-APPLICATION00000",
+          "official_concept_id": null,
           "official_release_time_utc": "2027-02-17T16:00:00Z"
         }
       ],
@@ -5244,7 +5298,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5362,6 +5416,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -5382,6 +5437,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -5425,7 +5481,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5490,24 +5546,25 @@
       },
       "releases": [
         {
-          "date": "2027-04-07",
+          "date": "2027-04-08",
           "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
           "source_date": "2027-04-07",
           "source_timestamp": 1807056000,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
           "timestamp_taipei_date": "2027-04-07",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/concept/10013615",
+          "official_source_name": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T15:05:11Z",
           "official_product_id": null,
-          "official_release_time_utc": null
+          "official_concept_id": "10013615",
+          "official_release_time_utc": "2027-04-07T16:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaott.jpg",
@@ -5554,12 +5611,14 @@
         }
       ],
       "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10013615",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10013615"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5667,6 +5726,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         },
         {
@@ -5687,6 +5747,7 @@
           "official_source_name": null,
           "official_verified_at": null,
           "official_product_id": null,
+          "official_concept_id": null,
           "official_release_time_utc": null
         }
       ],
@@ -5718,7 +5779,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:58:41Z",
+      "checked_at": "2026-10-04T15:12:06Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
