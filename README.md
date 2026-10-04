@@ -1,6 +1,6 @@
-# Nintendo Game Trend Radar
+# IGDB Game Trend Radar
 
-獨立處理 Nintendo Switch（NS）與 Nintendo Switch 2（NS2）的新作候選、人氣條件及平台別發售資料。公開月曆沿用 `danielet087/game-trend-radar`，Steam 與 Nintendo 的原始人氣數不混成同一種分數。
+儲存庫：`danielet087/game-trend-radar-igdb-backend`。目前獨立處理 Nintendo Switch（NS）與 Nintendo Switch 2（NS2）的新作候選、人氣條件及平台別發售資料。公開月曆沿用 `danielet087/game-trend-radar`，Steam 與 Nintendo 的原始人氣數不混成同一種分數。
 
 ## 收錄規則
 

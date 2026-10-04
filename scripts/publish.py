@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
-BACKEND = "danielet087/game-trend-radar-nintendo-backend"
+BACKEND = "danielet087/game-trend-radar-igdb-backend"
 FRONTEND = "danielet087/game-trend-radar"
 REPOSITORIES = {BACKEND, FRONTEND}
 FILES = ("nintendo_master.json", "nintendo_upcoming.json", "nintendo_refresh_status.json")
