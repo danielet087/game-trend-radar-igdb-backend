@@ -1,45 +1,430 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T13:00:33Z",
+  "generated_at": "2026-10-04T13:58:41Z",
   "complete": false,
   "status": "prepared",
-  "candidate_count": 5008,
-  "public_count": 19,
+  "candidate_count": 6600,
+  "public_count": 32,
   "popularity_counts": {
-    "qualified": 88,
-    "observe": 49,
-    "below_threshold": 992,
-    "unknown": 3879
+    "qualified": 201,
+    "observe": 90,
+    "below_threshold": 1484,
+    "unknown": 4825
   },
-  "content_review_count": 437,
-  "content_excluded_count": 6,
+  "content_review_count": 545,
+  "content_excluded_count": 14,
   "pending_count": 0,
   "source": {
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 5410,
-    "request_count": 66,
+    "discovery_release_count": 8637,
+    "request_count": 88,
     "retry_count": 0,
     "platform_ids_verified": [
       130,
+      167,
       508
     ],
-    "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"
+    "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"
   },
   "name_enrichment": {
-    "steam_request_count": 10,
+    "steam_request_count": 26,
     "steam_failure_count": 0,
     "steam_rate_limited": false
   },
+  "playstation_investigation": {
+    "review_only": true,
+    "schema_version": 1,
+    "provider": "PlayStation Store",
+    "request_count": 30,
+    "games": {
+      "igdb:52189": {
+        "igdb_id": 52189,
+        "name_en": "Grand Theft Auto VI",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10000730",
+          "https://store.playstation.com/en-hk/concept/10000730"
+        ],
+        "checked_at": "2026-10-04T13:59:00Z",
+        "evidence": null
+      },
+      "igdb:250618": {
+        "igdb_id": 250618,
+        "name_en": "Phantom Blade 0",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10017620",
+          "https://store.playstation.com/en-hk/concept/10017620"
+        ],
+        "checked_at": "2026-10-04T13:59:01Z",
+        "evidence": null
+      },
+      "igdb:279621": {
+        "igdb_id": 279621,
+        "name_en": "Exodus",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10013615",
+          "https://store.playstation.com/en-hk/concept/10013615"
+        ],
+        "checked_at": "2026-10-04T13:59:03Z",
+        "evidence": null
+      },
+      "igdb:381235": {
+        "igdb_id": 381235,
+        "name_en": "Tomb Raider: Legacy of Atlantis",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10014491",
+          "https://store.playstation.com/en-hk/concept/10014491"
+        ],
+        "checked_at": "2026-10-04T13:59:04Z",
+        "evidence": null
+      },
+      "igdb:2933": {
+        "igdb_id": 2933,
+        "name_en": "Kingdom Hearts III",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/208810",
+          "https://store.playstation.com/en-hk/concept/208810"
+        ],
+        "checked_at": "2026-10-04T13:59:06Z",
+        "evidence": null
+      },
+      "igdb:325599": {
+        "igdb_id": 325599,
+        "name_en": "Stranger Than Heaven",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10017939"
+        ],
+        "checked_at": "2026-10-04T13:59:06Z",
+        "evidence": {
+          "product_id": "JP0177-PPSA34972_00-MAINGAME00000000",
+          "official_title": "STRANGER THAN HEAVEN (English/Chinese/Korean/Japanese Ver.)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "release_time_utc": "2027-01-14T16:00:00Z",
+          "date": "2027-01-15",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      },
+      "igdb:398225": {
+        "igdb_id": 398225,
+        "name_en": "Metro 2039",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10009337",
+          "https://store.playstation.com/en-hk/concept/10009337"
+        ],
+        "checked_at": "2026-10-04T13:59:08Z",
+        "evidence": null
+      },
+      "igdb:404063": {
+        "igdb_id": 404063,
+        "name_en": "God of War Laufey",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10009461"
+        ],
+        "checked_at": "2026-10-04T13:59:09Z",
+        "evidence": {
+          "product_id": "UP9000-PPSA19249_00-LAUFEY0000000000",
+          "official_title": "God of War Laufey™ (English/Chinese/Korean Ver.)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "release_time_utc": "2027-02-15T16:00:00Z",
+          "date": "2027-02-16",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      },
+      "igdb:262712": {
+        "igdb_id": 262712,
+        "name_en": "Ananta",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10009022",
+          "https://store.playstation.com/en-hk/concept/10009022"
+        ],
+        "checked_at": "2026-10-04T13:59:11Z",
+        "evidence": null
+      },
+      "igdb:361833": {
+        "igdb_id": 361833,
+        "name_en": "Valor Mortis",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10016571",
+          "https://store.playstation.com/en-hk/concept/10016571"
+        ],
+        "checked_at": "2026-10-04T13:59:12Z",
+        "evidence": null
+      },
+      "igdb:381248": {
+        "igdb_id": 381248,
+        "name_en": "Star Wars: Galactic Racer",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10014146"
+        ],
+        "checked_at": "2026-10-04T13:59:13Z",
+        "evidence": {
+          "product_id": "UP8737-PPSA28416_00-SWGALACTICRACER1",
+          "official_title": "STAR WARS: Galactic Racer™ (Simplified Chinese, English, Korean, Japanese, Traditional Chinese)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1",
+          "supported_languages": [
+            "zh-Hans",
+            "en",
+            "ko",
+            "ja",
+            "zh-Hant"
+          ],
+          "complete": false,
+          "release_time_utc": "2026-10-06T09:00:00Z",
+          "date": "2026-10-06",
+          "evidence_type": "official_product_languages"
+        }
+      },
+      "igdb:389434": {
+        "igdb_id": 389434,
+        "name_en": "Castlevania: Belmont's Curse",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10018186"
+        ],
+        "checked_at": "2026-10-04T13:59:14Z",
+        "evidence": {
+          "product_id": "JP0101-PPSA35399_00-CVBCAPP000000000",
+          "official_title": "Castlevania: Belmont's Curse (Simplified Chinese, English, Korean, Japanese, Traditional Chinese)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000",
+          "supported_languages": [
+            "zh-Hans",
+            "en",
+            "ko",
+            "ja",
+            "zh-Hant"
+          ],
+          "complete": false,
+          "release_time_utc": "2026-10-14T16:00:00Z",
+          "date": "2026-10-15",
+          "evidence_type": "official_product_languages"
+        }
+      },
+      "igdb:348210": {
+        "igdb_id": 348210,
+        "name_en": "Persona 4 Revival",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10011107"
+        ],
+        "checked_at": "2026-10-04T13:59:15Z",
+        "evidence": {
+          "product_id": "JP0005-PPSA23593_00-APPLICATION00000",
+          "official_title": "Persona 4 Revival (English/Chinese/Korean/Japanese Ver.)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "release_time_utc": "2027-02-17T16:00:00Z",
+          "date": "2027-02-18",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      },
+      "igdb:404058": {
+        "igdb_id": 404058,
+        "name_en": "Until Dawn 2",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10004067"
+        ],
+        "checked_at": "2026-10-04T13:59:15Z",
+        "evidence": {
+          "product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "official_title": "Until Dawn 2 (English/Chinese/Korean/Japanese Ver.)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "release_time_utc": "2027-01-27T16:00:00Z",
+          "date": "2027-01-28",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      },
+      "igdb:404044": {
+        "igdb_id": 404044,
+        "name_en": "Rayman Legends Retold",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10017364",
+          "https://store.playstation.com/en-hk/concept/10017364"
+        ],
+        "checked_at": "2026-10-04T13:59:18Z",
+        "evidence": null
+      },
+      "igdb:314449": {
+        "igdb_id": 314449,
+        "name_en": "Hela: Of Mice & Magic",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10012485",
+          "https://store.playstation.com/en-hk/concept/10012485"
+        ],
+        "checked_at": "2026-10-04T13:59:19Z",
+        "evidence": null
+      },
+      "igdb:251059": {
+        "igdb_id": 251059,
+        "name_en": "Grave Seasons",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10014259",
+          "https://store.playstation.com/en-hk/concept/10014259"
+        ],
+        "checked_at": "2026-10-04T13:59:21Z",
+        "evidence": null
+      },
+      "igdb:361880": {
+        "igdb_id": 361880,
+        "name_en": "Zero Parades: For Dead Spies",
+        "status": "identity_or_metadata_unconfirmed",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/concept/10016673",
+          "https://store.playstation.com/en-hk/concept/10016673"
+        ],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:313597": {
+        "igdb_id": 313597,
+        "name_en": "Silver Pines",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:236665": {
+        "igdb_id": 236665,
+        "name_en": "Professor Layton and the New World of Steam",
+        "status": "no_exact_store_url",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:261146": {
+        "igdb_id": 261146,
+        "name_en": "Titan Quest II",
+        "status": "no_exact_store_url",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:378225": {
+        "igdb_id": 378225,
+        "name_en": "Armatus",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:252852": {
+        "igdb_id": 252852,
+        "name_en": "Mariachi Legends",
+        "status": "no_exact_store_url",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:381208": {
+        "igdb_id": 381208,
+        "name_en": "TankRat",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:381222": {
+        "igdb_id": 381222,
+        "name_en": "Order of the Sinking Star",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:196954": {
+        "igdb_id": 196954,
+        "name_en": "Hell is Us",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:279661": {
+        "igdb_id": 279661,
+        "name_en": "Monster Hunter Wilds",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:305107": {
+        "igdb_id": 305107,
+        "name_en": "Eriksholm: The Stolen Dream",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:19686": {
+        "igdb_id": 19686,
+        "name_en": "Resident Evil 2",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:26602": {
+        "igdb_id": 26602,
+        "name_en": "Metaphor: ReFantazio",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      },
+      "igdb:115060": {
+        "igdb_id": 115060,
+        "name_en": "Dragon's Dogma II",
+        "status": "budget_exhausted",
+        "attempted_urls": [],
+        "checked_at": "2026-10-04T13:59:22Z",
+        "evidence": null
+      }
+    }
+  },
   "exclusivity_counts": {
     "confirmed": 1,
-    "listed_only": 0,
-    "multi_platform": 18,
+    "listed_only": 2,
+    "multi_platform": 29,
     "unknown": 0
   },
-  "target_slot": "2026-10-04T12:59:38Z",
+  "target_slot": "2026-10-04T13:57:45Z",
   "trigger_source": "manual",
-  "run_id": "37204015809",
+  "run_id": "37207481852",
   "backend_mirror": "published"
 }

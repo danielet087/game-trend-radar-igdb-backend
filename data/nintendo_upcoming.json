@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T13:00:33Z",
+  "generated_at": "2026-10-04T13:58:41Z",
   "window": {
     "start": "2026-10-04",
     "end": "2027-10-04",
@@ -11,16 +11,158 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 5410,
-    "request_count": 66,
+    "discovery_release_count": 8637,
+    "request_count": 88,
     "retry_count": 0,
     "platform_ids_verified": [
       130,
+      167,
       508
     ],
-    "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"
+    "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"
   },
   "games": [
+    {
+      "id": "igdb:381248",
+      "igdb_id": 381248,
+      "display_name": "星際大戰：銀河賽車手™",
+      "name_en": "Star Wars: Galactic Racer",
+      "name_zh_tw": "星際大戰：銀河賽車手™",
+      "name_source": "Steam appdetails (tchinese)",
+      "name_url": "https://store.steampowered.com/app/4078430/?l=tchinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hant",
+        "converted": false,
+        "igdb_id": 381248,
+        "name_en": "Star Wars: Galactic Racer",
+        "steam_appid": 4078430,
+        "identity_source": "IGDB external_games Steam",
+        "language": "tchinese"
+      },
+      "hypes": 80,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/star-wars-galactic-racer"
+      },
+      "releases": [
+        {
+          "date": "2026-10-06",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-06",
+          "source_timestamp": 1791244800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-06",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobihx.jpg",
+      "url": "https://www.igdb.com/games/star-wars-galactic-racer",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/4078430"
+        },
+        {
+          "url": "https://starwarsgalacticracer.com/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/star-wars-galactic-racer"
+        },
+        {
+          "url": "https://x.com/SWGalacticRacer"
+        },
+        {
+          "url": "https://www.facebook.com/profile.php?id=61580982123086"
+        },
+        {
+          "url": "https://www.instagram.com/starwarsgalacticracer/"
+        },
+        {
+          "url": "https://www.youtube.com/channel/UC57GnaDS_gIMHRquyknLcnQ"
+        },
+        {
+          "url": "https://store.epicgames.com/p/star-wars-galactic-racer-246fdc"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10014146"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/star-wars-galactic-racer/9mxdpxsrvml5"
+        },
+        {
+          "url": "https://starwars.fandom.com/wiki/Star_Wars:_Galactic_Racer"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Star_Wars%3A_Galactic_Racer"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 4078430
+    },
     {
       "id": "igdb:2933",
       "igdb_id": 2933,
@@ -34,6 +176,11 @@
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
         {
           "id": 508,
           "name": "Nintendo Switch 2",
@@ -55,7 +202,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -68,6 +216,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "hong_kong",
@@ -153,7 +317,29 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-10-08",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tpy.jpg",
@@ -197,10 +383,12 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -226,6 +414,11 @@
           "id": 130,
           "name": "Nintendo Switch",
           "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
         }
       ],
       "known_platforms": [
@@ -240,7 +433,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -249,6 +443,22 @@
       ],
       "platform_language_support": {
         "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
+        "PS5": {
           "status": "unknown",
           "region": null,
           "languages": {
@@ -290,7 +500,29 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-10-08",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaxvl.jpg",
@@ -325,10 +557,230 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:381222",
+      "igdb_id": 381222,
+      "display_name": "沉星之序",
+      "name_en": "Order of the Sinking Star",
+      "name_zh_tw": "沉星之序",
+      "name_source": "Steam 官方繁中商品名稱（已核對同款 AppID 499170）",
+      "name_url": "https://store.steampowered.com/app/499170/?l=tchinese",
+      "name_evidence": {
+        "provider": "official_registry",
+        "locale": "zh-Hant",
+        "converted": false,
+        "igdb_id": 381222,
+        "name_en": "Order of the Sinking Star"
+      },
+      "hypes": 30,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方軟體商品語言資料",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup?spage=2",
+          "checked_at": "2026-10-04T06:08:03.026509Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/order-of-the-sinking-star"
+      },
+      "releases": [
+        {
+          "date": "2026-10-09",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/schedule",
+          "official_source_name": "任天堂台灣官方發售日程",
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-10-08",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc954.jpg",
+      "url": "https://www.igdb.com/games/order-of-the-sinking-star",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/499170"
+        },
+        {
+          "url": "https://www.orderofthesinkingstar.com/"
+        },
+        {
+          "url": "https://discord.gg/PcCxqvfeKK"
+        },
+        {
+          "url": "https://x.com/SinkingStarGame"
+        },
+        {
+          "url": "https://www.facebook.com/SinkingStarGame/"
+        },
+        {
+          "url": "https://www.instagram.com/sinkingstargame/"
+        },
+        {
+          "url": "https://www.youtube.com/@SinkingStarGame"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017166"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/order-of-the-sinking-star"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -351,6 +803,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -363,7 +820,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -376,6 +834,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "australia",
@@ -477,7 +951,9 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co833w.jpg",
@@ -512,35 +988,40 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
-      "id": "igdb:381222",
-      "igdb_id": 381222,
-      "display_name": "沉星之序",
-      "name_en": "Order of the Sinking Star",
-      "name_zh_tw": "沉星之序",
-      "name_source": "Steam 官方繁中商品名稱（已核對同款 AppID 499170）",
-      "name_url": "https://store.steampowered.com/app/499170/?l=tchinese",
+      "id": "igdb:361833",
+      "igdb_id": 361833,
+      "display_name": "不朽遺志 Valor Mortis",
+      "name_en": "Valor Mortis",
+      "name_zh_tw": "不朽遺志 Valor Mortis",
+      "name_source": "Steam appdetails (schinese)",
+      "name_url": "https://store.steampowered.com/app/2828710/?l=schinese",
       "name_evidence": {
-        "provider": "official_registry",
-        "locale": "zh-Hant",
-        "converted": false,
-        "igdb_id": 381222,
-        "name_en": "Order of the Sinking Star"
+        "provider": "steam_appdetails",
+        "locale": "zh-Hans",
+        "converted": true,
+        "igdb_id": 361833,
+        "name_en": "Valor Mortis",
+        "steam_appid": 2828710,
+        "identity_source": "IGDB external_games Steam",
+        "language": "schinese"
       },
-      "hypes": 30,
+      "hypes": 84,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
         {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
         }
       ],
       "known_platforms": [
@@ -550,75 +1031,30 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
+          "id": 169,
+          "name": "Xbox Series X|S"
         }
       ],
       "platform_language_support": {
-        "NS2": {
-          "status": "confirmed",
-          "region": "taiwan",
+        "PS5": {
+          "status": "unknown",
+          "region": null,
           "languages": {
-            "tchinese": true,
-            "schinese": true,
-            "english": true,
-            "chinese": true
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
           },
-          "supported_languages": [
-            {
-              "code": "en",
-              "name": "英文"
-            },
-            {
-              "code": "fr",
-              "name": "法文"
-            },
-            {
-              "code": "de",
-              "name": "德文"
-            },
-            {
-              "code": "it",
-              "name": "義大利文"
-            },
-            {
-              "code": "ja",
-              "name": "日文"
-            },
-            {
-              "code": "ko",
-              "name": "韓文"
-            },
-            {
-              "code": "pt",
-              "name": "葡萄牙文"
-            },
-            {
-              "code": "ru",
-              "name": "俄文"
-            },
-            {
-              "code": "zh-Hans",
-              "name": "簡體中文"
-            },
-            {
-              "code": "es",
-              "name": "西班牙文"
-            },
-            {
-              "code": "zh-Hant",
-              "name": "繁體中文"
-            }
-          ],
-          "complete": true,
-          "source": "任天堂台灣官方軟體商品語言資料",
-          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup?spage=2",
-          "checked_at": "2026-10-04T06:08:03.026509Z",
-          "evidence_type": "official_product_languages"
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
         }
       },
       "platform_editions": {},
@@ -627,68 +1063,76 @@
         "status": "multi_platform",
         "platform": null,
         "source": "IGDB",
-        "url": "https://www.igdb.com/games/order-of-the-sinking-star"
+        "url": "https://www.igdb.com/games/valor-mortis"
       },
       "releases": [
         {
-          "date": "2026-10-09",
-          "platform": "NS2",
+          "date": "2026-10-13",
+          "platform": "PS5",
           "precision": "day",
-          "region": "taiwan",
-          "source": "official_registry",
-          "date_basis": "taiwan_official_calendar_day",
-          "source_date": "2026-10-08",
-          "source_timestamp": 1791417600,
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-13",
+          "source_timestamp": 1791849600,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2026-10-08",
-          "timezone_status": "taiwan_official_date",
-          "taiwan_release_confirmed": true,
-          "official_source_url": "https://www.nintendo.com/tw/schedule",
-          "official_source_name": "任天堂台灣官方發售日程",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "timestamp_taipei_date": "2026-10-13",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc954.jpg",
-      "url": "https://www.igdb.com/games/order-of-the-sinking-star",
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaazc.jpg",
+      "url": "https://www.igdb.com/games/valor-mortis",
       "websites": [
         {
-          "url": "https://store.steampowered.com/app/499170"
+          "url": "https://bsky.app/profile/valormortis.bsky.social"
         },
         {
-          "url": "https://www.orderofthesinkingstar.com/"
+          "url": "https://store.playstation.com/en-us/concept/10016571/"
         },
         {
-          "url": "https://discord.gg/PcCxqvfeKK"
+          "url": "https://discord.gg/valormortis"
         },
         {
-          "url": "https://x.com/SinkingStarGame"
+          "url": "https://www.reddit.com/r/ValorMortis/"
         },
         {
-          "url": "https://www.facebook.com/SinkingStarGame/"
+          "url": "https://www.xbox.com/en-US/games/store/valor-mortis/9p861v1542bl"
         },
         {
-          "url": "https://www.instagram.com/sinkingstargame/"
+          "url": "https://www.twitch.tv/directory/category/valor-mortis"
         },
         {
-          "url": "https://www.youtube.com/@SinkingStarGame"
+          "url": "https://www.facebook.com/people/Valor-Mortis/61579025174559/"
         },
         {
-          "url": "https://store.playstation.com/en-us/concept/10017166"
+          "url": "https://store.steampowered.com/app/2828710"
         },
         {
-          "url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/"
+          "url": "https://www.instagram.com/valormortisgame/"
         },
         {
-          "url": "https://www.twitch.tv/directory/category/order-of-the-sinking-star"
+          "url": "https://x.com/ValorMortis"
+        },
+        {
+          "url": "https://valormortis.com"
         }
       ],
-      "nintendo_url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/",
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
-      "first_observed_at": "2026-10-03T16:40:12Z"
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 2828710
     },
     {
       "id": "igdb:389434",
@@ -713,6 +1157,11 @@
           "id": 130,
           "name": "Nintendo Switch",
           "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
         }
       ],
       "known_platforms": [
@@ -727,7 +1176,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -795,6 +1245,44 @@
           "source_url": "https://www.nintendo.com/tw/api/search?k=Castlevania&directory=software&size=24",
           "checked_at": "2026-10-04T06:08:03.026523Z",
           "evidence_type": "official_product_languages"
+        },
+        "PS5": {
+          "status": "partial",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（語言名正向證據；完整畫面語言清單尚未公開）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000",
+          "checked_at": "2026-10-04T13:46:24Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "JP0101-PPSA35399_00-CVBCAPP000000000"
         }
       },
       "platform_editions": {},
@@ -822,7 +1310,29 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.konami.com/games/castlevania/belmonts_curse/asia/zh-tw/",
           "official_source_name": "KONAMI 官方亞洲繁中 Nintendo Switch 發售公告（台灣 CSRR 分級）",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-10-15",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-10-15",
+          "source_timestamp": 1792022400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-15",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000",
+          "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T13:46:24Z",
+          "official_product_id": "JP0101-PPSA35399_00-CVBCAPP000000000",
+          "official_release_time_utc": "2026-10-14T16:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocrky.jpg",
@@ -857,10 +1367,14 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/castlevania-belmonts-curse-switch/",
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -882,6 +1396,11 @@
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
         {
           "id": 508,
           "name": "Nintendo Switch 2",
@@ -911,7 +1430,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -924,6 +1444,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "australia",
@@ -1029,7 +1565,9 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1ir3.jpg",
@@ -1073,10 +1611,12 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1103,6 +1643,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -1115,7 +1660,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -1128,6 +1674,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "united_kingdom",
@@ -1215,7 +1777,9 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co9vum.jpg",
@@ -1268,11 +1832,287 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/hell-is-us-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:250618",
+      "igdb_id": 250618,
+      "display_name": "影之刃零",
+      "name_en": "Phantom Blade 0",
+      "name_zh_tw": "影之刃零",
+      "name_source": "Steam appdetails (tchinese)",
+      "name_url": "https://store.steampowered.com/app/4115450/?l=tchinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hant",
+        "converted": false,
+        "igdb_id": 250618,
+        "name_en": "Phantom Blade 0",
+        "steam_appid": 4115450,
+        "identity_source": "IGDB external_games Steam",
+        "language": "tchinese"
+      },
+      "hypes": 215,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/phantom-blade-0"
+      },
+      "releases": [
+        {
+          "date": "2026-10-29",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-29",
+          "source_timestamp": 1793232000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-29",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cococe.jpg",
+      "url": "https://www.igdb.com/games/phantom-blade-0",
+      "websites": [
+        {
+          "url": "https://www.youtube.com/@PhantomBladeZero"
+        },
+        {
+          "url": "https://old.reddit.com/r/PhantomBladeZero/"
+        },
+        {
+          "url": "https://discord.gg/invite/AN2B4puBdt"
+        },
+        {
+          "url": "https://www.facebook.com/phantombladezero"
+        },
+        {
+          "url": "https://twitter.com/pbzero_official"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4115450"
+        },
+        {
+          "url": "https://www.instagram.com/phantomblade.zero/"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017620"
+        },
+        {
+          "url": "https://epicgames.com/p/phantom-blade-zero-e78a35"
+        },
+        {
+          "url": "https://phantom-blade.fandom.com/wiki/Phantom_Blade_Zero"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Phantom_Blade_Zero"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/phantom-blade-0"
+        },
+        {
+          "url": "https://pbz.s-game.com/"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 4115450
+    },
+    {
+      "id": "igdb:361880",
+      "igdb_id": 361880,
+      "display_name": "歸零巡禮：亡諜鎮魂曲",
+      "name_en": "Zero Parades: For Dead Spies",
+      "name_zh_tw": "歸零巡禮：亡諜鎮魂曲",
+      "name_source": "Steam appdetails (schinese)",
+      "name_url": "https://store.steampowered.com/app/2863680/?l=schinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hans",
+        "converted": true,
+        "igdb_id": 361880,
+        "name_en": "Zero Parades: For Dead Spies",
+        "steam_appid": 2863680,
+        "identity_source": "IGDB external_games Steam",
+        "language": "schinese"
+      },
+      "hypes": 43,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/zero-parades-for-dead-spies"
+      },
+      "releases": [
+        {
+          "date": "2026-11-03",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-11-03",
+          "source_timestamp": 1793664000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-11-03",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobpcd.jpg",
+      "url": "https://www.igdb.com/games/zero-parades-for-dead-spies",
+      "websites": [
+        {
+          "url": "https://www.twitch.tv/directory/category/zero-parades"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Zero_Parades:_For_Dead_Spies"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10016673"
+        },
+        {
+          "url": "https://store.epicgames.com/p/zero-parades-ed90f8"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2863680"
+        },
+        {
+          "url": "https://x.com/studiozaum"
+        },
+        {
+          "url": "https://bsky.app/profile/zaumstudio.bsky.social"
+        },
+        {
+          "url": "https://www.instagram.com/zaumstudio/"
+        },
+        {
+          "url": "https://www.gog.com/en/game/zero_parades"
+        },
+        {
+          "url": "https://www.youtube.com/@studiozaum"
+        },
+        {
+          "url": "https://zeroparades.com/"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 2863680
     },
     {
       "id": "igdb:405460",
@@ -1381,7 +2221,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-04T13:00:45Z",
+        "checked_at": "2026-10-04T13:59:27Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -1402,7 +2242,9 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocv5r.jpg",
@@ -1422,10 +2264,12 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1448,6 +2292,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -1464,7 +2313,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -1477,6 +2327,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -1564,7 +2430,9 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co8d9t.jpg",
@@ -1611,11 +2479,143 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/metaphor-refantazio-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:52189",
+      "igdb_id": 52189,
+      "display_name": "Grand Theft Auto VI",
+      "name_en": "Grand Theft Auto VI",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 1076,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/grand-theft-auto-vi"
+      },
+      "releases": [
+        {
+          "date": "2026-11-19",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-11-19",
+          "source_timestamp": 1795046400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-11-19",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocv1v.jpg",
+      "url": "https://www.igdb.com/games/grand-theft-auto-vi",
+      "websites": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grand_Theft_Auto_VI"
+        },
+        {
+          "url": "https://www.xbox.com/en-US/games/store/-/9NL3WWNZLZZN"
+        },
+        {
+          "url": "https://www.reddit.com/r/GTA6/"
+        },
+        {
+          "url": "https://x.com/RockstarGames"
+        },
+        {
+          "url": "https://discord.gg/rockstargames"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10000730"
+        },
+        {
+          "url": "https://www.rockstargames.com/VI"
+        },
+        {
+          "url": "https://youtube.com/@rockstargames"
+        },
+        {
+          "url": "https://www.instagram.com/rockstargames"
+        },
+        {
+          "url": "https://bsky.app/profile/rockstargames.com"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/grand-theft-auto-vi"
+        },
+        {
+          "url": "https://www.facebook.com/rockstargames"
+        },
+        {
+          "url": "https://gta.wiki/w/Grand_Theft_Auto_VI"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:314449",
@@ -1637,6 +2637,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -1649,7 +2654,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -1662,6 +2668,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -1741,7 +2763,29 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-12-01",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-12-01",
+          "source_timestamp": 1796083200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-01",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coax99.jpg",
@@ -1779,10 +2823,12 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1806,6 +2852,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -1818,7 +2869,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -1831,6 +2883,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "unknown",
           "region": null,
@@ -1873,7 +2941,9 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coa5u5.jpg",
@@ -1920,10 +2990,12 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1946,6 +3018,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -1958,7 +3035,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -1971,6 +3049,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -2058,7 +3152,29 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-12-03",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-12-03",
+          "source_timestamp": 1796256000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-03",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc5tb.jpg",
@@ -2096,10 +3212,12 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/rayman-legends-retold-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2122,6 +3240,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -2134,7 +3257,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -2147,6 +3271,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -2234,7 +3374,9 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co904o.jpg",
@@ -2272,10 +3414,12 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/monster-hunter-wilds-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2297,6 +3441,11 @@
           "code": "NS"
         },
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -2314,7 +3463,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 508,
@@ -2375,6 +3525,22 @@
           "source_url": "https://www.layton.jp/jouki/en/",
           "checked_at": "2026-10-04T06:05:55Z",
           "evidence_type": "official_product_languages"
+        },
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
         },
         "NS2": {
           "status": "confirmed",
@@ -2455,7 +3621,9 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         },
         {
           "date": "2026-12-10",
@@ -2473,7 +3641,29 @@
           "taiwan_release_confirmed": false,
           "official_source_url": null,
           "official_source_name": null,
-          "official_verified_at": null
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-12-10",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-12-10",
+          "source_timestamp": 1796860800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-10",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co66va.jpg",
@@ -2487,10 +3677,12 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2513,6 +3705,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -2525,7 +3722,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -2538,6 +3736,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -2625,7 +3839,29 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2027-01-07",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-01-07",
+          "source_timestamp": 1799280000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-07",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coave0.jpg",
@@ -2654,11 +3890,804 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:262712",
+      "igdb_id": 262712,
+      "display_name": "無限大",
+      "name_en": "Ananta",
+      "name_zh_tw": "無限大",
+      "name_source": "Steam appdetails (tchinese)",
+      "name_url": "https://store.steampowered.com/app/4814120/?l=tchinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hant",
+        "converted": false,
+        "igdb_id": 262712,
+        "name_en": "Ananta",
+        "steam_appid": 4814120,
+        "identity_source": "IGDB external_games Steam",
+        "language": "tchinese"
+      },
+      "hypes": 90,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 34,
+          "name": "Android"
+        },
+        {
+          "id": 39,
+          "name": "iOS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/ananta"
+      },
+      "releases": [
+        {
+          "date": "2027-01-15",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-01-15",
+          "source_timestamp": 1799971200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-15",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocrlo.jpg",
+      "url": "https://www.igdb.com/games/ananta",
+      "websites": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Ananta_(video_game)"
+        },
+        {
+          "url": "https://www.youtube.com/@Ananta_Game"
+        },
+        {
+          "url": "https://twitter.com/Ananta_EN"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4814120"
+        },
+        {
+          "url": "https://ananta.fandom.com/wiki/Ananta_Wiki"
+        },
+        {
+          "url": "https://www.facebook.com/ananta.en"
+        },
+        {
+          "url": "https://www.instagram.com/ananta.global"
+        },
+        {
+          "url": "https://www.reddit.com/r/AnantaOfficial"
+        },
+        {
+          "url": "https://discord.gg/ananta"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.netease.anantana"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/ananta/id6776533126"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/project-mugen"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10009022"
+        },
+        {
+          "url": "https://www.anantagame.com/"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 4814120
+    },
+    {
+      "id": "igdb:325599",
+      "igdb_id": 325599,
+      "display_name": "Stranger Than Heaven",
+      "name_en": "Stranger Than Heaven",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 110,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "partial",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "zh",
+              "name": "中文"
+            }
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000",
+          "checked_at": "2026-10-04T13:46:24Z",
+          "evidence_type": "official_chinese_unspecified",
+          "product_id": "JP0177-PPSA34972_00-MAINGAME00000000"
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/stranger-than-heaven"
+      },
+      "releases": [
+        {
+          "date": "2027-01-15",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-01-15",
+          "source_timestamp": 1799971200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-15",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000",
+          "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T13:46:24Z",
+          "official_product_id": "JP0177-PPSA34972_00-MAINGAME00000000",
+          "official_release_time_utc": "2027-01-14T16:00:00Z"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobu6l.jpg",
+      "url": "https://www.igdb.com/games/stranger-than-heaven",
+      "websites": [
+        {
+          "url": "https://yakuza.fandom.com/wiki/Stranger_Than_Heaven"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/STRANGER-THAN-HEAVEN/9P8XK6X57GBF"
+        },
+        {
+          "url": "https://stranger-than-heaven.com/"
+        },
+        {
+          "url": "https://x.com/STH_JP"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Stranger_Than_Heaven"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4260840"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017939"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000"
+      },
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
+    },
+    {
+      "id": "igdb:381208",
+      "igdb_id": 381208,
+      "display_name": "坦克狂途 TankRat",
+      "name_en": "TankRat",
+      "name_zh_tw": "坦克狂途 TankRat",
+      "name_source": "Steam appdetails (schinese)",
+      "name_url": "https://store.steampowered.com/app/1637460/?l=schinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hans",
+        "converted": true,
+        "igdb_id": 381208,
+        "name_en": "TankRat",
+        "steam_appid": 1637460,
+        "identity_source": "IGDB external_games Steam",
+        "language": "schinese"
+      },
+      "hypes": 31,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/tankrat"
+      },
+      "releases": [
+        {
+          "date": "2027-01-15",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-01-15",
+          "source_timestamp": 1799971200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-15",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cob0ej.jpg",
+      "url": "https://www.igdb.com/games/tankrat",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/1637460"
+        },
+        {
+          "url": "https://www.tankrat.com/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/tankrat"
+        },
+        {
+          "url": "https://www.instagram.com/playtankrat"
+        },
+        {
+          "url": "https://x.com/playtankrat"
+        },
+        {
+          "url": "https://discord.gg/TzjAfw2JJn"
+        },
+        {
+          "url": "https://www.youtube.com/@playtankrat"
+        },
+        {
+          "url": "https://store.playstation.com/en-gb/concept/10005291"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 1637460
+    },
+    {
+      "id": "igdb:261146",
+      "igdb_id": 261146,
+      "display_name": "Titan Quest II",
+      "name_en": "Titan Quest II",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 35,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/titan-quest-ii"
+      },
+      "releases": [
+        {
+          "date": "2027-01-19",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-01-19",
+          "source_timestamp": 1800316800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-19",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co6x9v.jpg",
+      "url": "https://www.igdb.com/games/titan-quest-ii",
+      "websites": [
+        {
+          "url": "https://www.facebook.com/THQNordic/"
+        },
+        {
+          "url": "https://twitter.com/THQNordic"
+        },
+        {
+          "url": "https://www.youtube.com/thqnordic"
+        },
+        {
+          "url": "https://www.instagram.com/thqnordic/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/1154030/Titan_Quest_II/"
+        },
+        {
+          "url": "https://bsky.app/profile/thqnordic.com"
+        },
+        {
+          "url": "https://discord.gg/invite/titanquest"
+        },
+        {
+          "url": "https://titanquest2.thqnordic.com/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/titan-quest-ii"
+        },
+        {
+          "url": "https://store.epicgames.com/en-US/p/titan-quest-ii-391cf4"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Titan_Quest_II"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
+    },
+    {
+      "id": "igdb:404058",
+      "igdb_id": 404058,
+      "display_name": "Until Dawn 2",
+      "name_en": "Until Dawn 2",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 60,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "partial",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "zh",
+              "name": "中文"
+            }
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "checked_at": "2026-10-04T13:46:24Z",
+          "evidence_type": "official_chinese_unspecified",
+          "product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001"
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "listed_only",
+        "platform": "PS5",
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/until-dawn-2"
+      },
+      "releases": [
+        {
+          "date": "2027-01-28",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-01-28",
+          "source_timestamp": 1801094400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-28",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T13:46:24Z",
+          "official_product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "official_release_time_utc": "2027-01-27T16:00:00Z"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocvjf.jpg",
+      "url": "https://www.igdb.com/games/until-dawn-2",
+      "websites": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Until_Dawn_2"
+        },
+        {
+          "url": "https://until-dawn.fandom.com/wiki/Until_Dawn_2"
+        },
+        {
+          "url": "https://www.reddit.com/r/untildawn/"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10004067"
+        },
+        {
+          "url": "https://www.playstation.com/en-us/games/until-dawn-2/"
+        },
+        {
+          "url": "https://x.com/FirespriteGames"
+        },
+        {
+          "url": "https://www.instagram.com/firespritegames/"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001"
+      },
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
+    },
+    {
+      "id": "igdb:398225",
+      "igdb_id": 398225,
+      "display_name": "戰慄深隧2039",
+      "name_en": "Metro 2039",
+      "name_zh_tw": "戰慄深隧2039",
+      "name_source": "Steam appdetails (tchinese)",
+      "name_url": "https://store.steampowered.com/app/2590240/?l=tchinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hant",
+        "converted": false,
+        "igdb_id": 398225,
+        "name_en": "Metro 2039",
+        "steam_appid": 2590240,
+        "identity_source": "IGDB external_games Steam",
+        "language": "tchinese"
+      },
+      "hypes": 108,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/metro-2039"
+      },
+      "releases": [
+        {
+          "date": "2027-02-04",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-02-04",
+          "source_timestamp": 1801699200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-02-04",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobxor.jpg",
+      "url": "https://www.igdb.com/games/metro-2039",
+      "websites": [
+        {
+          "url": "https://x.com/metrovideogame"
+        },
+        {
+          "url": "https://www.facebook.com/MetroVideoGame/"
+        },
+        {
+          "url": "https://www.instagram.com/metrovideogame"
+        },
+        {
+          "url": "https://www.reddit.com/r/metro"
+        },
+        {
+          "url": "https://metro2039.com/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/metro-2039"
+        },
+        {
+          "url": "https://store.epicgames.com/en-US/p/gozo-086260"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2590240/"
+        },
+        {
+          "url": "https://www.xbox.com/en-US/games/store/metro-2039/9nt5pb1rz9ld"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10009337"
+        },
+        {
+          "url": "https://bsky.app/profile/metrovideogame.bsky.social"
+        },
+        {
+          "url": "https://discord.com/invite/metrovideogame"
+        },
+        {
+          "url": "https://www.youtube.com/metrovideogame"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Metro_2039"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 2590240
     },
     {
       "id": "igdb:381235",
@@ -2680,6 +4709,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -2692,7 +4726,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -2705,6 +4740,22 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -2788,7 +4839,29 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2027-02-12",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-02-12",
+          "source_timestamp": 1802390400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-02-12",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cob1kg.jpg",
@@ -2817,259 +4890,129 @@
         }
       ],
       "nintendo_url": "https://www.nintendo.com/us/store/products/tomb-raider-legacy-of-atlantis-switch-2/",
+      "playstation_url": null,
+      "platform_urls": {},
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
-      "id": "igdb:251059",
-      "igdb_id": 251059,
-      "display_name": "埋谷季",
-      "name_en": "Grave Seasons",
-      "name_zh_tw": "埋谷季",
-      "name_source": "Steam appdetails (schinese)",
-      "name_url": "https://store.steampowered.com/app/3255110/?l=schinese",
-      "name_evidence": {
-        "provider": "steam_appdetails",
-        "locale": "zh-Hans",
-        "converted": true,
-        "igdb_id": 251059,
-        "name_en": "Grave Seasons",
-        "steam_appid": 3255110,
-        "identity_source": "IGDB external_games Steam",
-        "language": "schinese"
-      },
-      "steam_appid": 3255110,
-      "hypes": 44,
-      "hypes_status": "available",
-      "popularity_status": "qualified",
-      "platforms": [
-        {
-          "id": 130,
-          "name": "Nintendo Switch",
-          "code": "NS"
-        }
-      ],
-      "known_platforms": [
-        {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 130,
-          "name": "Nintendo Switch",
-          "code": "NS"
-        },
-        {
-          "id": 167,
-          "name": "PlayStation 5"
-        },
-        {
-          "id": 169,
-          "name": "Xbox Series X|S"
-        }
-      ],
-      "platform_language_support": {
-        "NS": {
-          "status": "unknown",
-          "region": null,
-          "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
-          },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
-        }
-      },
-      "platform_editions": {},
-      "platform_data_complete": true,
-      "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
-        "source": "IGDB",
-        "url": "https://www.igdb.com/games/grave-seasons"
-      },
-      "releases": [
-        {
-          "date": "2027-03-09",
-          "platform": "NS",
-          "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
-          "source_date": "2027-03-09",
-          "source_timestamp": 1804550400,
-          "source_region": "worldwide",
-          "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2027-03-09",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null
-        }
-      ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobtwq.jpg",
-      "url": "https://www.igdb.com/games/grave-seasons",
-      "websites": [
-        {
-          "url": "https://www.youtube.com/@perfectgarbage1871"
-        },
-        {
-          "url": "https://www.perfectgarbage.com/grave-seasons"
-        },
-        {
-          "url": "https://www.instagram.com/perfectgarbo/"
-        },
-        {
-          "url": "https://twitter.com/perfectgarbo"
-        },
-        {
-          "url": "https://discord.gg/invite/2Avfb8pNCq"
-        },
-        {
-          "url": "https://bsky.app/profile/perfectgarbage.bsky.social"
-        },
-        {
-          "url": "https://store.steampowered.com/app/3255110/"
-        },
-        {
-          "url": "https://www.xbox.com/en-us/games/store/grave-seasons/9n36kgdxkm0s"
-        },
-        {
-          "url": "https://store.playstation.com/en-us/concept/10014259"
-        },
-        {
-          "url": "https://graveseasons.site/"
-        }
-      ],
-      "nintendo_url": null,
-      "game_type": "main_game",
-      "sexual_content_screened": true,
-      "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
-      "first_observed_at": "2026-10-03T16:40:12Z"
-    },
-    {
-      "id": "igdb:252852",
-      "igdb_id": 252852,
-      "display_name": "Mariachi Legends",
-      "name_en": "Mariachi Legends",
+      "id": "igdb:404063",
+      "igdb_id": 404063,
+      "display_name": "God of War Laufey",
+      "name_en": "God of War Laufey",
       "name_zh_tw": null,
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 31,
+      "hypes": 108,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
         {
-          "id": 130,
-          "name": "Nintendo Switch",
-          "code": "NS"
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
         }
       ],
       "known_platforms": [
         {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 130,
-          "name": "Nintendo Switch",
-          "code": "NS"
-        },
-        {
           "id": 167,
-          "name": "PlayStation 5"
-        },
-        {
-          "id": 169,
-          "name": "Xbox Series X|S"
+          "name": "PlayStation 5",
+          "code": "PS5"
         }
       ],
       "platform_language_support": {
-        "NS": {
-          "status": "unknown",
-          "region": null,
+        "PS5": {
+          "status": "partial",
+          "region": "taiwan",
           "languages": {
             "tchinese": null,
             "schinese": null,
             "english": null,
-            "chinese": null
+            "chinese": true
           },
-          "supported_languages": [],
+          "supported_languages": [
+            {
+              "code": "zh",
+              "name": "中文"
+            }
+          ],
           "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
+          "source": "PlayStation Store 台灣官方商品標題（中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000",
+          "checked_at": "2026-10-04T13:53:59Z",
+          "evidence_type": "official_chinese_unspecified",
+          "product_id": "UP9000-PPSA19249_00-LAUFEY0000000000"
         }
       },
       "platform_editions": {},
       "platform_data_complete": true,
       "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
+        "status": "listed_only",
+        "platform": "PS5",
         "source": "IGDB",
-        "url": "https://www.igdb.com/games/mariachi-legends"
+        "url": "https://www.igdb.com/games/god-of-war-laufey"
       },
       "releases": [
         {
-          "date": "2027-04-27",
-          "platform": "NS",
+          "date": "2027-02-16",
+          "platform": "PS5",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day",
-          "source_date": "2027-04-27",
-          "source_timestamp": 1808784000,
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-02-16",
+          "source_timestamp": 1802736000,
           "source_region": "worldwide",
           "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2027-04-27",
-          "timezone_status": "same_calendar_day",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null
+          "timestamp_taipei_date": "2027-02-16",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000",
+          "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T13:53:59Z",
+          "official_product_id": "UP9000-PPSA19249_00-LAUFEY0000000000",
+          "official_release_time_utc": "2027-02-15T16:00:00Z"
         }
       ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co93lp.jpg",
-      "url": "https://www.igdb.com/games/mariachi-legends",
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc5rc.jpg",
+      "url": "https://www.igdb.com/games/god-of-war-laufey",
       "websites": [
         {
-          "url": "https://www.halberdstudios.com/mariachi-legends"
+          "url": "https://www.playstation.com/en-us/games/god-of-war-laufey/"
         },
         {
-          "url": "https://store.epicgames.com/en-US/p/mariachi-legends-773b34"
+          "url": "https://store.playstation.com/en-us/concept/10009461"
         },
         {
-          "url": "https://twitter.com/HALBERDSTUDIOS?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+          "url": "https://twitter.com/sonysantamonica"
         },
         {
-          "url": "https://store.steampowered.com/app/2376260/Mariachi_Legends/"
+          "url": "https://www.facebook.com/godofwar"
         },
         {
-          "url": "https://discord.gg/QQpmcn9UvN"
+          "url": "https://instagram.com/santamonicastudio"
         },
         {
-          "url": "https://www.xbox.com/en-US/games/store/mariachi-legends/9phd73mh05f4"
+          "url": "https://www.youtube.com/user/PlayStation"
+        },
+        {
+          "url": "https://godofwar.fandom.com/wiki/God_of_War_Laufey"
         }
       ],
       "nintendo_url": null,
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000"
+      },
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
-      "first_observed_at": "2026-10-03T16:40:12Z"
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:348210",
@@ -3091,6 +5034,11 @@
       "popularity_status": "qualified",
       "platforms": [
         {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
           "id": 508,
           "name": "Nintendo Switch 2",
           "code": "NS2"
@@ -3103,7 +5051,8 @@
         },
         {
           "id": 167,
-          "name": "PlayStation 5"
+          "name": "PlayStation 5",
+          "code": "PS5"
         },
         {
           "id": 169,
@@ -3116,6 +5065,28 @@
         }
       ],
       "platform_language_support": {
+        "PS5": {
+          "status": "partial",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "zh",
+              "name": "中文"
+            }
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中日英韓文版；中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
+          "checked_at": "2026-10-04T13:20:00Z",
+          "evidence_type": "official_chinese_unspecified",
+          "product_id": "JP0005-PPSA23593_00-APPLICATION00000"
+        },
         "NS2": {
           "status": "confirmed",
           "region": "taiwan",
@@ -3203,7 +5174,29 @@
           "taiwan_release_confirmed": true,
           "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
           "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
-          "official_verified_at": "2026-10-04T04:20:18Z"
+          "official_verified_at": "2026-10-04T04:20:18Z",
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2027-02-18",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-02-18",
+          "source_timestamp": 1802908800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-02-18",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
+          "official_source_name": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "official_verified_at": "2026-10-04T13:20:00Z",
+          "official_product_id": "JP0005-PPSA23593_00-APPLICATION00000",
+          "official_release_time_utc": "2027-02-17T16:00:00Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc7iu.jpg",
@@ -3244,10 +5237,488 @@
         }
       ],
       "nintendo_url": null,
+      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
+      "platform_urls": {
+        "PS5": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000"
+      },
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T13:00:33Z",
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:251059",
+      "igdb_id": 251059,
+      "display_name": "埋谷季",
+      "name_en": "Grave Seasons",
+      "name_zh_tw": "埋谷季",
+      "name_source": "Steam appdetails (schinese)",
+      "name_url": "https://store.steampowered.com/app/3255110/?l=schinese",
+      "name_evidence": {
+        "provider": "steam_appdetails",
+        "locale": "zh-Hans",
+        "converted": true,
+        "igdb_id": 251059,
+        "name_en": "Grave Seasons",
+        "steam_appid": 3255110,
+        "identity_source": "IGDB external_games Steam",
+        "language": "schinese"
+      },
+      "steam_appid": 3255110,
+      "hypes": 44,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/grave-seasons"
+      },
+      "releases": [
+        {
+          "date": "2027-03-09",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-03-09",
+          "source_timestamp": 1804550400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-03-09",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2027-03-09",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-03-09",
+          "source_timestamp": 1804550400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-03-09",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobtwq.jpg",
+      "url": "https://www.igdb.com/games/grave-seasons",
+      "websites": [
+        {
+          "url": "https://www.youtube.com/@perfectgarbage1871"
+        },
+        {
+          "url": "https://www.perfectgarbage.com/grave-seasons"
+        },
+        {
+          "url": "https://www.instagram.com/perfectgarbo/"
+        },
+        {
+          "url": "https://twitter.com/perfectgarbo"
+        },
+        {
+          "url": "https://discord.gg/invite/2Avfb8pNCq"
+        },
+        {
+          "url": "https://bsky.app/profile/perfectgarbage.bsky.social"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3255110/"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/grave-seasons/9n36kgdxkm0s"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10014259"
+        },
+        {
+          "url": "https://graveseasons.site/"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:279621",
+      "igdb_id": 279621,
+      "display_name": "Exodus",
+      "name_en": "Exodus",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 150,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/exodus--5"
+      },
+      "releases": [
+        {
+          "date": "2027-04-07",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-04-07",
+          "source_timestamp": 1807056000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-04-07",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaott.jpg",
+      "url": "https://www.igdb.com/games/exodus--5",
+      "websites": [
+        {
+          "url": "https://www.facebook.com/EXODUSGameOfficial"
+        },
+        {
+          "url": "https://www.instagram.com/exodusgameofficial/"
+        },
+        {
+          "url": "https://www.youtube.com/@EXODUSGameOfficial"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/exodus/9nzrhch0pl9b"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10013615/"
+        },
+        {
+          "url": "https://bsky.app/profile/exodusgameofficial.bsky.social"
+        },
+        {
+          "url": "https://epicgames.com/p/exodus-67511f"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Exodus_(2027_video_game)"
+        },
+        {
+          "url": "https://twitter.com/ArchetypeEnt"
+        },
+        {
+          "url": "https://www.exodusgame.com/en-US"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/exodus-4"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3230960"
+        },
+        {
+          "url": "https://discord.gg/exodusgame"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
+    },
+    {
+      "id": "igdb:252852",
+      "igdb_id": 252852,
+      "display_name": "Mariachi Legends",
+      "name_en": "Mariachi Legends",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 31,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_language_support": {
+        "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/mariachi-legends"
+      },
+      "releases": [
+        {
+          "date": "2027-04-27",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-04-27",
+          "source_timestamp": 1808784000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-04-27",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2027-04-27",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-04-27",
+          "source_timestamp": 1808784000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-04-27",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co93lp.jpg",
+      "url": "https://www.igdb.com/games/mariachi-legends",
+      "websites": [
+        {
+          "url": "https://www.halberdstudios.com/mariachi-legends"
+        },
+        {
+          "url": "https://store.epicgames.com/en-US/p/mariachi-legends-773b34"
+        },
+        {
+          "url": "https://twitter.com/HALBERDSTUDIOS?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2376260/Mariachi_Legends/"
+        },
+        {
+          "url": "https://discord.gg/QQpmcn9UvN"
+        },
+        {
+          "url": "https://www.xbox.com/en-US/games/store/mariachi-legends/9phd73mh05f4"
+        }
+      ],
+      "nintendo_url": null,
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T13:58:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
