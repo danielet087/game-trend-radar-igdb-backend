@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "games": {
+    "igdb:348210": {
+      "igdb_id": 348210,
+      "name_en": "Persona 4 Revival",
+      "platforms": {
+        "PS5": {
+          "region": "taiwan",
+          "supported_languages": ["zh"],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中日英韓文版；中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
+          "product_id": "JP0005-PPSA23593_00-APPLICATION00000",
+          "checked_at": "2026-10-04T13:20:00Z",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      }
+    }
+  }
+}

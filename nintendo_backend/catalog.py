@@ -14,6 +14,7 @@ from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
 
 PLATFORMS = {130: {"id": 130, "name": "Nintendo Switch", "code": "NS"},
+             167: {"id": 167, "name": "PlayStation 5", "code": "PS5"},
              508: {"id": 508, "name": "Nintendo Switch 2", "code": "NS2"}}
 FORMATS = {0: "YYYYMMMMDD", 1: "YYYYMMMM", 2: "YYYY", 3: "YYYYQ1",
            4: "YYYYQ2", 5: "YYYYQ3", 6: "YYYYQ4", 7: "TBD"}
@@ -28,7 +29,8 @@ TAIPEI = ZoneInfo("Asia/Taipei")
 RELEASE_FIELDS = ("date", "platform", "precision", "region", "source", "date_basis",
                   "source_date", "source_timestamp", "source_region", "time_zone",
                   "timestamp_taipei_date", "timezone_status", "taiwan_release_confirmed",
-                  "official_source_url", "official_source_name", "official_verified_at")
+                  "official_source_url", "official_source_name", "official_verified_at",
+                  "official_product_id", "official_release_time_utc")
 
 
 def reference(value, field="name"):
@@ -134,7 +136,8 @@ def release_record(row):
             "source_date": source_day, "source_timestamp": timestamp, "source_region": region,
             "time_zone": "Asia/Taipei", "timestamp_taipei_date": converted_day,
             "timezone_status": timezone_status, "taiwan_release_confirmed": False,
-            "official_source_url": None, "official_source_name": None, "official_verified_at": None}
+            "official_source_url": None, "official_source_name": None, "official_verified_at": None,
+            "official_product_id": None, "official_release_time_utc": None}
 
 
 def content_policy(game):
@@ -220,10 +223,12 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
                     "source": "official_registry", "date_basis": "taiwan_official_calendar_day",
                     "timezone_status": "taiwan_official_date", "taiwan_release_confirmed": True,
                     "official_source_url": official["url"], "official_source_name": official["source"],
-                    "official_verified_at": official["verified_at"]})
+                    "official_verified_at": official["verified_at"],
+                    "official_product_id": official.get("product_id"),
+                    "official_release_time_utc": official.get("release_time_utc")})
         releases.append(row)
     outside = known_ids - PLATFORMS.keys()
-    exclusive_status = "multi_platform" if outside else "listed_only" if platform_complete else "unknown"
+    exclusive_status = "multi_platform" if outside or (platform_complete and len(known_ids) > 1) else "listed_only" if platform_complete else "unknown"
     exclusive_platform = tracked[0]["code"] if len(tracked) == 1 and not outside and platform_complete else None
     game_type_ref = game.get("game_type") or {}
     game_type = game_type_ref.get("type") if isinstance(game_type_ref, dict) else None
@@ -241,7 +246,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     calendar_releases = []
     # Region priority, including a more relevant known date outside the window,
     # prevents incorrectly replacing an earlier Asia date with a later US date.
-    for code in ("NS", "NS2"):
+    for code in ("NS", "NS2", "PS5"):
         exact = [r for r in releases if r["platform"] == code and r["precision"] == "day"
                  and not str(r["status"] or "").lower().startswith(("cancel", "rumor"))]
         if not exact:
@@ -259,7 +264,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
             calendar_releases.append({key: selected[key] for key in RELEASE_FIELDS})
     reasons = []
     if not tracked:
-        reasons.append("no_nintendo_platform")
+        reasons.append("no_tracked_native_platform")
     if game_type not in ALLOWED_TYPES:
         reasons.append("not_standalone_game")
     if cancelled:
@@ -280,6 +285,16 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if isinstance(website, dict) and (website_url := safe_url(website.get("url"))):
             websites.append({"url": website_url})
     nintendo_urls = [row["url"] for row in websites if safe_url(row["url"], ["nintendo.com", "nintendo.co.jp", "nintendo.com.hk"])]
+    from .playstation import official_url as playstation_official_url
+    playstation_urls = [row["url"] for row in websites if playstation_official_url(row["url"])]
+    # Reviewed platform evidence can identify a regional store product even
+    # when IGDB has not linked it yet. Never copy a Nintendo URL to PS5.
+    for evidence in list(platform_language_support(game, tracked, language_registry).values()) + list(platform_editions(game, tracked, language_registry).values()):
+        if (link := playstation_official_url(evidence.get("source_url"))) and link not in playstation_urls:
+            playstation_urls.insert(0, link)
+    for evidence in official_releases(game, release_registry):
+        if evidence["platform"] == "PS5" and (link := playstation_official_url(evidence["url"])) and link not in playstation_urls:
+            playstation_urls.insert(0, link)
     result = {"id": "igdb:" + str(game["id"]), "igdb_id": game["id"],
               **names(game, registry=name_registry, previous=previous),
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
@@ -290,6 +305,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "exclusivity": {"status": exclusive_status, "platform": exclusive_platform, "source": "IGDB", "url": url},
               "releases": calendar_releases, "release_records": releases, "cover_image": cover_url, "url": url,
               "websites": websites, "nintendo_url": nintendo_urls[0] if nintendo_urls else None,
+              "playstation_url": playstation_urls[0] if playstation_urls else None,
+              "platform_urls": {"PS5": playstation_urls[0]} if playstation_urls else {},
               "game_type": game_type, "content_screening": screening,
               "sexual_content_screened": screening["status"] == "screened", "calendar_eligible": not reasons,
               "eligibility_reasons": reasons, "possible_in_window": bool(possible), "checked_at": checked_at,

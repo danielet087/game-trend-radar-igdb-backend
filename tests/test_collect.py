@@ -34,6 +34,40 @@ def test_collect_does_not_pre_filter_hypes_and_rehydrates_previous_games():
     assert status["complete"] is True
     assert all("hypes >=" not in query for _, query in api.calls)
     assert "id = (1,2)" in api.calls[-1][1]
+    assert "platform = (130,167,508)" in api.calls[1][1]
+    assert status["source"]["platform_ids_verified"] == [130, 167, 508]
+
+
+def test_collect_discovers_ps5_without_dropping_previous_nintendo_ledger():
+    raw1 = {"id": 1, "name": "PS5 adventure", "hypes": 30, "platforms": [{"id": 167}], "category": 0,
+        "summary": "An adventure.", "release_dates": [{"platform": {"id": 167}, "category": 0, "y": 2027, "m": 3, "d": 1, "region": 8}]}
+    raw2 = {"id": 2, "name": "Previous NS", "hypes": 0, "platforms": [{"id": 130}], "category": 0}
+    api = Client([{"count": 1}, [{"id": 4, "game": 1, "platform": 167}], {"count": 1}, [raw1, raw2]])
+    master, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z",
+        previous={"games": {"igdb:2": {"igdb_id": 2}}})
+    assert set(master["games"]) == {"igdb:1", "igdb:2"}
+    assert public["games"][0]["releases"][0]["platform"] == "PS5"
+    assert status["complete"] is True
+
+
+def test_store_investigation_prioritizes_future_ps5_and_cannot_supply_public_proof():
+    def release(platform, year):
+        return {"platform": {"id": platform}, "category": 0, "y": year, "m": 3, "d": 1, "region": 8}
+    raw1 = {"id": 1, "name": "Existing PS5 port", "hypes": 100, "platforms": [{"id": 167}, {"id": 508}],
+        "category": 0, "summary": "An adventure.", "release_dates": [release(167, 2025), release(508, 2027)]}
+    raw2 = {"id": 2, "name": "Future PS5 game", "hypes": 30, "platforms": [{"id": 167}],
+        "category": 0, "summary": "An adventure.", "release_dates": [release(167, 2027)]}
+    api = Client([{"count": 2}, [{"id": 4, "game": 1, "platform": 508}, {"id": 5, "game": 2, "platform": 167}],
+                  {"count": 2}, [raw1, raw2]])
+    class Store:
+        def investigate(self, games):
+            assert [row["id"] for row in games] == [2, 1]
+            return {"evidence": {"date": "2027-09-01", "supported_languages": ["zh-Hant"]}}
+    _, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", playstation_client=Store())
+    future = next(row for row in public["games"] if row["igdb_id"] == 2)
+    assert future["releases"][0]["date"] == "2027-03-01"
+    assert future["platform_language_support"]["PS5"]["languages"]["tchinese"] is None
+    assert status["playstation_investigation"]["review_only"] is True
 
 
 def test_missing_batch_game_prevents_complete_snapshot():

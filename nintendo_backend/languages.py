@@ -1,4 +1,4 @@
-"""Reviewed language evidence for a precise Nintendo game and native version.
+"""Reviewed language evidence for a precise game and native platform version.
 
 The Steam version and a game's general IGDB metadata cannot establish which
 languages the NS or NS2 product supports. Missing evidence stays unknown.
@@ -13,8 +13,10 @@ import re
 from urllib.parse import urlparse
 
 from .igdb import CollectionError
+from .playstation import official_url as playstation_url, product_id as playstation_product_id, PRODUCT_ID
 
 REGISTRY_PATH = Path(__file__).resolve().parents[1] / "data" / "nintendo_languages.json"
+PLAYSTATION_REGISTRY_PATH = Path(__file__).resolve().parents[1] / "data" / "playstation_languages.json"
 OFFICIAL_DOMAINS = {"www.nintendo.com", "www.nintendo.co.jp", "www.nintendo.com.hk",
                     "ec.nintendo.com", "asia.sega.com", "www.konami.com",
                     "www.playtombraider.com", "www.layton.jp"}
@@ -33,7 +35,10 @@ LANGUAGE_NAMES = {
 }
 
 
-def _source_url(value, region):
+def _source_url(value, region, platform=None):
+    if platform == "PS5":
+        url = playstation_url(value, region=region)
+        return bool(url and urlparse(url).hostname == "store.playstation.com")
     if not isinstance(value, str) or len(value) > 2000:
         return False
     try:
@@ -58,9 +63,9 @@ def _source_url(value, region):
         return False
 
 
-def _edition_identity_url(value, region):
+def _edition_identity_url(value, region, platform=None):
     """Publisher base-inclusion proof may differ from the regional product URL."""
-    if _source_url(value, region):
+    if _source_url(value, region, platform):
         return True
     if not isinstance(value, str) or len(value) > 2000:
         return False
@@ -73,16 +78,17 @@ def _edition_identity_url(value, region):
         return False
 
 
-def _edition_valid(row):
+def _edition_valid(row, platform=None):
     if "edition_type" not in row and "edition_label" not in row:
         return True
     return (row.get("edition_type") in EDITION_TYPES
             and isinstance(row.get("edition_label"), str) and 0 < len(row["edition_label"].strip()) <= 120
             and isinstance(row.get("official_title"), str) and 0 < len(row["official_title"].strip()) <= 240
-            and isinstance(row.get("product_id"), str) and re.fullmatch(r"[0-9]{14}", row["product_id"]) is not None
+            and isinstance(row.get("product_id"), str)
+            and re.fullmatch(PRODUCT_ID if platform == "PS5" else r"[0-9]{14}", row["product_id"]) is not None
             and row.get("identity_relation") == "base_game_included"
             and isinstance(row.get("identity_evidence"), str) and 0 < len(row["identity_evidence"].strip()) <= 1000
-            and _edition_identity_url(row.get("identity_source_url"), row.get("region")))
+            and _edition_identity_url(row.get("identity_source_url"), row.get("region"), platform))
 
 
 def validate_registry(document):
@@ -94,9 +100,9 @@ def validate_registry(document):
                 or key != "igdb:" + str(game["igdb_id"])
                 or not isinstance(game.get("name_en"), str) or not 0 < len(game["name_en"].strip()) <= 240
                 or not isinstance(game.get("platforms"), dict) or not game["platforms"]
-                or set(game["platforms"]) - {"NS", "NS2"}):
+                or set(game["platforms"]) - {"NS", "NS2", "PS5"}):
             raise CollectionError("invalid_nintendo_language_registry")
-        for row in game["platforms"].values():
+        for platform, row in game["platforms"].items():
             try:
                 if not isinstance(row, dict):
                     raise ValueError
@@ -106,11 +112,13 @@ def validate_registry(document):
                         or not isinstance(codes, list) or not codes or len(codes) != len(set(codes))
                         or any(code not in LANGUAGE_NAMES for code in codes)
                         or not isinstance(row.get("source"), str) or not 0 < len(row["source"].strip()) <= 240
-                        or checked.utcoffset() is None or not _source_url(row.get("source_url"), row["region"])
+                        or checked.utcoffset() is None or not _source_url(row.get("source_url"), row["region"], platform)
+                        or (platform == "PS5" and playstation_product_id(row.get("source_url"))
+                            and row.get("product_id") != playstation_product_id(row["source_url"]))
                         or row.get("evidence_type") not in {"official_product_languages", "official_chinese_unspecified"}
                         or (row["evidence_type"] == "official_chinese_unspecified"
                             and (row["complete"] or codes != ["zh"]))
-                        or not _edition_valid(row)):
+                        or not _edition_valid(row, platform)):
                     raise ValueError
             except (ValueError, TypeError, KeyError, AttributeError):
                 raise CollectionError("invalid_nintendo_language_registry") from None
@@ -123,6 +131,22 @@ def load_registry(path=REGISTRY_PATH):
     except (OSError, ValueError, UnicodeError):
         raise CollectionError("invalid_nintendo_language_registry") from None
     return validate_registry(document)
+
+
+def load_combined_registry(nintendo_path=REGISTRY_PATH, playstation_path=PLAYSTATION_REGISTRY_PATH):
+    """Keep evidence for Nintendo and PlayStation versions independently bound."""
+    result = deepcopy(load_registry(nintendo_path))
+    for key, game in load_registry(playstation_path).items():
+        if key not in result:
+            result[key] = deepcopy(game)
+            continue
+        existing = result[key]
+        if existing["name_en"] != game["name_en"] or existing["igdb_id"] != game["igdb_id"]:
+            raise CollectionError("conflicting_native_language_registry_identity")
+        if set(existing["platforms"]) & set(game["platforms"]):
+            raise CollectionError("conflicting_native_language_registry_platform")
+        existing["platforms"].update(deepcopy(game["platforms"]))
+    return result
 
 
 def unknown_support():
@@ -155,6 +179,8 @@ def platform_language_support(game, tracked_platforms, registry=None):
                             "supported_languages": [{"code": code, "name": LANGUAGE_NAMES[code]} for code in row["supported_languages"]],
                             "complete": complete, **{key: deepcopy(row[key]) for key in
                                                       ("source", "source_url", "checked_at", "evidence_type")}}
+        if platform == "PS5" and row.get("product_id"):
+            result[platform]["product_id"] = row["product_id"]
     return result
 
 

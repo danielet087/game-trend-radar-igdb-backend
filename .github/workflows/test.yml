@@ -1,8 +1,8 @@
-name: Test Nintendo backend
+name: Test IGDB console backend
 on:
   push:
     branches: [main]
-    paths: ['nintendo_backend/**', 'scripts/**', 'tests/**', 'data/chinese_names.json', 'requirements*.txt', '.github/workflows/test.yml']
+    paths: ['nintendo_backend/**', 'scripts/**', 'tests/**', 'data/chinese_names.json', 'data/*languages.json', 'data/*release_dates.json', 'requirements*.txt', '.github/workflows/test.yml']
   pull_request:
 permissions:
   contents: read

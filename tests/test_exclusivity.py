@@ -224,3 +224,65 @@ def test_cli_syncs_only_evidence_into_master_and_preserves_completion(tmp_path, 
     assert public['games'][0]['exclusivity'] == master['games'][row['id']]['exclusivity']
     assert status['complete'] is True and status['public_count'] == 1
     assert status['exclusivity_counts']['confirmed'] == 1
+
+
+def test_ps5_single_platform_never_inherits_nintendo_exclusivity_or_store_branding():
+    row = game(name="A PS5 game", igdb_id=1)
+    row["platforms"] = [{"id": 167, "name": "PlayStation 5", "code": "PS5"}]
+    row["known_platforms"] = deepcopy(row["platforms"])
+    row["exclusivity"].update(platform="PS5")
+    row["playstation_url"] = "https://store.playstation.com/zh-hant-tw/product/HP0001-PPSA12345_00-BASEGAME00000000"
+    original, result, session = enrich(row)
+    assert len(session.calls) == 1  # A Sony listing alone never proves exclusivity.
+    assert result["games"][0] == row and result["games"][0]["exclusivity"]["status"] == "listed_only"
+    assert ex.validate_enriched_game(original["games"][0], result["games"][0])
+
+
+def ps5_game():
+    row = game(name="A PS5 game", igdb_id=1)
+    row["platforms"] = [{"id": 167, "name": "PlayStation 5", "code": "PS5"}]
+    row["known_platforms"] = deepcopy(row["platforms"])
+    row["exclusivity"].update(platform="PS5")
+    row["nintendo_url"] = None
+    row["playstation_url"] = "https://www.playstation.com/en-tw/games/a-ps5-game"
+    row["platform_urls"] = {"PS5": row["playstation_url"]}
+    return row
+
+
+def test_ps5_exact_official_product_metadata_confirms_and_publisher_validates():
+    row = ps5_game()
+    html = '<meta property="og:title" content="A PS5 game - PS5 Games | PlayStation (Taiwan)">' \
+           '<meta name="description" content="A PS5 game is available exclusively for PlayStation 5.">'
+    session = Session(Response(html, url=row["playstation_url"]))
+    updated = ex.enrich_exclusivity({"games": [row]}, session)["games"][0]
+    assert updated["exclusivity"]["status"] == "confirmed" and updated["exclusivity"]["source"] == "PlayStation official"
+    assert updated["nintendo_url"] is None and updated["playstation_url"] == row["playstation_url"]
+    assert ex.validate_enriched_game(row, updated)
+    updated["nintendo_url"] = URL
+    assert not ex.validate_enriched_game(row, updated)
+
+
+@pytest.mark.parametrize("phrase", [
+    "A PS5 game is available on PS5.", "Other game is only on PS5.",
+    "A PS5 game is not exclusively for PlayStation 5.",
+    "A PS5 game has PS5 exclusive content.", "A PS5 game is a PS5 console exclusive.",
+    "A PS5 game is only on PS5 and PC.", "A PS5 game is a timed exclusive for PS5.",
+    "A PS5 game has bonus content available only on PS5.",
+    "A PS5 game has content only on PS5 bonus.",
+    "A PS5 game has DLC available exclusively on PlayStation 5.",
+])
+def test_ps5_unproven_timed_content_or_other_game_exclusivity_stays_unconfirmed(phrase):
+    row = ps5_game()
+    html = '<meta property="og:title" content="A PS5 game"><meta name="description" content="' + phrase + '">'
+    session = Session(Response(html, url=row["playstation_url"]))
+    assert ex.enrich_exclusivity({"games": [row]}, session)["games"][0] == row
+
+
+def test_ps5_scoped_json_product_and_cross_platform_evidence_remain_separate():
+    row = ps5_game()
+    html = '<script type="application/ld+json">' + json.dumps({"@type": "VideoGame", "name": "A PS5 game", "description": "Only on PS5."}) + '</script>'
+    updated = ex.enrich_exclusivity({"games": [row]}, Session(Response(html, url=row["playstation_url"])))["games"][0]
+    assert ex.validate_enriched_game(row, updated)
+    row["known_platforms"].append({"id": 6, "name": "PC"})
+    session = Session(Response(html, url=row["playstation_url"]))
+    assert ex.enrich_exclusivity({"games": [row]}, session)["games"][0] == row and session.calls == []

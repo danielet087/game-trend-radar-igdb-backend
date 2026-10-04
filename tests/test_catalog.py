@@ -62,7 +62,30 @@ def test_two_nintendo_platforms_preserve_independent_dates():
     row = normalize_game(game(platforms=[{"id": 130}, {"id": 508}],
                               release_dates=[release("2027-01-01", 130), release("2027-02-01", 508)]), START, END, CHECKED)
     assert [(r["platform"], r["date"]) for r in row["releases"]] == [("NS", "2027-01-01"), ("NS2", "2027-02-01")]
-    assert row["exclusivity"] == {"status": "listed_only", "platform": None, "source": "IGDB", "url": row["url"]}
+    assert row["exclusivity"] == {"status": "multi_platform", "platform": None, "source": "IGDB", "url": row["url"]}
+
+
+def test_ps5_native_release_tracks_own_day_without_ps4_backward_compatibility():
+    row = normalize_game(game(platforms=[{"id": 48}, {"id": 167}],
+        release_dates=[release("2026-09-01", 48), release("2027-03-01", 167)]), START, END, CHECKED)
+    assert [(r["platform"], r["date"]) for r in row["releases"]] == [("PS5", "2027-03-01")]
+    assert [p["code"] for p in row["platforms"]] == ["PS5"]
+    assert row["platform_language_support"]["PS5"]["status"] == "unknown"
+    assert row["calendar_eligible"] is True
+    ps4 = normalize_game(game(platforms=[{"id": 48}], release_dates=[release(platform=48)]), START, END, CHECKED)
+    assert not ps4["calendar_eligible"] and not ps4["platforms"]
+
+
+def test_cross_console_ps5_dates_languages_and_official_links_remain_separate():
+    row = normalize_game(game(platforms=[{"id": 508}, {"id": 167}],
+        release_dates=[release("2027-03-01", 508), release("2027-02-01", 167)],
+        websites=[{"url": "https://www.nintendo.com/tw/games/example/"},
+                  {"url": "https://store.playstation.com/en-tw/concept/10000001"}]), START, END, CHECKED)
+    assert [(r["platform"], r["date"]) for r in row["releases"]] == [("NS2", "2027-03-01"), ("PS5", "2027-02-01")]
+    assert row["exclusivity"]["platform"] is None
+    assert row["platform_urls"]["PS5"] == row["playstation_url"]
+    assert "nintendo.com" in row["nintendo_url"] and "playstation.com" in row["playstation_url"]
+    assert all(p["status"] == "unknown" for p in row["platform_language_support"].values())
 
 
 def test_igdb_single_platform_is_listed_only_not_official_exclusive():

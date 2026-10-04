@@ -1,15 +1,15 @@
 # IGDB Game Trend Radar
 
-儲存庫：`danielet087/game-trend-radar-igdb-backend`。目前獨立處理 Nintendo Switch（NS）與 Nintendo Switch 2（NS2）的新作候選、人氣條件及平台別發售資料。公開月曆沿用 `danielet087/game-trend-radar`，Steam 與 Nintendo 的原始人氣數不混成同一種分數。
+儲存庫：`danielet087/game-trend-radar-igdb-backend`。目前處理 Nintendo Switch（NS）、Nintendo Switch 2（NS2）與 PlayStation 5（PS5）的新作候選、人氣條件及平台別發售資料。公開月曆沿用 `danielet087/game-trend-radar`，Steam 與 IGDB 的原始人氣數不混成同一種分數。
 
 ## 收錄規則
 
-- 每天重新調查未來 365 天的 NS／NS2 原生版本；使用平台別發售記錄，移植版不受遊戲全球首發日期較早影響。
+- 每天重新調查未來 365 天的 NS／NS2／PS5 原生版本；使用平台別發售記錄，移植版不受遊戲全球首發日期較早影響。
 - `hypes ≥ 30` 通過第一版人氣条件；20～29 保留觀察，低值及未知仍留在候選狀態。缺值不當成零。
 - 月曆只使用確切年月日；年、季度、月份與未定日期留在候選資料，不能補造發售日。
 - 每個平台的日期與地區分開保存。同日雙平台在前端合併顯示；不同日各自出現在對應日期。
 - 依可取得的遊戲介紹、類型及分級內容排除以性愛色情為主要內容的作品；單純成人年齡分級、暴力或裸露不直接等同色情。缺少可判讀內容時保留待檢查。
-- 月曆標 NS、NS2 或兩者；「獨佔」必須有同款遊戲的 Nintendo 官方證據。IGDB 目前只列單一平台時保留 `listed_only`，不冒充官方獨佔聲明。每日重查所有平台，日後新增平台會更新標示。
+- 卡片分為 PC＋主機、主機多平台、Steam 與主機；僅有同款遊戲的平台官方獨佔證據才顯示獨佔。NS／NS2 獨佔用紅色，PS5 獨佔用藍色。IGDB 目前只列單一平台時保留 `listed_only`，不冒充官方獨佔聲明。每日重查所有平台，日後新增平台會更新標示。
 - 中文名稱優先使用 `data/chinese_names.json` 內已核對的官方繁中名稱，其次 IGDB 繁中名稱／明確標示中文的別名與先前已驗證名稱；簡中轉繁，未確認時保留英文。登錄資料同時綁定 IGDB ID 與英文全名，避免重製版、移植版、Cloud 版誤用名稱。
 
 ## 執行與資料
@@ -37,15 +37,15 @@ python -m nintendo_backend.exclusivity --output-dir output
 
 ## 自動更新
 
-Cloudflare 的既有控制器每天台灣 **08:30** 派發獨立的 **Collect Nintendo catalog** workflow，原 Cron 字串保持不變。執行入口暫放於已有憑證的 [Twitch 後端 Actions](https://github.com/danielet087/game-trend-radar-twitch-backend/actions/workflows/collect-nintendo.yml)，每次 checkout 本倉庫的最新 `main`。本倉庫只管理 Nintendo 程式與測試，不需複製 Secrets，也沒有 GitHub 原生 cron。
+Cloudflare 的既有控制器每天台灣 **08:30** 派發獨立的 **Collect IGDB console catalog** workflow，原 Cron 字串保持不變。執行入口暫放於已有憑證的 [Twitch 後端 Actions](https://github.com/danielet087/game-trend-radar-twitch-backend/actions/workflows/collect-nintendo.yml)，每次 checkout 本倉庫的最新 `main`。本倉庫管理 IGDB 主機收集程式與測試，不需複製 Secrets，也沒有 GitHub 原生 cron。
 
 可在上述 workflow 的 **Run workflow** 手動執行。`target_slot` 空白代表實際手動時間；Cloudflare 傳入每日原定 UTC slot。發布前會在 concurrency 內檢查持久回條，避免同一每日 slot 重複執行。第一次部署 workflow 會自動收集一次。
 
-發布器僅更新白名單 Nintendo JSON，合併最新 Git tree，不覆寫 Steam／Twitch 資料。完整候選與回條持久保存在前端 `data/`；同時鏡像到本倉庫 `data/`。若既有 `FRONTEND_REPO_TOKEN` 尚未涵蓋新倉庫的 Contents write 權限，會明示鏡像被阻擋，前端候選與月曆仍可正常更新。日後擴充該 Token 的新倉庫權限即可恢復鏡像，不需要改收集程式。
+發布器僅更新白名單 IGDB 主機 JSON，合併最新 Git tree，不覆寫 Steam／Twitch 資料。完整候選與回條持久保存在前端 `data/`；同時鏡像到本倉庫 `data/`。若既有 `FRONTEND_REPO_TOKEN` 尚未涵蓋新倉庫的 Contents write 權限，會明示鏡像被阻擋，前端候選與月曆仍可正常更新。日後擴充該 Token 的新倉庫權限即可恢復鏡像，不需要改收集程式。
 
 ## 資料限制
 
-IGDB `hypes` 是遊戲記錄的發售前關注數，跨平台不能拆成 Nintendo 玩家人數。NS／NS2 支援與日期由各平台資料決定；向下相容不直接當成另一個原生版本。未有台灣資料時保留實際來源地區，不把其他地區日期標成台灣官方日期。
+IGDB `hypes` 是遊戲記錄的發售前關注數，跨平台不能拆成單一主機玩家人數。NS／NS2／PS5 支援與日期由各平台資料決定；向下相容不直接當成另一個原生版本。未有台灣資料時保留實際來源地區，不把其他地區日期標成台灣官方日期。
 
 Nintendo 支援語言另由 `data/nintendo_languages.json` 保存已核對的官方版本資料。每筆同時綁定 IGDB ID、英文全名與 NS／NS2，並保存來源地區、官方網址、完整語言清單及實際核對時間；任天堂台灣商品資料優先。Steam 語言、IGDB 全遊戲語言、另一個平台版本不能填入 Nintendo 版本。若官方商品是本體加 DLC、Deluxe 等不同名稱版本，官方描述明確包含同一款本體，且原生平台與商品身分均已核對，就可登錄該商品的語言表，並保存官方商品名稱、商品 ID 及身分對應證據；獨立 DLC、其他作品與 Cloud 版仍需分別核對。香港或其他官區的資料保留來源地區，不據此宣稱台灣版本。官方只寫「Chinese／中文」時只確認中文，繁／簡仍為未知；只有完整官方清單才能將未列出的語言標為不支援。
 
@@ -56,3 +56,11 @@ Nintendo 支援語言另由 `data/nintendo_languages.json` 保存已核對的官
 台灣日期優先使用 `data/nintendo_release_dates.json` 內核對的任天堂台灣／發行商台灣官方日期；每筆綁定 IGDB ID、英文全名、NS／NS2、確切日期、官方網址及核對時間。`--taiwan-releases` 可指定登錄檔，發布器仍從本倉庫的可信登錄檔重新驗證。保留 IGDB 原日期、區域及 Unix 秒，另外稽核 UTC→`Asia/Taipei` 日期；IGDB 日精度不是實際解鎖時刻，不顯示推算的 08:00。未有官方台灣證據且換算跨日時，保留待確認、暫停放入月曆，不能直接替區域日加一天。已核對的 IGDB 原日期若日後改成不同的新日期，撤回旧的台灣確認，避免舊登錄資料蓋住延期；台灣日期及原始 IGDB 記錄分開保存，月曆只使用選中的平台日期。
 
 來源：[IGDB API](https://api-docs.igdb.com/)、各遊戲 Nintendo 官方商品頁。
+
+## PS5 官方版本證據
+
+PS5（IGDB 平台 ID `167`）沿用每日 08:30 同一收集器、hypes ≥ 30、未來 365 天與確切日／內容資格規則。保留既有 `nintendo_backend` 模組與三個 `nintendo_*.json` 傳輸檔名以相容候選歷史、收藏與跑馬燈；檔案現在涵蓋 NS、NS2、PS5，來源均是 IGDB。PS4 的向下相容不能生成 PS5 原生版本。
+
+`data/playstation_release_dates.json` 與 `data/playstation_languages.json` 保存已核對的 Sony 官方 PS5 版本證據，分別以 `--playstation-releases`、`--playstation-languages` 載入；收集與發布 gate 同時載入 Nintendo 與 PS5 的可信登錄檔，按 IGDB ID、英文完整名称及平台合併，衝突即停止。台灣 Store 時間包含 UTC 時刻時換算 `Asia/Taipei`；網址地域、商品／concept ID 與核對時間一起公開，香港語言資料保留香港標示。PS5 不沿用 Steam 或 NS／NS2 的語言與版本證據。
+
+既有流程對符合月曆資格且有 PS5 版本的遊戲進行有上限的官方 Store 調查（最多 30 頁、90 秒，台灣优先、香港備援），優先未來 PS5 版本與較高 hypes。只使用 IGDB 明示的商品／concept URL，檢查頁面選定商品、英文完整名稱、PS5 與正式本體類型；不搜尋猜測商品，也不把 Deluxe／DLC 自動當成本體。`nintendo_refresh_status.json.playstation_investigation` 明示 `review_only: true`，供後續核對；調查報告不直接改變公開日期或語言，正式確認仍須更新可信登錄檔。商品頁未公開語言、查不到或遇 429 時，保留未知與調查狀態。

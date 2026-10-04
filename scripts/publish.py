@@ -1,4 +1,4 @@
-"""Publish a fully validated Nintendo snapshot using atomic, fast-forward commits."""
+"""Publish a fully validated IGDB console snapshot with atomic, fast-forward commits."""
 from __future__ import annotations
 
 import argparse
@@ -22,6 +22,8 @@ SHA = re.compile(r"[0-9a-f]{40}\Z")
 CHINESE_NAME_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "chinese_names.json"
 TAIWAN_RELEASE_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "nintendo_release_dates.json"
 NINTENDO_LANGUAGE_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "nintendo_languages.json"
+PLAYSTATION_RELEASE_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "playstation_release_dates.json"
+PLAYSTATION_LANGUAGE_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "playstation_languages.json"
 
 
 class PublishError(Exception):
@@ -183,8 +185,8 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
     from nintendo_backend.chinese_names import NAME_FIELDS, load_registry, names
     from nintendo_backend.exclusivity import validate_enriched_game
     from nintendo_backend.igdb import CollectionError
-    from nintendo_backend.languages import load_registry as load_language_registry
-    from nintendo_backend.taiwan_releases import load_registry as load_release_registry
+    from nintendo_backend.languages import load_combined_registry as load_language_registry
+    from nintendo_backend.taiwan_releases import load_combined_registry as load_release_registry
     from scripts.guard import parse_utc
 
     if set(bundle) != set(FILES):
@@ -206,11 +208,20 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         rows = master["games"]
         if not isinstance(rows, dict) or any(not isinstance(row, dict) for row in rows.values()):
             raise ValueError("invalid_master")
+        if any(any(platform.get("id") == 167 for platform in row.get("raw", {}).get("platforms", [])
+                   if isinstance(platform, dict)) or
+               any(platform.get("code") == "PS5" for platform in row.get("platforms", [])
+                   if isinstance(platform, dict)) for row in rows.values()):
+            verified = master["source"].get("platform_ids_verified")
+            if (not isinstance(verified, list) or len(verified) != 3
+                    or any(type(value) is not int for value in verified)
+                    or set(verified) != {130, 167, 508}):
+                raise ValueError("unverified_ps5_platform_identity")
         # Curated official names are approved by repository data, never by a
         # publication bundle's own claim to have verified a source URL.
         name_registry = load_registry(CHINESE_NAME_REGISTRY)
-        release_registry = load_release_registry(TAIWAN_RELEASE_REGISTRY)
-        language_registry = load_language_registry(NINTENDO_LANGUAGE_REGISTRY)
+        release_registry = load_release_registry(TAIWAN_RELEASE_REGISTRY, PLAYSTATION_RELEASE_REGISTRY)
+        language_registry = load_language_registry(NINTENDO_LANGUAGE_REGISTRY, PLAYSTATION_LANGUAGE_REGISTRY)
         for row in rows.values():
             evidence = row.get("name_evidence")
             if isinstance(evidence, dict) and evidence.get("provider") == "official_registry":
@@ -246,7 +257,7 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         # verifier. Only the two evidence fields may differ from the raw rebuild.
         if not validate_enriched_game(reference, row):
             raise PublishError("qualification_gate_failed")
-        if any(row.get(key) != rows[row["id"]].get(key) for key in ("exclusivity", "nintendo_url")):
+        if any(row.get(key) != rows[row["id"]].get(key) for key in ("exclusivity", "nintendo_url", "playstation_url", "platform_urls")):
             raise PublishError("inconsistent_exclusivity_evidence")
     for key in ("candidate_count", "public_count", "popularity_counts", "content_review_count", "content_excluded_count", "pending_count"):
         actual = status.get(key)

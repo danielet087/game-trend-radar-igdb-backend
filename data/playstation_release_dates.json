@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "games": {
+    "igdb:348210": {
+      "igdb_id": 348210,
+      "name_en": "Persona 4 Revival",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-02-18",
+          "verified_source_date": "2027-02-18",
+          "source": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
+          "product_id": "JP0005-PPSA23593_00-APPLICATION00000",
+          "release_time_utc": "2027-02-17T16:00:00Z",
+          "verified_at": "2026-10-04T13:20:00Z"
+        }
+      ]
+    }
+  }
+}

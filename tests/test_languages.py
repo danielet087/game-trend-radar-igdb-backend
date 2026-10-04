@@ -6,7 +6,7 @@ import pytest
 
 from nintendo_backend.catalog import build_documents
 from nintendo_backend.igdb import CollectionError
-from nintendo_backend.languages import load_registry, platform_editions, platform_language_support, validate_registry
+from nintendo_backend.languages import load_combined_registry, load_registry, platform_editions, platform_language_support, validate_registry
 
 CHECKED = "2026-10-04T06:10:00Z"
 
@@ -180,3 +180,61 @@ def test_editions_require_reviewed_base_inclusion_product_and_source(change):
     doc["games"]["igdb:1"]["platforms"]["NS"].update(change)
     with pytest.raises(CollectionError, match="invalid_nintendo_language_registry"):
         validate_registry(doc)
+
+
+def playstation_document():
+    doc = document()
+    row = doc["games"]["igdb:1"]["platforms"].pop("NS")
+    row.update(source="PlayStation Store 台灣官方PS5商品語言",
+               source_url="https://store.playstation.com/zh-hant-tw/product/HP0001-PPSA12345_00-BASEGAME00000000",
+               product_id="HP0001-PPSA12345_00-BASEGAME00000000")
+    doc["games"]["igdb:1"]["platforms"]["PS5"] = row
+    return doc
+
+
+def test_ps5_language_support_never_carries_to_ns_or_ns2_and_hk_is_explicit():
+    doc = playstation_document()
+    row = doc["games"]["igdb:1"]["platforms"]["PS5"]
+    row.update(region="hong_kong", source_url=row["source_url"].replace("zh-hant-tw", "zh-hant-hk"))
+    support = platform_language_support({"id": 1, "name": "A game"},
+        [{"code": "NS"}, {"code": "NS2"}, {"code": "PS5"}], validate_registry(doc))
+    assert support["PS5"]["languages"]["tchinese"] is True
+    assert support["PS5"]["region"] == "hong_kong" and support["PS5"]["product_id"] == row["product_id"]
+    assert support["NS"]["status"] == support["NS2"]["status"] == "unknown"
+
+
+@pytest.mark.parametrize("changes", [
+    {"source_url": "https://www.nintendo.com/tw/games/a-game"},
+    {"source_url": "https://store.playstation.com/en-us/product/HP0001-PPSA12345_00-BASEGAME00000000"},
+    {"source_url": "https://store.playstation.com/zh-hant-hk/product/HP0001-PPSA12345_00-BASEGAME00000000"},
+    {"product_id": "HP0001-PPSA12345_00-DIFFERENT0000000"},
+    {"source_url": "https://store.playstation.com/zh-hant-tw/product/HP0001-PPSA12345_00-BASEGAME00000000?secret=value"},
+    {"region": "japan"}, {"region": "worldwide"},
+])
+def test_ps5_language_evidence_requires_exact_sony_product_and_region(changes):
+    doc = playstation_document()
+    doc["games"]["igdb:1"]["platforms"]["PS5"].update(changes)
+    with pytest.raises(CollectionError, match="invalid_nintendo_language_registry"):
+        validate_registry(doc)
+
+
+def test_ps5_deluxe_edition_uses_sony_product_id_and_reviewed_base_inclusion():
+    doc = playstation_document()
+    row = doc["games"]["igdb:1"]["platforms"]["PS5"]
+    row.update(edition_type="deluxe", edition_label="數位豪華版", official_title="A game Digital Deluxe Edition",
+               identity_relation="base_game_included", identity_evidence="官方商品列出本體與追加內容。",
+               identity_source_url=row["source_url"])
+    result = platform_editions({"id": 1, "name": "A game"}, [{"code": "PS5"}], validate_registry(doc))["PS5"]
+    assert result["label"] == "數位豪華版" and result["product_id"] == row["product_id"]
+    row["product_id"] = "70010000114443"
+    with pytest.raises(CollectionError, match="invalid_nintendo_language_registry"):
+        validate_registry(doc)
+
+
+def test_ps5_reviewed_generic_chinese_preserves_unknown_scripts_and_nintendo_evidence():
+    registry = load_combined_registry()
+    result = platform_language_support({"id": 348210, "name": "Persona 4 Revival"},
+        [{"code": "NS2"}, {"code": "PS5"}], registry)
+    assert result["NS2"]["languages"]["tchinese"] is True
+    assert result["PS5"]["languages"] == {"tchinese": None, "schinese": None, "english": None, "chinese": True}
+    assert result["PS5"]["complete"] is False and result["PS5"]["status"] == "partial"

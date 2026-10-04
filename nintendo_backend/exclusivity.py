@@ -1,4 +1,4 @@
-"""Confirm exclusivity only from game-specific Nintendo evidence.
+"""Confirm exclusivity only from game-specific Nintendo or PlayStation evidence.
 
 IGDB listing a single platform is insufficient. Network enrichment is optional;
 unavailable or conflicting evidence retains the collector's conservative label.
@@ -18,13 +18,14 @@ import unicodedata
 from urllib.parse import urlsplit, urlunsplit
 
 import requests
+from .playstation import official_url as playstation_url
 
 
 MAX_PAGES = 30
 TIMEOUT_SECONDS = 5
 DEADLINE_SECONDS = 90
 MAX_HTML_BYTES = 2_000_000
-PLATFORM_IDS = {130: "NS", 508: "NS2"}
+PLATFORM_IDS = {130: "NS", 508: "NS2", 167: "PS5"}
 _HOSTS = {"www.nintendo.com", "nintendo.com", "www.nintendo.co.jp", "nintendo.co.jp"}
 
 
@@ -126,24 +127,44 @@ _EXCLUSIVE_PATTERNS = (
 )
 
 
-def _title_matches(title: str, name: str) -> bool:
+def _title_matches(title: str, name: str, platform=None) -> bool:
     title = unescape(title).strip()
     previous = None
     while previous != title:
         previous, title = title, _TITLE_SUFFIX.sub("", title).strip()
+    if platform == "PS5":
+        title = re.sub(r"\s*[-–—|]\s*(?:PS5(?:[™®])?\s*(?:Games?)?(?:\s*[-–—|]\s*PlayStation(?:\s*\([^)]*\))?)?|PlayStation(?:\s*\([^)]*\))?)\s*$", "", title, flags=re.I).strip()
     return _normalize(title) == _normalize(name)
 
 
-def _exclusive_phrase(value: str):
+def _exclusive_phrase(value: str, platform=None):
     value = re.sub(r"\s+", " ", unescape(value)).strip()
     if re.search(r"\b(?:not|non)\s*[- ]?exclusive\b", value, re.I):
+        return None
+    if platform == "PS5":
+        if (re.search(r"\b(?:not|never)\b.{0,24}\b(?:exclusive(?:ly)?|only)\b", value, re.I)
+                or re.search(r"\b(?:timed|console|launch)\s+exclusive\b", value, re.I)
+                or re.search(r"\b(?:PC|Windows|Xbox|Nintendo|PS4|PlayStation\s*4)\b", value, re.I)):
+            return None
+        patterns = (
+            r"(?:available\s+)?(?:exclusively\s+(?:for|on)|only\s+(?:for|on))\s+(?:the\s+)?(?:PS5|PlayStation\s*5)[™®]?\b(?:\s+(?:console|system))?",
+            r"(?:PS5|PlayStation\s*5)[™®]?\s*[-–—]?\s+exclusive(?=\s*(?:[.,;:!?–—-]|$)|\s+(?:game|title)\b)",
+        )
+        for pattern in patterns:
+            for match in re.finditer(pattern, value, re.I):
+                following = value[match.end():].lstrip().lower()
+                preceding = value[max(0, match.start() - 80):match.start()].lower()
+                if (re.match(r"(?:features?|content|offers?|bonus(?:es)?|items?|modes?|editions?|packs?|DLC|add-ons?)\b", following, re.I)
+                        or re.search(r"\b(?:features?|content|offers?|bonus(?:es)?|items?|modes?|editions?|packs?|DLC|add-ons?)\b", preceding, re.I)):
+                    continue
+                return "PS5", match.group(0)[:200]
         return None
     found = []
     for pattern in _EXCLUSIVE_PATTERNS:
         for match in pattern.finditer(value):
             # An exclusive offer, feature, content pack or mode is not the game.
             following = value[match.end():].lstrip().lower()
-            if re.match(r"(?:features?|content|offers?|bonuses?|items?|modes?)\b", following):
+            if re.match(r"(?:features?|content|offers?|bonus(?:es)?|items?|modes?)\b", following):
                 continue
             found.append(("NS2" if match.group(1) == "2" else "NS", match.group(0)[:200]))
     return found[0] if found and len({item[0] for item in found}) == 1 else None
@@ -163,14 +184,14 @@ def _json_products(value):
             yield from _json_products(value["@graph"])
 
 
-def _page_evidence(html: str, name: str):
+def _page_evidence(html: str, name: str, platform=None):
     parser = _ProductMetadata()
     parser.feed(html)
     titles = ["".join(parser.title), parser.meta.get("og:title", "")]
-    if any(_title_matches(title, name) for title in titles):
+    if any(_title_matches(title, name, platform) for title in titles):
         for title in titles:
-            if _title_matches(title, name):
-                evidence = _exclusive_phrase(title)
+            if _title_matches(title, name, platform):
+                evidence = _exclusive_phrase(title, platform)
                 if evidence:
                     return (*evidence, title)
         for field in ("og:description", "description"):
@@ -178,18 +199,18 @@ def _page_evidence(html: str, name: str):
             # Metadata descriptions are only used when they name this game;
             # "exclusive hardware offers" on generic pages cannot qualify.
             if _normalize(name) in _normalize(description):
-                evidence = _exclusive_phrase(description)
+                evidence = _exclusive_phrase(description, platform)
                 if evidence:
-                    return (*evidence, next(title for title in titles if _title_matches(title, name)))
+                    return (*evidence, next(title for title in titles if _title_matches(title, name, platform)))
     for raw in parser.json_ld:
         try:
             products = _json_products(json.loads(raw))
             for product in products:
                 product_name = product.get("name")
                 description = product.get("description")
-                if (isinstance(product_name, str) and _title_matches(product_name, name)
+                if (isinstance(product_name, str) and _title_matches(product_name, name, platform)
                         and isinstance(description, str)):
-                    evidence = _exclusive_phrase(description)
+                    evidence = _exclusive_phrase(description, platform)
                     if evidence:
                         return (*evidence, product_name)
         except (ValueError, TypeError, RecursionError):
@@ -218,15 +239,18 @@ def _platform(game):
 
 
 def _game_urls(game):
-    candidates = [game.get("nintendo_url")]
+    platform = _platform(game)
+    candidates = [game.get("playstation_url") if platform == "PS5" else game.get("nintendo_url")]
+    if platform == "PS5" and isinstance(game.get("platform_urls"), dict):
+        candidates.append(game["platform_urls"].get("PS5"))
     for website in game.get("websites", []) if isinstance(game.get("websites"), list) else []:
         candidates.append(website.get("url") if isinstance(website, dict) else website)
     name = game.get("name_en")
-    if isinstance(name, str):
+    if platform != "PS5" and isinstance(name, str):
         candidates.append(_PRODUCT_URLS.get(_normalize(name)))
     seen = set()
     for candidate in candidates:
-        url = _official_url(candidate)
+        url = playstation_url(candidate) if platform == "PS5" else _official_url(candidate)
         if url and url not in seen:
             seen.add(url)
             yield url
@@ -234,11 +258,11 @@ def _game_urls(game):
 
 def _confirm(game, platform, url, evidence, checked_at, evidence_title, method="product_metadata"):
     game["exclusivity"] = {
-        "status": "confirmed", "platform": platform, "source": "Nintendo official",
+        "status": "confirmed", "platform": platform, "source": "PlayStation official" if platform == "PS5" else "Nintendo official",
         "url": url, "evidence": evidence[:200], "checked_at": checked_at,
         "evidence_title": evidence_title, "evidence_method": method,
     }
-    game["nintendo_url"] = url
+    game["playstation_url" if platform == "PS5" else "nintendo_url"] = url
 
 
 def enrich_exclusivity(catalog, session=None):
@@ -280,7 +304,7 @@ def enrich_exclusivity(catalog, session=None):
                                                  allow_redirects=False)
                         if response.status_code != 200 or len(response.content) > MAX_HTML_BYTES:
                             cache[url] = None
-                        elif _official_url(response.url) != url:
+                        elif (playstation_url(response.url) if platform == "PS5" else _official_url(response.url)) != url:
                             cache[url] = None
                         else:
                             cache[url] = response.text
@@ -289,7 +313,7 @@ def enrich_exclusivity(catalog, session=None):
                 if cache[url] is None:
                     continue
                 try:
-                    evidence = _page_evidence(cache[url], name)
+                    evidence = _page_evidence(cache[url], name, platform)
                 except (ValueError, TypeError, RecursionError):
                     evidence = None
                 if evidence and evidence[0] == platform:
@@ -309,7 +333,7 @@ def validate_enriched_game(base_game, enriched_game):
     if base_game == enriched_game:
         return True
     without_evidence = deepcopy(enriched_game)
-    for field in ("exclusivity", "nintendo_url"):
+    for field in ("exclusivity", "nintendo_url", "playstation_url"):
         if field in base_game:
             without_evidence[field] = deepcopy(base_game[field])
         else:
@@ -320,18 +344,24 @@ def validate_enriched_game(base_game, enriched_game):
     name, platform = base_game.get("name_en"), _platform(base_game)
     if not isinstance(evidence, dict) or not isinstance(name, str) or not platform:
         return False
+    other_link = "nintendo_url" if platform == "PS5" else "playstation_url"
+    if ((other_link in base_game) != (other_link in enriched_game)
+            or base_game.get(other_link) != enriched_game.get(other_link)):
+        return False
     allowed = {"status", "platform", "source", "url", "evidence", "checked_at", "evidence_title", "evidence_method"}
     if set(evidence) != allowed or evidence.get("status") != "confirmed" or evidence.get("platform") != platform:
         return False
-    url = _official_url(evidence.get("url"))
+    url = playstation_url(evidence.get("url")) if platform == "PS5" else _official_url(evidence.get("url"))
     snippet, title = evidence.get("evidence"), evidence.get("evidence_title")
-    if (evidence.get("source") != "Nintendo official" or not url
-            or evidence.get("url") != url or enriched_game.get("nintendo_url") != url
+    expected_source = "PlayStation official" if platform == "PS5" else "Nintendo official"
+    link_field = "playstation_url" if platform == "PS5" else "nintendo_url"
+    if (evidence.get("source") != expected_source or not url
+            or evidence.get("url") != url or enriched_game.get(link_field) != url
             or not isinstance(snippet, str) or not 0 < len(snippet) <= 200
             or not isinstance(title, str) or len(title) > 500
-            or not _title_matches(title, name)):
+            or not _title_matches(title, name, platform)):
         return False
-    phrase = _exclusive_phrase(snippet)
+    phrase = _exclusive_phrase(snippet, platform)
     if not phrase or phrase[0] != platform:
         return False
     try:
@@ -368,8 +398,9 @@ def main(argv=None):
             raise ValueError("invalid_exclusivity_enrichment")
         entry = master["games"][game["id"]]
         updated = deepcopy(entry)
-        for field in ("exclusivity", "nintendo_url"):
-            updated[field] = deepcopy(game[field])
+        for field in ("exclusivity", "nintendo_url", "playstation_url"):
+            if field in game:
+                updated[field] = deepcopy(game[field])
         if not validate_enriched_game(entry, updated):
             raise ValueError("inconsistent_master_exclusivity")
         master["games"][game["id"]] = updated

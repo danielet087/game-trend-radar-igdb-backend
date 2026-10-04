@@ -12,8 +12,9 @@ from zoneinfo import ZoneInfo
 from .catalog import build_documents
 from .chinese_names import SteamNameClient, enrich_documents, load_registry
 from .igdb import CollectionError, IGDBClient, paginated_releases
-from .languages import load_registry as load_language_registry
-from .taiwan_releases import load_registry as load_release_registry
+from .languages import load_combined_registry as load_language_registry
+from .taiwan_releases import load_combined_registry as load_release_registry
+from .playstation import PlayStationStoreClient
 
 GAME_FIELDS = (
     "id,name,hypes,url,category,game_type.type,status,game_status.status,summary,storyline,"
@@ -45,14 +46,15 @@ def load_existing(path):
 
 
 def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
-            name_registry=None, name_client=None, release_registry=None, language_registry=None):
+            name_registry=None, name_client=None, release_registry=None, language_registry=None,
+            playstation_client=None):
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
     # A timestamp attached to a month is never mistaken for a precise day.
     lower = int(datetime.combine(start, datetime.min.time(), tzinfo=timezone.utc).timestamp())
     upper = int(datetime.combine(end, datetime.min.time(), tzinfo=timezone.utc).timestamp())
-    where = f"platform = (130,508) & ((date >= {lower} & date < {upper}) | (y >= {start.year} & y <= {end.year}) | date = null)"
+    where = f"platform = (130,167,508) & ((date >= {lower} & date < {upper}) | (y >= {start.year} & y <= {end.year}) | date = null)"
     releases = paginated_releases(client, where, page_size=page_size, max_pages=max_pages)
     game_ids = {row["game"] for row in releases}
     game_ids.update(row["igdb_id"] for row in (previous or {}).get("games", {}).values())
@@ -76,10 +78,19 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                            release_registry=release_registry,
                            language_registry=language_registry,
                            source={"discovery_release_count": len(releases), "request_count": client.request_count,
-                                   "retry_count": client.retry_count, "platform_ids_verified": [130, 508],
-                                   "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"})
+                                   "retry_count": client.retry_count, "platform_ids_verified": [130, 167, 508],
+                                   "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"})
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
+    if playstation_client is not None:
+        admitted = {row["igdb_id"]: row for row in catalog["games"] if any(p["code"] == "PS5" for p in row["platforms"])}
+        investigation_games = sorted([row for row in raw_games if row["id"] in admitted],
+            key=lambda row: (not any(r["platform"] == "PS5" for r in admitted[row["id"]]["releases"]),
+                             -(row.get("hypes") or 0), row["id"]))
+        # Investigation reports are review material. Only reviewed repository
+        # registries affect dates/languages and the publisher rebuilds those.
+        status["playstation_investigation"] = {"review_only": True,
+            **playstation_client.investigate(investigation_games)}
     return master, catalog, status
 
 
@@ -104,19 +115,22 @@ def main(argv=None):
     parser.add_argument("--chinese-names", default="data/chinese_names.json")
     parser.add_argument("--taiwan-releases", default="data/nintendo_release_dates.json")
     parser.add_argument("--nintendo-languages", default="data/nintendo_languages.json")
+    parser.add_argument("--playstation-releases", default="data/playstation_release_dates.json")
+    parser.add_argument("--playstation-languages", default="data/playstation_languages.json")
     parser.add_argument("--today", type=date.fromisoformat, default=None)
     args = parser.parse_args(argv)
     out = Path(args.output_dir)
     try:
         previous = load_existing(args.existing)
         name_registry = load_registry(args.chinese_names)
-        release_registry = load_release_registry(args.taiwan_releases)
-        language_registry = load_language_registry(args.nintendo_languages)
+        release_registry = load_release_registry(args.taiwan_releases, args.playstation_releases)
+        language_registry = load_language_registry(args.nintendo_languages, args.playstation_languages)
         client = IGDBClient(os.environ.get("TWITCH_CLIENT_ID", ""), os.environ.get("TWITCH_CLIENT_SECRET", ""))
         start = args.today or datetime.now(ZoneInfo("Asia/Taipei")).date()
         master, catalog, status = collect(client, start=start, previous=previous,
                                          name_registry=name_registry, name_client=SteamNameClient(),
-                                         release_registry=release_registry, language_registry=language_registry)
+                                         release_registry=release_registry, language_registry=language_registry,
+                                         playstation_client=PlayStationStoreClient())
         # All API, completeness and qualification gates have passed before any data write.
         write_json_atomic(out / "nintendo_master.json", master)
         write_json_atomic(out / "nintendo_upcoming.json", catalog)

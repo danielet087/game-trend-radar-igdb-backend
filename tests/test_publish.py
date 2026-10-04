@@ -130,6 +130,63 @@ def test_unmodified_bundle_passes_full_formal_qualification_gate():
 
 
 @pytest.fixture
+def ps5_bundle(tmp_path, monkeypatch):
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    raw["platforms"] = [{"id": 167, "name": "PlayStation 5"}]
+    raw["release_dates"][0]["platform"] = {"id": 167}
+    product = "JP0005-PPSA23593_00-APPLICATION00000"
+    url = "https://store.playstation.com/zh-hant-tw/product/" + product
+    releases = {"igdb:12345": {"igdb_id": 12345, "name_en": raw["name"], "releases": [{
+        "platform": "PS5", "date": "2026-10-16", "verified_source_date": "2026-10-15",
+        "verified_at": CHECKED, "source": "PlayStation Store 台灣官方", "url": url,
+        "product_id": product, "release_time_utc": "2026-10-15T16:00:00Z"}]}}
+    languages = {"igdb:12345": {"igdb_id": 12345, "name_en": raw["name"], "platforms": {"PS5": {
+        "region": "taiwan", "supported_languages": ["en", "ja"], "complete": True,
+        "source": "PlayStation Store 台灣商品語言", "source_url": url,
+        "product_id": product, "checked_at": CHECKED, "evidence_type": "official_product_languages"}}}}
+    for field, filename, registry in (("PLAYSTATION_RELEASE_REGISTRY", "ps5_dates.json", releases),
+                                      ("PLAYSTATION_LANGUAGE_REGISTRY", "ps5_languages.json", languages)):
+        path = tmp_path / filename
+        path.write_text(json.dumps({"schema_version": 1, "games": registry}))
+        monkeypatch.setattr(P, field, path)
+    return dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+        release_registry=releases, language_registry=languages,
+        source={"platform_ids_verified": [130, 167, 508]})))
+
+
+def test_ps5_bundle_rebuilds_reviewed_regional_date_and_separate_languages(ps5_bundle):
+    validate_bundle(ps5_bundle, now=NOW)
+    row = ps5_bundle["nintendo_upcoming.json"]["games"][0]
+    assert row["releases"][0]["date"] == "2026-10-16"
+    assert row["releases"][0]["official_product_id"] == "JP0005-PPSA23593_00-APPLICATION00000"
+    assert row["platform_language_support"]["PS5"]["languages"]["tchinese"] is False
+
+
+def test_ps5_publication_requires_verified_native_platform_id(ps5_bundle):
+    for payload in ps5_bundle.values():
+        payload["source"]["platform_ids_verified"] = [130, 508]
+    with pytest.raises(PublishError, match="qualification_gate_failed"):
+        validate_bundle(ps5_bundle, now=NOW)
+
+
+@pytest.mark.parametrize("change", ["date", "language", "store_identity"])
+def test_ps5_matching_public_master_and_investigation_cannot_self_authorize_proof(ps5_bundle, change):
+    ps5_bundle["nintendo_refresh_status.json"]["playstation_investigation"] = {
+        "review_only": True, "evidence": {"date": "2026-10-17", "supported_languages": ["zh-Hant"]}}
+    for row in (ps5_bundle["nintendo_master.json"]["games"]["igdb:12345"], ps5_bundle["nintendo_upcoming.json"]["games"][0]):
+        if change == "date":
+            row["releases"][0]["date"] = "2026-10-17"
+        elif change == "language":
+            row["platform_language_support"]["PS5"]["languages"].update(tchinese=True, chinese=True)
+        else:
+            row["releases"][0]["official_product_id"] = "10000001"
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(ps5_bundle, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+@pytest.fixture
 def language_bundle(tmp_path, monkeypatch):
     assert P.NINTENDO_LANGUAGE_REGISTRY.is_absolute()
     raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])

@@ -101,6 +101,13 @@ def test_platform_ids_runtime_names_must_match():
         api.verify_platforms()
 
 
+def test_platform_identity_verification_includes_native_ps5():
+    rows = [{"id": 130, "name": "Nintendo Switch"}, {"id": 167, "name": "PlayStation 5"}, {"id": 508, "name": "Nintendo Switch 2"}]
+    api, session, _ = client([Response({"access_token": "token"}), Response(rows)])
+    assert api.verify_platforms() == rows
+    assert "(130,167,508)" in session.calls[-1][1]["data"]
+
+
 class QueryClient:
     def __init__(self, results):
         self.results, self.calls = deque(results), []

@@ -100,11 +100,11 @@ class IGDBClient:
         })
 
     def verify_platforms(self):
-        rows = self.query("platforms", "fields id,name; where id = (130,508); limit 3;")
-        if not isinstance(rows, list) or len(rows) != 2:
+        rows = self.query("platforms", "fields id,name; where id = (130,167,508); limit 3;")
+        if not isinstance(rows, list) or len(rows) != 3:
             raise CollectionError("platform_identity_mismatch")
         actual = {row.get("id"): row.get("name") for row in rows if isinstance(row, dict)}
-        if actual != {130: "Nintendo Switch", 508: "Nintendo Switch 2"}:
+        if actual != {130: "Nintendo Switch", 167: "PlayStation 5", 508: "Nintendo Switch 2"}:
             raise CollectionError("platform_identity_mismatch")
         return rows
 
@@ -130,7 +130,7 @@ def paginated_releases(client, where: str, *, page_size=500, max_pages=100):
         for row in page:
             if (not isinstance(row, dict) or type(row.get("id")) is not int or row["id"] <= last_id
                     or type(row.get("game")) is not int or row["game"] <= 0
-                    or row.get("platform") not in {130, 508}):
+                    or row.get("platform") not in {130, 167, 508}):
                 raise CollectionError("invalid_release_page")
             last_id = row["id"]
             rows.append(row)
