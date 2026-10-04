@@ -503,6 +503,20 @@ def test_dense_candidate_ledger_compacts_transport_without_losing_raw_evidence()
     assert files["data/nintendo_upcoming.json"].count("\n") > 2
 
 
+def test_large_master_publication_transport_is_resumable_by_the_collector(tmp_path, monkeypatch):
+    from nintendo_backend import persistence
+    from nintendo_backend.collect import load_existing
+    monkeypatch.setattr(persistence, "ENCODE_THRESHOLD_BYTES", 1)
+    data = bundle()
+    data["nintendo_master.json"]["playstation_investigation"] = {"review_only": True, "games": {
+        "igdb:12345": {"checked_at": CHECKED, "status": "budget_exhausted", "attempted_urls": []}}}
+    transport = _serialize(data)["data/nintendo_master.json"]
+    assert json.loads(transport)["storage_format"] == "gzip-base64"
+    path = tmp_path / "nintendo_master.json"
+    path.write_text(transport)
+    assert load_existing(path) == data["nintendo_master.json"]
+
+
 @pytest.mark.parametrize("method,suffix,operation", [("POST", "/git/blobs", "blob"),
     ("POST", "/git/trees", "tree"), ("POST", "/git/commits", "commit"),
     ("PATCH", "/git/refs/heads/main", "ref"), ("GET", "", "read")])

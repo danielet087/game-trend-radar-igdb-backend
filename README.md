@@ -63,4 +63,6 @@ PS5（IGDB 平台 ID `167`）沿用每日 08:30 同一收集器、hypes ≥ 30�
 
 `data/playstation_release_dates.json` 與 `data/playstation_languages.json` 保存已核對的 Sony 官方 PS5 版本證據，分別以 `--playstation-releases`、`--playstation-languages` 載入；收集與發布 gate 同時載入 Nintendo 與 PS5 的可信登錄檔，按 IGDB ID、英文完整名称及平台合併，衝突即停止。台灣 Store 時間包含 UTC 時刻時換算 `Asia/Taipei`；網址地域、商品／concept ID 與核對時間一起公開，香港語言資料保留香港標示。PS5 不沿用 Steam 或 NS／NS2 的語言與版本證據。
 
-既有流程對符合月曆資格且有 PS5 版本的遊戲進行有上限的官方 Store 調查（最多 30 頁、90 秒，台灣优先、香港備援），優先未來 PS5 版本與較高 hypes。只使用 IGDB 明示的商品／concept URL，檢查頁面選定商品、英文完整名稱、PS5 與正式本體類型；不搜尋猜測商品，也不把 Deluxe／DLC 自動當成本體。`nintendo_refresh_status.json.playstation_investigation` 明示 `review_only: true`，供後續核對；調查報告不直接改變公開日期或語言，正式確認仍須更新可信登錄檔。商品頁未公開語言、查不到或遇 429 時，保留未知與調查狀態。
+既有流程對符合月曆資格且有 PS5 版本的遊戲進行有上限的官方 Store 調查（最多 30 頁、90 秒，台灣优先、香港備援），優先未來 PS5 版本，再查尚未嘗試或較久未查的版本；同等條件按 hypes 排序，避免低順位一直耗盡額度。調查進度保存在完整候選主資料，下一輪沿用。只使用 IGDB 明示的商品／concept URL，檢查頁面選定商品、英文完整名稱、PS5 與正式本體類型；不搜尋猜測商品，也不把 Deluxe／DLC 自動當成本體。`nintendo_refresh_status.json.playstation_investigation` 明示 `review_only: true`，供後續核對；調查報告不直接改變公開日期或語言，正式確認仍須更新可信登錄檔。商品頁未公開語言、查不到或遇 429 時，保留未知與調查狀態。
+
+完整候選量較大時，發布器會將 `nintendo_master.json` 保存為 `gzip-base64` 傳輸封裝（含 SHA-256 與解壓後位元組數）。候選、原始證據、平台歷史與已查狀態全部保留；下一輪 `load_existing` 校驗及解碼後使用相同完整資料。小型舊 JSON 仍可直接載入；公開 `nintendo_upcoming.json` 與回條保持可讀 JSON。封裝不是截斷或刪除候選，也不改變日期／語言發布驗證。

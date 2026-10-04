@@ -16,6 +16,70 @@
           "verified_at": "2026-10-04T13:20:00Z"
         }
       ]
+    },
+    "igdb:325599": {
+      "igdb_id": 325599,
+      "name_en": "Stranger Than Heaven",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-01-15",
+          "verified_source_date": "2027-01-15",
+          "source": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000",
+          "product_id": "JP0177-PPSA34972_00-MAINGAME00000000",
+          "release_time_utc": "2027-01-14T16:00:00Z",
+          "verified_at": "2026-10-04T13:46:24Z"
+        }
+      ]
+    },
+    "igdb:389434": {
+      "igdb_id": 389434,
+      "name_en": "Castlevania: Belmont's Curse",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2026-10-15",
+          "verified_source_date": "2026-10-15",
+          "source": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000",
+          "product_id": "JP0101-PPSA35399_00-CVBCAPP000000000",
+          "release_time_utc": "2026-10-14T16:00:00Z",
+          "verified_at": "2026-10-04T13:46:24Z"
+        }
+      ]
+    },
+    "igdb:404058": {
+      "igdb_id": 404058,
+      "name_en": "Until Dawn 2",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-01-28",
+          "verified_source_date": "2027-01-28",
+          "source": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "release_time_utc": "2027-01-27T16:00:00Z",
+          "verified_at": "2026-10-04T13:46:24Z"
+        }
+      ]
+    },
+    "igdb:404063": {
+      "igdb_id": 404063,
+      "name_en": "God of War Laufey",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-02-16",
+          "verified_source_date": "2027-02-16",
+          "source": "PlayStation Store 台灣官方商品發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000",
+          "product_id": "UP9000-PPSA19249_00-LAUFEY0000000000",
+          "release_time_utc": "2027-02-15T16:00:00Z",
+          "verified_at": "2026-10-04T13:53:59Z"
+        }
+      ]
     }
   }
 }

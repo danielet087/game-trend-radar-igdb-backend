@@ -7,12 +7,90 @@
       "platforms": {
         "PS5": {
           "region": "taiwan",
-          "supported_languages": ["zh"],
+          "supported_languages": [
+            "zh"
+          ],
           "complete": false,
           "source": "PlayStation Store 台灣官方商品標題（中日英韓文版；中文繁簡未分列）",
           "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000",
           "product_id": "JP0005-PPSA23593_00-APPLICATION00000",
           "checked_at": "2026-10-04T13:20:00Z",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      }
+    },
+    "igdb:325599": {
+      "igdb_id": 325599,
+      "name_en": "Stranger Than Heaven",
+      "platforms": {
+        "PS5": {
+          "region": "taiwan",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0177-PPSA34972_00-MAINGAME00000000",
+          "product_id": "JP0177-PPSA34972_00-MAINGAME00000000",
+          "checked_at": "2026-10-04T13:46:24Z",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      }
+    },
+    "igdb:389434": {
+      "igdb_id": 389434,
+      "name_en": "Castlevania: Belmont's Curse",
+      "platforms": {
+        "PS5": {
+          "region": "taiwan",
+          "supported_languages": [
+            "zh-Hans",
+            "en",
+            "ko",
+            "ja",
+            "zh-Hant"
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（語言名正向證據；完整畫面語言清單尚未公開）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0101-PPSA35399_00-CVBCAPP000000000",
+          "product_id": "JP0101-PPSA35399_00-CVBCAPP000000000",
+          "checked_at": "2026-10-04T13:46:24Z",
+          "evidence_type": "official_product_languages"
+        }
+      }
+    },
+    "igdb:404058": {
+      "igdb_id": 404058,
+      "name_en": "Until Dawn 2",
+      "platforms": {
+        "PS5": {
+          "region": "taiwan",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001",
+          "checked_at": "2026-10-04T13:46:24Z",
+          "evidence_type": "official_chinese_unspecified"
+        }
+      }
+    },
+    "igdb:404063": {
+      "igdb_id": 404063,
+      "name_en": "God of War Laufey",
+      "platforms": {
+        "PS5": {
+          "region": "taiwan",
+          "supported_languages": [
+            "zh"
+          ],
+          "complete": false,
+          "source": "PlayStation Store 台灣官方商品標題（中文繁簡未分列）",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/UP9000-PPSA19249_00-LAUFEY0000000000",
+          "product_id": "UP9000-PPSA19249_00-LAUFEY0000000000",
+          "checked_at": "2026-10-04T13:53:59Z",
           "evidence_type": "official_chinese_unspecified"
         }
       }

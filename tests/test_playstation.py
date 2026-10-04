@@ -54,6 +54,19 @@ def test_generic_chinese_suffix_retains_unknown_scripts_when_language_metadata_i
     assert result["evidence_type"] == "official_chinese_unspecified"
 
 
+def test_explicit_chinese_script_names_in_exact_native_product_title_are_positive_partial_evidence():
+    product = metadata(name="A game (Simplified Chinese, English, Korean, Japanese, Traditional Chinese)",
+                       screenLanguagesByPlatform=[{"platform": "PS5", "screenLanguages": []}])
+    result = ps.parse_store_metadata(html(product), URL, "A game")
+    assert result["supported_languages"] == ["zh-Hans", "en", "ko", "ja", "zh-Hant"]
+    assert result["complete"] is False and result["evidence_type"] == "official_product_languages"
+
+
+def test_store_title_trademark_does_not_change_exact_game_identity():
+    result = ps.parse_store_metadata(html(metadata(name="A game™ (English/Chinese Ver.)", invariantName="A game®")), URL, "A game")
+    assert result["product_id"] == PRODUCT
+
+
 def test_ps4_general_or_unsupported_language_names_do_not_become_ps5_complete_evidence():
     product = metadata(name="A game", screenLanguagesByPlatform=[
         {"platform": "PS4", "screenLanguages": ["Chinese (Traditional)"]}])

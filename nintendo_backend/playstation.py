@@ -64,6 +64,7 @@ def product_id(value):
 
 
 def _normalize(value):
+    value = value.replace("™", "").replace("®", "").replace("©", "")
     return "".join(c for c in unicodedata.normalize("NFKC", unescape(value)).casefold()
                    if c.isalnum())
 
@@ -239,6 +240,15 @@ def parse_store_metadata(html, url, name_en):
                     result["supported_languages"] = list(dict.fromkeys(_LANGUAGES[label] for label in labels))
                     result["complete"] = True
                     result["evidence_type"] = "official_product_languages"
+    if not result["supported_languages"]:
+        suffix = re.search(r"\(([^()]*)\)\s*$", product["name"])
+        labels = [label.strip() for label in re.split(r"[/,]", suffix[1])] if suffix else []
+        if (labels and any(label in {"Traditional Chinese", "Simplified Chinese"} for label in labels)
+                and all(label in _LANGUAGES for label in labels)):
+            # An exact native product title can prove listed languages, but its
+            # abbreviated label does not prove that unlisted languages lack support.
+            result.update(supported_languages=list(dict.fromkeys(_LANGUAGES[label] for label in labels)),
+                          evidence_type="official_product_languages")
     if not result["supported_languages"] and re.search(r"\([^)]*\bChinese\b[^)]*\)", product["name"], re.I):
         # A generic Chinese storefront suffix cannot prove script variants.
         result.update(supported_languages=["zh"], evidence_type="official_chinese_unspecified")

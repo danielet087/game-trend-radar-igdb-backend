@@ -63,11 +63,30 @@ def test_store_investigation_prioritizes_future_ps5_and_cannot_supply_public_pro
         def investigate(self, games):
             assert [row["id"] for row in games] == [2, 1]
             return {"evidence": {"date": "2027-09-01", "supported_languages": ["zh-Hant"]}}
-    _, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", playstation_client=Store())
+    master, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", playstation_client=Store())
     future = next(row for row in public["games"] if row["igdb_id"] == 2)
     assert future["releases"][0]["date"] == "2027-03-01"
     assert future["platform_language_support"]["PS5"]["languages"]["tchinese"] is None
     assert status["playstation_investigation"]["review_only"] is True
+    assert master["playstation_investigation"] == status["playstation_investigation"]
+
+
+def test_store_investigation_resumes_unattempted_future_games_before_recent_high_hypes():
+    def raw(id_, hypes):
+        return {"id": id_, "name": "Game " + str(id_), "hypes": hypes, "platforms": [{"id": 167}],
+            "category": 0, "summary": "An adventure.", "release_dates": [
+                {"platform": {"id": 167}, "category": 0, "y": 2027, "m": 3, "d": 1, "region": 8}]}
+    games = [raw(1, 100), raw(2, 30)]
+    api = Client([{"count": 2}, [{"id": 4, "game": 1, "platform": 167}, {"id": 5, "game": 2, "platform": 167}], {"count": 2}, games])
+    class Store:
+        def investigate(self, rows):
+            assert [row["id"] for row in rows] == [2, 1]
+            return {"games": {}}
+    previous = {"games": {}, "playstation_investigation": {"games": {
+        "igdb:1": {"attempted_urls": ["https://store.playstation.com/en-tw/concept/10000001"],
+                   "checked_at": "2026-10-04T02:00:00Z"},
+        "igdb:2": {"attempted_urls": [], "checked_at": "2026-10-04T02:00:00Z", "status": "budget_exhausted"}}}}
+    collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", previous=previous, playstation_client=Store())
 
 
 def test_missing_batch_game_prevents_complete_snapshot():

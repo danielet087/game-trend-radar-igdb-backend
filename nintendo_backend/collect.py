@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 import json
 import os
@@ -15,6 +16,7 @@ from .igdb import CollectionError, IGDBClient, paginated_releases
 from .languages import load_combined_registry as load_language_registry
 from .taiwan_releases import load_combined_registry as load_release_registry
 from .playstation import PlayStationStoreClient
+from .persistence import decode_master
 
 GAME_FIELDS = (
     "id,name,hypes,url,category,game_type.type,status,game_status.status,summary,storyline,"
@@ -34,7 +36,7 @@ def load_existing(path):
     if not path.exists():
         return {"schema_version": 1, "games": {}}
     try:
-        existing = json.loads(path.read_text(encoding="utf-8"))
+        existing = decode_master(json.loads(path.read_text(encoding="utf-8")))
     except (OSError, ValueError):
         raise CollectionError("invalid_previous_master") from None
     if not isinstance(existing, dict) or existing.get("schema_version") != 1 or not isinstance(existing.get("games"), dict):
@@ -84,13 +86,28 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
     if playstation_client is not None:
         admitted = {row["igdb_id"]: row for row in catalog["games"] if any(p["code"] == "PS5" for p in row["platforms"])}
+        last_report = (previous or {}).get("playstation_investigation") or {}
+        prior_checks = last_report.get("games", {}) if isinstance(last_report, dict) else {}
+        def previous_attempt(raw):
+            record = prior_checks.get("igdb:" + str(raw["id"])) if isinstance(prior_checks, dict) else None
+            if not isinstance(record, dict) or not record.get("attempted_urls"):
+                return ""
+            try:
+                checked = datetime.fromisoformat(record["checked_at"].replace("Z", "+00:00"))
+                if checked.utcoffset() is not None and checked <= datetime.fromisoformat(checked_at.replace("Z", "+00:00")):
+                    return checked.astimezone(timezone.utc).isoformat()
+            except (ValueError, TypeError, KeyError, AttributeError):
+                pass
+            return ""
         investigation_games = sorted([row for row in raw_games if row["id"] in admitted],
             key=lambda row: (not any(r["platform"] == "PS5" for r in admitted[row["id"]]["releases"]),
+                             previous_attempt(row),
                              -(row.get("hypes") or 0), row["id"]))
         # Investigation reports are review material. Only reviewed repository
         # registries affect dates/languages and the publisher rebuilds those.
         status["playstation_investigation"] = {"review_only": True,
             **playstation_client.investigate(investigation_games)}
+        master["playstation_investigation"] = deepcopy(status["playstation_investigation"])
     return master, catalog, status
 
 

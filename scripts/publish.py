@@ -273,15 +273,17 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
 
 
 def _serialize(bundle: dict[str, dict]) -> dict[str, str]:
+    from nintendo_backend.persistence import encode_master
+    from nintendo_backend.igdb import CollectionError
     try:
-        # The full raw + normalized candidate ledger is large. Compact storage
-        # retains every field while reducing the GitHub blob request size;
-        # public catalog and status remain readable.
+        # Preserve every raw record and history. Large ledgers use a checked,
+        # deterministic compressed envelope; consumers decode before resuming.
         return {"data/" + name: json.dumps(
-            bundle[name], ensure_ascii=False, allow_nan=False,
+            encode_master(bundle[name]) if name == "nintendo_master.json" else bundle[name],
+            ensure_ascii=False, allow_nan=False,
             **({"separators": (",", ":")} if name == "nintendo_master.json" else {"indent": 2})) + "\n"
                 for name in FILES}
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, CollectionError):
         raise PublishError("invalid_output_file") from None
 
 
@@ -348,9 +350,9 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(result, ensure_ascii=False))
         if summary := os.environ.get("GITHUB_STEP_SUMMARY"):
             with open(summary, "a", encoding="utf-8") as handle:
-                handle.write("### Nintendo 月曆資料發布\n\n")
+                handle.write("### IGDB 主機月曆資料發布\n\n")
                 handle.write(f"- 候選：{result['candidate_count']} 款\n- 月曆：{result['public_count']} 款\n")
-                handle.write(f"- Nintendo 後端鏡像：{result['backend_mirror']}\n")
+                handle.write(f"- IGDB 後端鏡像：{result['backend_mirror']}\n")
                 handle.write("- 續查狀態：前端 nintendo_master.json（已持久化）\n")
         return 0
     except PublishError as error:
