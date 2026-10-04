@@ -21,6 +21,7 @@ ALLOWED_PATHS = {"data/" + name for name in FILES}
 SHA = re.compile(r"[0-9a-f]{40}\Z")
 CHINESE_NAME_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "chinese_names.json"
 TAIWAN_RELEASE_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "nintendo_release_dates.json"
+NINTENDO_LANGUAGE_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "nintendo_languages.json"
 
 
 class PublishError(Exception):
@@ -182,6 +183,7 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
     from nintendo_backend.chinese_names import NAME_FIELDS, load_registry, names
     from nintendo_backend.exclusivity import validate_enriched_game
     from nintendo_backend.igdb import CollectionError
+    from nintendo_backend.languages import load_registry as load_language_registry
     from nintendo_backend.taiwan_releases import load_registry as load_release_registry
     from scripts.guard import parse_utc
 
@@ -208,6 +210,7 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         # publication bundle's own claim to have verified a source URL.
         name_registry = load_registry(CHINESE_NAME_REGISTRY)
         release_registry = load_release_registry(TAIWAN_RELEASE_REGISTRY)
+        language_registry = load_language_registry(NINTENDO_LANGUAGE_REGISTRY)
         for row in rows.values():
             evidence = row.get("name_evidence")
             if isinstance(evidence, dict) and evidence.get("provider") == "official_registry":
@@ -219,7 +222,7 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         rebuilt_master, rebuilt_public, rebuilt_status = build_documents(
             [row["raw"] for row in rows.values()], start=start, checked_at=master["generated_at"],
             previous=master, source=master["source"], name_registry=name_registry,
-            release_registry=release_registry)
+            release_registry=release_registry, language_registry=language_registry)
     except (ValueError, KeyError, TypeError, CollectionError):
         raise PublishError("qualification_gate_failed") from None
     if master["window"] != rebuilt_master["window"] or public.get("window") != rebuilt_master["window"]:

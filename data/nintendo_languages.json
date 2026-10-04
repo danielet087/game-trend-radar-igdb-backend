@@ -1,0 +1,492 @@
+{
+  "schema_version": 1,
+  "games": {
+    "igdb:348210": {
+      "igdb_id": 348210,
+      "name_en": "Persona 4 Revival",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "ru",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734667Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000131657",
+          "official_title": "女神異聞錄４ Revival (Persona 4 Revival)",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:381235": {
+      "igdb_id": 381235,
+      "name_en": "Tomb Raider: Legacy of Atlantis",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734684Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000120173",
+          "official_title": "《古墓奇兵：亞特蘭提斯遺跡》",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:378225": {
+      "igdb_id": 378225,
+      "name_en": "Armatus",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "ru",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734724Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000112022",
+          "official_title": "Armatus",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:279661": {
+      "igdb_id": 279661,
+      "name_en": "Monster Hunter Wilds",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "ru",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734730Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000102605",
+          "official_title": "Monster Hunter Wilds",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:404044": {
+      "igdb_id": 404044,
+      "name_en": "Rayman Legends Retold",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "zh-Hans",
+            "en",
+            "nl",
+            "de",
+            "it",
+            "pt",
+            "fr",
+            "zh-Hant",
+            "ru",
+            "ja",
+            "es"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734737Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000111545",
+          "official_title": "《雷射超人：傳奇重述》 - Rayman Legends Retold",
+          "source_languages": [
+            "Simplified Chinese",
+            "English",
+            "Dutch",
+            "German",
+            "Italian",
+            "Portuguese",
+            "French",
+            "Traditional Chinese",
+            "Russian",
+            "Japanese",
+            "Spanish"
+          ]
+        }
+      }
+    },
+    "igdb:314449": {
+      "igdb_id": 314449,
+      "name_en": "Hela: Of Mice & Magic",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ko",
+            "pt",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734745Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000100025",
+          "official_title": "Hela：魔鼠無敵",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Korean",
+            "Portuguese",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:26602": {
+      "igdb_id": 26602,
+      "name_en": "Metaphor: ReFantazio",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "ru",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734749Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000105918",
+          "official_title": "暗喻幻想：ReFantazio（Metaphor: ReFantazio）",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:405460": {
+      "igdb_id": 405460,
+      "name_en": "The Legend of Zelda: Ocarina of Time",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "fr",
+            "it",
+            "pt",
+            "de",
+            "nl",
+            "es",
+            "ko",
+            "ja",
+            "en",
+            "ru",
+            "zh-Hant",
+            "zh-Hans"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734754Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000130795",
+          "official_title": "薩爾達傳說 時之笛",
+          "source_languages": [
+            "French",
+            "Italian",
+            "Portuguese",
+            "German",
+            "Dutch",
+            "Spanish",
+            "Korean",
+            "Japanese",
+            "English",
+            "Russian",
+            "Traditional Chinese",
+            "Simplified Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:196954": {
+      "igdb_id": 196954,
+      "name_en": "Hell is Us",
+      "platforms": {
+        "NS2": {
+          "region": "united_kingdom",
+          "supported_languages": [
+            "ja",
+            "en",
+            "es",
+            "fr",
+            "de",
+            "it",
+            "pt",
+            "ru",
+            "ko",
+            "zh",
+            "pl"
+          ],
+          "complete": true,
+          "source": "Nintendo UK 官方商品語言資料",
+          "source_url": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-2-games/Hell-is-Us-3182915.html",
+          "checked_at": "2026-10-04T06:05:55Z",
+          "evidence_type": "official_product_languages"
+        }
+      }
+    },
+    "igdb:236665": {
+      "igdb_id": 236665,
+      "name_en": "Professor Layton and the New World of Steam",
+      "platforms": {
+        "NS": {
+          "region": "worldwide",
+          "supported_languages": [
+            "en",
+            "ja",
+            "zh-Hant",
+            "zh-Hans",
+            "fr",
+            "it",
+            "de",
+            "es",
+            "ko"
+          ],
+          "complete": true,
+          "source": "LEVEL5 官方產品規格（逐一列明 NS 與 NS2）",
+          "source_url": "https://www.layton.jp/jouki/en/",
+          "checked_at": "2026-10-04T06:05:55Z",
+          "evidence_type": "official_product_languages"
+        },
+        "NS2": {
+          "region": "worldwide",
+          "supported_languages": [
+            "en",
+            "ja",
+            "zh-Hant",
+            "zh-Hans",
+            "fr",
+            "it",
+            "de",
+            "es",
+            "ko"
+          ],
+          "complete": true,
+          "source": "LEVEL5 官方產品規格（逐一列明 NS 與 NS2）",
+          "source_url": "https://www.layton.jp/jouki/en/",
+          "checked_at": "2026-10-04T06:05:55Z",
+          "evidence_type": "official_product_languages"
+        }
+      }
+    },
+    "igdb:381222": {
+      "igdb_id": 381222,
+      "name_en": "Order of the Sinking Star",
+      "platforms": {
+        "NS2": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "ru",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方軟體商品語言資料",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup?spage=2",
+          "checked_at": "2026-10-04T06:08:03.026509Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000124342",
+          "official_title": "沉星之序",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    },
+    "igdb:389434": {
+      "igdb_id": 389434,
+      "name_en": "Castlevania: Belmont's Curse",
+      "platforms": {
+        "NS": {
+          "region": "taiwan",
+          "supported_languages": [
+            "en",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "ru",
+            "zh-Hans",
+            "es",
+            "zh-Hant"
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方軟體商品語言資料",
+          "source_url": "https://www.nintendo.com/tw/api/search?k=Castlevania&directory=software&size=24",
+          "checked_at": "2026-10-04T06:08:03.026523Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000116854",
+          "official_title": "Castlevania: Belmont's Curse",
+          "source_languages": [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Traditional Chinese"
+          ]
+        }
+      }
+    }
+  }
+}

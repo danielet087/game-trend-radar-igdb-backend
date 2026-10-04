@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "purpose": "Unresolved investigation notes only; not approved language support evidence.",
+  "investigations": [
+    {
+      "igdb_id": 2933,
+      "name_en": "Kingdom Hearts III",
+      "platform": "NS2",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "不同版本：官方 HK 頁是 KINGDOM HEARTS III + Re Mind（DLC），不能套到本體。",
+      "inspected_urls": [
+        "https://ec.nintendo.com/HK/zh/titles/70010000117242"
+      ]
+    },
+    {
+      "igdb_id": 115060,
+      "name_en": "Dragon's Dogma II",
+      "platform": "NS2",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "本體 NS2 適用語言清單未確認，不套用 Dark Arisen 版本。",
+      "inspected_urls": [
+        "https://www.dragonsdogma.com/2/"
+      ]
+    },
+    {
+      "igdb_id": 19686,
+      "name_en": "Resident Evil 2",
+      "platform": "NS2",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "NS2 本體語言未確認，不套用 Deluxe 或 NS Cloud 版本。",
+      "inspected_urls": []
+    },
+    {
+      "igdb_id": 313597,
+      "name_en": "Silver Pines",
+      "platform": "NS",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "官方僅列平台介紹，未取得適用 NS 版本的語言清單。",
+      "inspected_urls": [
+        "https://www.team17.com/news/announcing-silver-pines"
+      ]
+    },
+    {
+      "igdb_id": 305107,
+      "name_en": "Eriksholm: The Stolen Dream",
+      "platform": "NS2",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "Nintendo 發售公告只有日期與操作說明，未列 NS2 語言清單。",
+      "inspected_urls": [
+        "https://www.nintendo.dk/nyheder/nintendo-direct-praesenterer-metroid-ravenous-kirby-and-the-world-beyond-og-flere-spil-til-nintendo-switch-2-og-nintendo-switch"
+      ]
+    },
+    {
+      "igdb_id": 251059,
+      "name_en": "Grave Seasons",
+      "platform": "NS",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "官方介紹未列可確認的 NS 版本語言清單。",
+      "inspected_urls": [
+        "https://www.blumhouse.com/games/grave-seasons"
+      ]
+    },
+    {
+      "igdb_id": 252852,
+      "name_en": "Mariachi Legends",
+      "platform": "NS",
+      "status": "unknown",
+      "checked_at": "2026-10-04T06:05:55Z",
+      "reason": "官方介紹未列適用 Nintendo 版本語言清單。",
+      "inspected_urls": [
+        "https://www.halberdstudios.com/mariachi-legends"
+      ]
+    }
+  ]
+}

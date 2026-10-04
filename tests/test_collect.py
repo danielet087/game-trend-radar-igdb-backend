@@ -106,3 +106,16 @@ def test_invalid_name_registry_preserves_existing_outputs(tmp_path):
                  "--chinese-names", str(registry)]) == 1
     assert (output / "nintendo_upcoming.json").read_text() == old
     assert json.loads((output / "nintendo_refresh_status.json").read_text())["reason"] == "invalid_chinese_name_registry"
+
+
+def test_invalid_language_registry_preserves_existing_outputs_before_api_calls(tmp_path):
+    output = tmp_path / "output"
+    output.mkdir()
+    old = '{"old":"catalog"}\n'
+    (output / "nintendo_upcoming.json").write_text(old)
+    path = tmp_path / "nintendo_languages.json"
+    path.write_text('{"schema_version":1,"games":{"igdb:1":{"igdb_id":2}}}')
+    assert main(["--output-dir", str(output), "--existing", str(tmp_path / "missing.json"),
+                 "--nintendo-languages", str(path)]) == 1
+    assert (output / "nintendo_upcoming.json").read_text() == old
+    assert json.loads((output / "nintendo_refresh_status.json").read_text())["reason"] == "invalid_nintendo_language_registry"

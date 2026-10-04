@@ -130,6 +130,57 @@ def test_unmodified_bundle_passes_full_formal_qualification_gate():
 
 
 @pytest.fixture
+def language_bundle(tmp_path, monkeypatch):
+    assert P.NINTENDO_LANGUAGE_REGISTRY.is_absolute()
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    registry = {"igdb:12345": {"igdb_id": 12345, "name_en": raw["name"], "platforms": {
+        "NS": {"region": "taiwan", "supported_languages": ["en", "ja"], "complete": True,
+               "source": "Nintendo Taiwan official product languages",
+               "source_url": "https://www.nintendo.com/tw/games/switch/lineup", "checked_at": CHECKED,
+               "evidence_type": "official_product_languages"}}}}
+    path = tmp_path / "nintendo_languages.json"
+    path.write_text(json.dumps({"schema_version": 1, "games": registry}))
+    monkeypatch.setattr(P, "NINTENDO_LANGUAGE_REGISTRY", path)
+    data = dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+                                           language_registry=registry)))
+    return data, path
+
+
+def test_language_gate_rebuilds_trusted_registry_from_any_working_directory(language_bundle, tmp_path, monkeypatch):
+    data, _ = language_bundle
+    outside = tmp_path / "outside-checkout"
+    outside.mkdir()
+    monkeypatch.chdir(outside)
+    validate_bundle(data, now=NOW)
+    native = data["nintendo_upcoming.json"]["games"][0]["platform_language_support"]["NS"]
+    assert native["languages"]["tchinese"] is False and native["checked_at"] == CHECKED
+
+
+@pytest.mark.parametrize("mutate", [
+    lambda row: row["languages"].update(tchinese=True, chinese=True),
+    lambda row: row.update(source_url="https://www.nintendo.com/tw/fake-product"),
+    lambda row: row.update(checked_at="2026-10-03T16:14:00Z"),
+    lambda row: row.update(region="north_america"),
+    lambda row: row.update(complete=False),
+])
+def test_matching_master_and_public_cannot_forge_nintendo_language_evidence(language_bundle, mutate):
+    data, _ = language_bundle
+    for row in (data["nintendo_master.json"]["games"]["igdb:12345"], data["nintendo_upcoming.json"]["games"][0]):
+        mutate(row["platform_language_support"]["NS"])
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+def test_removing_approved_language_registry_withdraws_existing_confirmation(language_bundle):
+    data, path = language_bundle
+    path.write_text('{"schema_version":1,"games":{}}')
+    with pytest.raises(PublishError):
+        validate_bundle(data, now=NOW)
+
+
+@pytest.fixture
 def taiwan_date_bundle(tmp_path, monkeypatch):
     assert P.TAIWAN_RELEASE_REGISTRY.is_absolute()
     raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])

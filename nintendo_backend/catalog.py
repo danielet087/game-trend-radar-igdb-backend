@@ -10,6 +10,7 @@ from zoneinfo import ZoneInfo
 
 from .chinese_names import names, previous_lookup
 from .igdb import CollectionError
+from .languages import platform_language_support
 from .taiwan_releases import official_releases
 
 PLATFORMS = {130: {"id": 130, "name": "Nintendo Switch", "code": "NS"},
@@ -168,7 +169,7 @@ def content_policy(game):
 
 
 def normalize_game(game, start: date, end: date, checked_at: str, *, previous=None, name_registry=None,
-                   release_registry=None):
+                   release_registry=None, language_registry=None):
     if not isinstance(game, dict) or type(game.get("id")) is not int or game["id"] <= 0:
         raise CollectionError("invalid_game_identity")
     hypes = game.get("hypes")
@@ -283,6 +284,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               **names(game, registry=name_registry, previous=previous),
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
               "popularity_status": popularity, "platforms": tracked, "known_platforms": known,
+              "platform_language_support": platform_language_support(game, tracked, language_registry),
               "platform_data_complete": platform_complete,
               "exclusivity": {"status": exclusive_status, "platform": exclusive_platform, "source": "IGDB", "url": url},
               "releases": calendar_releases, "release_records": releases, "cover_image": cover_url, "url": url,
@@ -305,7 +307,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
 
 
 def build_documents(raw_games, *, start: date, checked_at: str, previous=None, source=None, name_registry=None,
-                    release_registry=None):
+                    release_registry=None, language_registry=None):
     end = start + timedelta(days=365)
     prior_games = (previous or {}).get("games") or {}
     games = {}
@@ -314,7 +316,8 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
         if key in games:
             raise CollectionError("duplicate_game_identity")
         games[key] = normalize_game(raw, start, end, checked_at, previous=prior_games.get(key),
-                                    name_registry=name_registry, release_registry=release_registry)
+                                    name_registry=name_registry, release_registry=release_registry,
+                                    language_registry=language_registry)
     missing_prior = set(prior_games) - set(games)
     if missing_prior:
         raise CollectionError("previous_game_lookup_incomplete")
