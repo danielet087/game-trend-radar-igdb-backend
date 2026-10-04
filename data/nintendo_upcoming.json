@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T06:39:19Z",
+  "generated_at": "2026-10-04T06:58:10Z",
   "window": {
     "start": "2026-10-04",
     "end": "2027-10-04",
@@ -189,7 +189,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -316,7 +316,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -365,20 +365,69 @@
       ],
       "platform_language_support": {
         "NS2": {
-          "status": "unknown",
-          "region": null,
+          "status": "confirmed",
+          "region": "australia",
           "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
           },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
+          "supported_languages": [
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            },
+            {
+              "code": "pl",
+              "name": "波蘭文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂澳洲官方 Dragon's Dogma 2: Dark Arisen 商品語言資料",
+          "source_url": "https://www.nintendo.com/au/games/nintendo-switch-2/dragons-dogma-2-dark-arisen/",
+          "checked_at": "2026-10-04T06:46:35Z",
+          "evidence_type": "official_product_languages"
         }
       },
       "platform_data_complete": true,
@@ -443,7 +492,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -614,7 +663,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -786,7 +835,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -851,20 +900,73 @@
       ],
       "platform_language_support": {
         "NS2": {
-          "status": "unknown",
-          "region": null,
+          "status": "confirmed",
+          "region": "australia",
           "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
           },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
+          "supported_languages": [
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            },
+            {
+              "code": "th",
+              "name": "泰文"
+            },
+            {
+              "code": "pl",
+              "name": "波蘭文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂澳洲官方 Resident Evil 2 Deluxe Edition 商品語言資料",
+          "source_url": "https://ec.nintendo.com/AU/en/titles/70010000114443",
+          "checked_at": "2026-10-04T06:46:35Z",
+          "evidence_type": "official_product_languages"
         }
       },
       "platform_data_complete": true,
@@ -938,7 +1040,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1132,7 +1234,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1241,7 +1343,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-04T06:39:29Z",
+        "checked_at": "2026-10-04T06:58:21Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -1285,7 +1387,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1473,7 +1575,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1640,7 +1742,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1780,7 +1882,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1955,7 +2057,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2130,7 +2232,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2344,7 +2446,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2510,7 +2612,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2672,7 +2774,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2806,7 +2908,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2918,7 +3020,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3096,7 +3198,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T06:39:19Z",
+      "checked_at": "2026-10-04T06:58:10Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
