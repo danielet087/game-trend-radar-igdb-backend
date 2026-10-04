@@ -1,0 +1,1808 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-04T02:30:32Z",
+  "window": {
+    "start": "2026-10-04",
+    "end": "2027-10-04",
+    "end_inclusive": false,
+    "time_zone": "Asia/Taipei"
+  },
+  "source": {
+    "provider": "IGDB",
+    "complete": true,
+    "hypes_threshold": 30,
+    "discovery_release_count": 5409,
+    "request_count": 66,
+    "retry_count": 0,
+    "platform_ids_verified": [
+      130,
+      508
+    ],
+    "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"
+  },
+  "games": [
+    {
+      "id": "igdb:2933",
+      "igdb_id": 2933,
+      "display_name": "Kingdom Hearts III",
+      "name_en": "Kingdom Hearts III",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 110,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 48,
+          "name": "PlayStation 4"
+        },
+        {
+          "id": 49,
+          "name": "Xbox One"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/kingdom-hearts-iii"
+      },
+      "releases": [
+        {
+          "date": "2026-10-08",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tpy.jpg",
+      "url": "https://www.igdb.com/games/kingdom-hearts-iii",
+      "websites": [
+        {
+          "url": "https://www.khwiki.com/Kingdom_Hearts_III"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/kingdom-hearts-%E2%85%B2/C08MW8XHQN9G"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/208810"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kingdom_Hearts_III"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2552450/KINGDOM_HEARTS_III__Re_Mind_DLC/"
+        },
+        {
+          "url": "https://www.kingdomhearts.com/3/us/home/"
+        },
+        {
+          "url": "https://twitter.com/KINGDOMHEARTS"
+        },
+        {
+          "url": "https://www.epicgames.com/product/kingdom-hearts-iii"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/game/Kingdom%20Hearts%20III"
+        },
+        {
+          "url": "https://www.youtube.com/channel/UCCyrXyelKeXFx5KDgldMmNw"
+        },
+        {
+          "url": "https://www.facebook.com/KingdomHearts/"
+        },
+        {
+          "url": "https://www.reddit.com/r/KingdomHearts"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:313597",
+      "igdb_id": 313597,
+      "display_name": "Silver Pines",
+      "name_en": "Silver Pines",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 39,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/silver-pines"
+      },
+      "releases": [
+        {
+          "date": "2026-10-08",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaxvl.jpg",
+      "url": "https://www.igdb.com/games/silver-pines",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/2333000/Silver_Pines/"
+        },
+        {
+          "url": "https://www.xbox.com/en-gb/games/store/silver-pines/9npj71qqc6q3"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017331"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/silver-pines"
+        },
+        {
+          "url": "https://www.silverpinesgame.com/"
+        },
+        {
+          "url": "https://x.com/SilverPinesGame"
+        },
+        {
+          "url": "https://www.youtube.com/playlist?list=PLjkadU1Gs-CH0N8-lXq9UPjtXoIvy_fLE"
+        },
+        {
+          "url": "https://discord.gg/geF6zhDqAU"
+        },
+        {
+          "url": "https://www.instagram.com/silverpinesgame/"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:381222",
+      "igdb_id": 381222,
+      "display_name": "Order of the Sinking Star",
+      "name_en": "Order of the Sinking Star",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 30,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/order-of-the-sinking-star"
+      },
+      "releases": [
+        {
+          "date": "2026-10-08",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc954.jpg",
+      "url": "https://www.igdb.com/games/order-of-the-sinking-star",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/499170"
+        },
+        {
+          "url": "https://www.orderofthesinkingstar.com/"
+        },
+        {
+          "url": "https://discord.gg/PcCxqvfeKK"
+        },
+        {
+          "url": "https://x.com/SinkingStarGame"
+        },
+        {
+          "url": "https://www.facebook.com/SinkingStarGame/"
+        },
+        {
+          "url": "https://www.instagram.com/sinkingstargame/"
+        },
+        {
+          "url": "https://www.youtube.com/@SinkingStarGame"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017166"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/order-of-the-sinking-star"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/",
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:115060",
+      "igdb_id": 115060,
+      "display_name": "Dragon's Dogma II",
+      "name_en": "Dragon's Dogma II",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 31,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/dragons-dogma-ii"
+      },
+      "releases": [
+        {
+          "date": "2026-10-09",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co833w.jpg",
+      "url": "https://www.igdb.com/games/dragons-dogma-ii",
+      "websites": [
+        {
+          "url": "https://twitter.com/dragonsdogma"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/dragon's-dogma-2/9PJQMBMJ3154"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10005844"
+        },
+        {
+          "url": "https://www.youtube.com/c/dragonsdogma"
+        },
+        {
+          "url": "https://www.dragonsdogma.com/2/en-uk/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2054970"
+        },
+        {
+          "url": "https://www.facebook.com/dragonsdogma"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/game/Dragon%E2%80%99s%20Dogma%20II"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dragon%27s_Dogma_2"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:389434",
+      "igdb_id": 389434,
+      "display_name": "Castlevania: Belmont's Curse",
+      "name_en": "Castlevania: Belmont's Curse",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 72,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/castlevania-belmonts-curse"
+      },
+      "releases": [
+        {
+          "date": "2026-10-15",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocrky.jpg",
+      "url": "https://www.igdb.com/games/castlevania-belmonts-curse",
+      "websites": [
+        {
+          "url": "https://store.playstation.com/en-us/concept/10018186"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4231820"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/castlevania-belmonts-curse"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/castlevania-belmonts-curse/9nh6n2dnq0h0"
+        },
+        {
+          "url": "https://www.konami.com/games/castlevania/us/en-us/"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/castlevania-belmonts-curse-switch/"
+        },
+        {
+          "url": "https://castlevania.fandom.com/wiki/Castlevania:_Belmont%27s_Curse"
+        },
+        {
+          "url": "https://x.com/Castlevania_EN"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Castlevania:_Belmont%27s_Curse"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/castlevania-belmonts-curse-switch/",
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:19686",
+      "igdb_id": 19686,
+      "display_name": "Resident Evil 2",
+      "name_en": "Resident Evil 2",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 46,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 14,
+          "name": "Mac"
+        },
+        {
+          "id": 39,
+          "name": "iOS"
+        },
+        {
+          "id": 48,
+          "name": "PlayStation 4"
+        },
+        {
+          "id": 49,
+          "name": "Xbox One"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/resident-evil-2--1"
+      },
+      "releases": [
+        {
+          "date": "2026-10-16",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1ir3.jpg",
+      "url": "https://www.igdb.com/games/resident-evil-2--1",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/883710/RESIDENT_EVIL_2__BIOHAZARD_RE2"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/229500"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/resident-evil-2/BWMH951M3G3P"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/game/Resident%20Evil%202"
+        },
+        {
+          "url": "https://apps.apple.com/app/resident-evil-2/id1640632432"
+        },
+        {
+          "url": "https://apps.apple.com/app/resident-evil-2/id1640632432"
+        },
+        {
+          "url": "https://twitter.com/RE_Games"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Resident_Evil_2_(2019_video_game)"
+        },
+        {
+          "url": "https://www.reddit.com/r/residentevil"
+        },
+        {
+          "url": "https://www.facebook.com/residentevil"
+        },
+        {
+          "url": "https://www.instagram.com/re_games"
+        },
+        {
+          "url": "https://www.youtube.com/user/ResidentEvil"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "remake",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:196954",
+      "igdb_id": 196954,
+      "display_name": "Hell is Us",
+      "name_en": "Hell is Us",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 146,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/hell-is-us"
+      },
+      "releases": [
+        {
+          "date": "2026-10-27",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co9vum.jpg",
+      "url": "https://www.igdb.com/games/hell-is-us",
+      "websites": [
+        {
+          "url": "https://store.epicgames.com/en-US/p/hell-is-us-b9c06d"
+        },
+        {
+          "url": "https://www.xbox.com/en-US/games/store/hell-is-us/9n9097g0xzmb"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10005051"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hell_Is_Us"
+        },
+        {
+          "url": "https://hell-is-us.com/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/1620730"
+        },
+        {
+          "url": "https://youtube.com/Nacon"
+        },
+        {
+          "url": "https://facebook.com/HELLisUSgame"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/hell-is-us"
+        },
+        {
+          "url": "https://www.instagram.com/HELLisUSgame"
+        },
+        {
+          "url": "https://twitter.com/HELLisUSgame"
+        },
+        {
+          "url": "https://hellisus.wiki.fextralife.com/Hell_Is_Us_Wiki"
+        },
+        {
+          "url": "https://www.reddit.com/r/HellisUs/"
+        },
+        {
+          "url": "https://discord.gg/vKnb5SBJ4a"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/hell-is-us-switch-2/"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/hell-is-us-switch-2/",
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:405460",
+      "igdb_id": 405460,
+      "display_name": "The Legend of Zelda: Ocarina of Time",
+      "name_en": "The Legend of Zelda: Ocarina of Time",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 70,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "confirmed",
+        "platform": "NS2",
+        "source": "Nintendo official",
+        "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
+        "evidence": "Nintendo Switch 2 Exclusive",
+        "checked_at": "2026-10-04T02:30:37Z",
+        "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
+        "evidence_method": "product_metadata"
+      },
+      "releases": [
+        {
+          "date": "2026-11-05",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocv5r.jpg",
+      "url": "https://www.igdb.com/games/the-legend-of-zelda-ocarina-of-time--1",
+      "websites": [
+        {
+          "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/"
+        },
+        {
+          "url": "https://zelda.fandom.com/wiki/The_Legend_of_Zelda:_Ocarina_of_Time_(Switch_2)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Ocarina_of_Time"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
+      "game_type": "remake",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:26602",
+      "igdb_id": 26602,
+      "display_name": "Metaphor: ReFantazio",
+      "name_en": "Metaphor: ReFantazio",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 37,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 48,
+          "name": "PlayStation 4"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/metaphor-refantazio"
+      },
+      "releases": [
+        {
+          "date": "2026-11-12",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co8d9t.jpg",
+      "url": "https://www.igdb.com/games/metaphor-refantazio",
+      "websites": [
+        {
+          "url": "https://megamitensei.fandom.com/wiki/Metaphor:_ReFantazio"
+        },
+        {
+          "url": "https://www.instagram.com/atlus_west/"
+        },
+        {
+          "url": "https://www.youtube.com/@atlus"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/metaphor-refantazio/9N5DV8310XP7"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10001029"
+        },
+        {
+          "url": "https://www.facebook.com/AtlusWest/"
+        },
+        {
+          "url": "https://metaphor.atlus.com/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2679460/Metaphor_ReFantazio/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/metaphor-refantazio"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Metaphor:_ReFantazio"
+        },
+        {
+          "url": "https://www.reddit.com/r/MetaphorReFantazio/"
+        },
+        {
+          "url": "https://twitter.com/stud_zero"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/metaphor-refantazio-switch-2/"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/metaphor-refantazio-switch-2/",
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:314449",
+      "igdb_id": 314449,
+      "display_name": "Hela: Of Mice & Magic",
+      "name_en": "Hela: Of Mice & Magic",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 46,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/hela-of-mice-and-magic"
+      },
+      "releases": [
+        {
+          "date": "2026-12-01",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coax99.jpg",
+      "url": "https://www.igdb.com/games/hela-of-mice-and-magic",
+      "websites": [
+        {
+          "url": "https://www.helagame.com"
+        },
+        {
+          "url": "https://twitter.com/helathegame"
+        },
+        {
+          "url": "https://www.youtube.com/@WindupGames_SE"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/hela"
+        },
+        {
+          "url": "https://discord.gg/invite/TkTj4xNfSX"
+        },
+        {
+          "url": "https://www.instagram.com/helagame/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3161310/Hela/"
+        },
+        {
+          "url": "https://store.epicgames.com/en-US/p/hela-6d220a"
+        },
+        {
+          "url": "https://www.xbox.com/en-US/games/store/hela-of-mice-magic/9nmbdprkk1xf"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10012485/"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:305107",
+      "igdb_id": 305107,
+      "display_name": "Eriksholm: The Stolen Dream",
+      "name_en": "Eriksholm: The Stolen Dream",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 51,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/eriksholm-the-stolen-dream"
+      },
+      "releases": [
+        {
+          "date": "2026-12-03",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coa5u5.jpg",
+      "url": "https://www.igdb.com/games/eriksholm-the-stolen-dream",
+      "websites": [
+        {
+          "url": "https://eriksholmgame.com/"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10009571/"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/eriksholm-the-stolen-dream/9n3c43z99zb3"
+        },
+        {
+          "url": "https://www.youtube.com/@NordcurrentLabs"
+        },
+        {
+          "url": "https://x.com/NordcurrentLabs"
+        },
+        {
+          "url": "https://bsky.app/profile/nordcurrentlabs.bsky.social"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Eriksholm%3A_The_Stolen_Dream"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/eriksholm-the-stolen-dream"
+        },
+        {
+          "url": "https://www.facebook.com/NordcurrentLabs"
+        },
+        {
+          "url": "https://discord.gg/invite/3hUzpDm8cm"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2377280/Eriksholm_The_Stolen_Dream/"
+        },
+        {
+          "url": "https://store.epicgames.com/en-US/p/eriksholm-the-stolen-dream-c90ad9"
+        },
+        {
+          "url": "https://www.gog.com/en/game/eriksholm_the_stolen_dream"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:404044",
+      "igdb_id": 404044,
+      "display_name": "Rayman Legends Retold",
+      "name_en": "Rayman Legends Retold",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 58,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/rayman-legends-retold"
+      },
+      "releases": [
+        {
+          "date": "2026-12-03",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc5tb.jpg",
+      "url": "https://www.igdb.com/games/rayman-legends-retold",
+      "websites": [
+        {
+          "url": "https://x.com/RaymanGame"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4084710"
+        },
+        {
+          "url": "https://store.epicgames.com/p/rayman-legends-retold"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/rayman-legends-retold-deluxe-edition/9NMP2PLJN7N9/0017/9XHBZGL0QPLF"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017364/"
+        },
+        {
+          "url": "https://www.raymanlegendsretold.com/"
+        },
+        {
+          "url": "https://www.instagram.com/stories/rayman_game/"
+        },
+        {
+          "url": "https://bsky.app/profile/rayman.ubisoft.com"
+        },
+        {
+          "url": "https://www.reddit.com/r/Rayman/"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/rayman-legends-retold-switch-2/"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/rayman-legends-retold-switch-2/",
+      "game_type": "remake",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:279661",
+      "igdb_id": 279661,
+      "display_name": "Monster Hunter Wilds",
+      "name_en": "Monster Hunter Wilds",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 104,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/monster-hunter-wilds"
+      },
+      "releases": [
+        {
+          "date": "2026-12-04",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co904o.jpg",
+      "url": "https://www.igdb.com/games/monster-hunter-wilds",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/2246340"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10005176"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/monster-hunter-wilds/9NMT6XFN0LVD"
+        },
+        {
+          "url": "https://www.monsterhunter.com/wilds/"
+        },
+        {
+          "url": "https://www.facebook.com/monsterhunter"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/monster-hunter-wilds"
+        },
+        {
+          "url": "https://bsky.app/profile/monsterhunter.capcomusa.com"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Monster_Hunter_Wilds"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/monster-hunter-wilds-switch-2/"
+        },
+        {
+          "url": "https://discord.gg/mhwilds"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/monster-hunter-wilds-switch-2/",
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:236665",
+      "igdb_id": 236665,
+      "display_name": "Professor Layton and the New World of Steam",
+      "name_en": "Professor Layton and the New World of Steam",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 38,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/professor-layton-and-the-new-world-of-steam"
+      },
+      "releases": [
+        {
+          "date": "2026-12-10",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        },
+        {
+          "date": "2026-12-10",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co66va.jpg",
+      "url": "https://www.igdb.com/games/professor-layton-and-the-new-world-of-steam",
+      "websites": [
+        {
+          "url": "https://www.layton.jp/jouki/en"
+        },
+        {
+          "url": "https://twitter.com/laytonseries"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:378225",
+      "igdb_id": 378225,
+      "display_name": "Armatus",
+      "name_en": "Armatus",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 35,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/armatus"
+      },
+      "releases": [
+        {
+          "date": "2027-01-07",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coave0.jpg",
+      "url": "https://www.igdb.com/games/armatus",
+      "websites": [
+        {
+          "url": "https://www.xbox.com/en-us/games/store/armatus/9nqpj4m6smdf"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017555"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3660710"
+        },
+        {
+          "url": "https://discord.gg/zuhz2NfNuD"
+        },
+        {
+          "url": "https://bsky.app/profile/counterplaygames.bsky.social"
+        },
+        {
+          "url": "https://www.instagram.com/counterplay_games/"
+        },
+        {
+          "url": "https://www.youtube.com/@CounterplayGames"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:381235",
+      "igdb_id": 381235,
+      "display_name": "Tomb Raider: Legacy of Atlantis",
+      "name_en": "Tomb Raider: Legacy of Atlantis",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 140,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/tomb-raider-legacy-of-atlantis"
+      },
+      "releases": [
+        {
+          "date": "2027-02-12",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cob1kg.jpg",
+      "url": "https://www.igdb.com/games/tomb-raider-legacy-of-atlantis",
+      "websites": [
+        {
+          "url": "https://store.playstation.com/en-us/concept/10014491/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3558670/"
+        },
+        {
+          "url": "https://www.playtombraider.com/"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Tomb_Raider:_Legacy_of_Atlantis"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/tomb-raider-legacy-of-atlantis-switch-2/"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/tomb-raider-legacy-of-atlantis/9p82c3n2tlsv"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/tomb-raider-legacy-of-atlantis"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/tomb-raider-legacy-of-atlantis-switch-2/",
+      "game_type": "remake",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:251059",
+      "igdb_id": 251059,
+      "display_name": "Grave Seasons",
+      "name_en": "Grave Seasons",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 44,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/grave-seasons"
+      },
+      "releases": [
+        {
+          "date": "2027-03-09",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobtwq.jpg",
+      "url": "https://www.igdb.com/games/grave-seasons",
+      "websites": [
+        {
+          "url": "https://www.youtube.com/@perfectgarbage1871"
+        },
+        {
+          "url": "https://www.perfectgarbage.com/grave-seasons"
+        },
+        {
+          "url": "https://www.instagram.com/perfectgarbo/"
+        },
+        {
+          "url": "https://twitter.com/perfectgarbo"
+        },
+        {
+          "url": "https://discord.gg/invite/2Avfb8pNCq"
+        },
+        {
+          "url": "https://bsky.app/profile/perfectgarbage.bsky.social"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3255110/"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/grave-seasons/9n36kgdxkm0s"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10014259"
+        },
+        {
+          "url": "https://graveseasons.site/"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:252852",
+      "igdb_id": 252852,
+      "display_name": "Mariachi Legends",
+      "name_en": "Mariachi Legends",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 31,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/mariachi-legends"
+      },
+      "releases": [
+        {
+          "date": "2027-04-27",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co93lp.jpg",
+      "url": "https://www.igdb.com/games/mariachi-legends",
+      "websites": [
+        {
+          "url": "https://www.halberdstudios.com/mariachi-legends"
+        },
+        {
+          "url": "https://store.epicgames.com/en-US/p/mariachi-legends-773b34"
+        },
+        {
+          "url": "https://twitter.com/HALBERDSTUDIOS?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2376260/Mariachi_Legends/"
+        },
+        {
+          "url": "https://discord.gg/QQpmcn9UvN"
+        },
+        {
+          "url": "https://www.xbox.com/en-US/games/store/mariachi-legends/9phd73mh05f4"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:348210",
+      "igdb_id": 348210,
+      "display_name": "Persona 4 Revival",
+      "name_en": "Persona 4 Revival",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "hypes": 70,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/persona-4-revival"
+      },
+      "releases": [
+        {
+          "date": "2027-05-20",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "regional_calendar_day"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc7iu.jpg",
+      "url": "https://www.igdb.com/games/persona-4-revival",
+      "websites": [
+        {
+          "url": "https://www.twitch.tv/directory/category/persona-4-revival"
+        },
+        {
+          "url": "https://www.instagram.com/atlus_west/?hl=en"
+        },
+        {
+          "url": "https://x.com/Atlus_West"
+        },
+        {
+          "url": "https://www.facebook.com/AtlusWest/"
+        },
+        {
+          "url": "https://www.youtube.com/atlus"
+        },
+        {
+          "url": "https://store.steampowered.com/app/2963950"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10011107"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/persona-4-revival/9n40dk5n4ld4"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Persona_4_Revival"
+        },
+        {
+          "url": "https://megamitensei.fandom.com/wiki/Persona_4_Revival"
+        },
+        {
+          "url": "https://www.sega.com/persona/persona-4-revival"
+        }
+      ],
+      "nintendo_url": null,
+      "game_type": "remake",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T02:30:32Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    }
+  ]
+}

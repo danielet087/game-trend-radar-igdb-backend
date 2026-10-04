@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-04T02:30:32Z",
+  "complete": false,
+  "status": "prepared",
+  "candidate_count": 5008,
+  "public_count": 19,
+  "popularity_counts": {
+    "qualified": 88,
+    "observe": 49,
+    "below_threshold": 992,
+    "unknown": 3879
+  },
+  "content_review_count": 437,
+  "content_excluded_count": 6,
+  "pending_count": 0,
+  "source": {
+    "provider": "IGDB",
+    "complete": true,
+    "hypes_threshold": 30,
+    "discovery_release_count": 5409,
+    "request_count": 66,
+    "retry_count": 0,
+    "platform_ids_verified": [
+      130,
+      508
+    ],
+    "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"
+  },
+  "exclusivity_counts": {
+    "confirmed": 1,
+    "listed_only": 0,
+    "multi_platform": 18,
+    "unknown": 0
+  },
+  "target_slot": "2026-10-04T02:29:47Z",
+  "trigger_source": "manual",
+  "run_id": "37137013480",
+  "backend_mirror": "published"
+}
