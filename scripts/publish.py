@@ -19,6 +19,7 @@ REPOSITORIES = {BACKEND, FRONTEND}
 FILES = ("nintendo_master.json", "nintendo_upcoming.json", "nintendo_refresh_status.json")
 ALLOWED_PATHS = {"data/" + name for name in FILES}
 SHA = re.compile(r"[0-9a-f]{40}\Z")
+CHINESE_NAME_REGISTRY = Path(__file__).resolve().parents[1] / "data" / "chinese_names.json"
 
 
 class PublishError(Exception):
@@ -177,6 +178,7 @@ def _read_json(path: Path) -> dict:
 
 def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
     from nintendo_backend.catalog import build_documents
+    from nintendo_backend.chinese_names import NAME_FIELDS, load_registry, names
     from nintendo_backend.exclusivity import validate_enriched_game
     from nintendo_backend.igdb import CollectionError
     from scripts.guard import parse_utc
@@ -200,9 +202,20 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         rows = master["games"]
         if not isinstance(rows, dict) or any(not isinstance(row, dict) for row in rows.values()):
             raise ValueError("invalid_master")
+        # Curated official names are approved by repository data, never by a
+        # publication bundle's own claim to have verified a source URL.
+        name_registry = load_registry(CHINESE_NAME_REGISTRY)
+        for row in rows.values():
+            evidence = row.get("name_evidence")
+            if isinstance(evidence, dict) and evidence.get("provider") == "official_registry":
+                approved = names(row["raw"], registry=name_registry)
+                if (not isinstance(approved.get("name_evidence"), dict)
+                        or approved["name_evidence"].get("provider") != "official_registry"
+                        or any(row.get(field) != approved.get(field) for field in NAME_FIELDS)):
+                    raise ValueError("unverified_official_name")
         rebuilt_master, rebuilt_public, rebuilt_status = build_documents(
             [row["raw"] for row in rows.values()], start=start, checked_at=master["generated_at"],
-            previous=master, source=master["source"])
+            previous=master, source=master["source"], name_registry=name_registry)
     except (ValueError, KeyError, TypeError, CollectionError):
         raise PublishError("qualification_gate_failed") from None
     if master["window"] != rebuilt_master["window"] or public.get("window") != rebuilt_master["window"]:

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "games": {
+    "igdb:26602": {
+      "igdb_id": 26602,
+      "name_en": "Metaphor: ReFantazio",
+      "name_zh_tw": "暗喻幻想：ReFantazio",
+      "source": "ATLUS 官方繁中 Nintendo Switch 2 商品頁",
+      "url": "https://asia.sega.com/metaphor/cht/switch2/"
+    },
+    "igdb:348210": {
+      "igdb_id": 348210,
+      "name_en": "Persona 4 Revival",
+      "name_zh_tw": "女神異聞錄４ Revival",
+      "source": "ATLUS 官方繁中商品頁",
+      "url": "https://asia.sega.com/p4r/cht/"
+    },
+    "igdb:381235": {
+      "igdb_id": 381235,
+      "name_en": "Tomb Raider: Legacy of Atlantis",
+      "name_zh_tw": "古墓奇兵：亞特蘭提斯遺跡",
+      "source": "Amazon Game Studios 官方繁中 Nintendo Switch 2 公告",
+      "url": "https://www.playtombraider.com/zh-hant/news/articles/switch2-preorders"
+    },
+    "igdb:405460": {
+      "igdb_id": 405460,
+      "name_en": "The Legend of Zelda: Ocarina of Time",
+      "name_zh_tw": "薩爾達傳說 時之笛",
+      "source": "任天堂台灣官方 Nintendo Switch 2 公告",
+      "url": "https://www.nintendo.com/tw/topics/article/2OMbHnXXwcwQAJCviAj8Hl"
+    },
+    "igdb:404044": {
+      "igdb_id": 404044,
+      "name_en": "Rayman Legends Retold",
+      "name_zh_tw": "雷射超人：傳奇重述",
+      "source": "任天堂香港官方 Nintendo Switch 2 商品頁",
+      "url": "https://ec.nintendo.com/HK/zh/titles/70010000111545"
+    },
+    "igdb:381222": {
+      "igdb_id": 381222,
+      "name_en": "Order of the Sinking Star",
+      "name_zh_tw": "沉星之序",
+      "source": "Steam 官方繁中商品名稱（已核對同款 AppID 499170）",
+      "url": "https://store.steampowered.com/app/499170/?l=tchinese"
+    },
+    "igdb:314449": {
+      "igdb_id": 314449,
+      "name_en": "Hela: Of Mice & Magic",
+      "name_zh_tw": "Hela：鼠鼠奇旅",
+      "source": "Steam 官方繁中商品名稱（已核對同款 AppID 3161310）",
+      "url": "https://store.steampowered.com/app/3161310/?l=tchinese"
+    },
+    "igdb:313597": {
+      "igdb_id": 313597,
+      "name_en": "Silver Pines",
+      "name_zh_tw": "銀松鎮",
+      "source": "Steam 官方繁中介紹內明示遊戲名（已核對同款 AppID 2333000）",
+      "url": "https://store.steampowered.com/app/2333000/?l=tchinese"
+    },
+    "igdb:378225": {
+      "igdb_id": 378225,
+      "name_en": "Armatus",
+      "name_zh_tw": "阿瑪塔斯",
+      "source": "Steam 官方繁中介紹內明示遊戲名（已核對同款 AppID 3660710）",
+      "url": "https://store.steampowered.com/app/3660710/Armatus/?l=tchinese"
+    },
+    "igdb:279661": {
+      "igdb_id": 279661,
+      "name_en": "Monster Hunter Wilds",
+      "name_zh_tw": "魔物獵人 荒野",
+      "source": "傑仕登台灣官方代理商繁中商品頁",
+      "url": "https://www.igamers.com.tw/zh-TW/products/mhw"
+    },
+    "igdb:19686": {
+      "igdb_id": 19686,
+      "name_en": "Resident Evil 2",
+      "name_zh_tw": "惡靈古堡2 重製版",
+      "source": "傑仕登台灣官方代理商繁中商品頁（RE ENGINE 重製作品）",
+      "url": "https://www.igamers.com.tw/zh-TW/products/ps5-re2"
+    },
+    "igdb:115060": {
+      "igdb_id": 115060,
+      "name_en": "Dragon's Dogma II",
+      "name_zh_tw": "龍族教義 2",
+      "source": "傑仕登台灣官方代理商活動公告（同款 Dragon's Dogma 2 試玩）",
+      "url": "https://www.justdan.com/tw/news/hot/%E5%82%91%E4%BB%95%E7%99%BB%E5%AE%A3%E5%B8%83%E5%8F%83%E5%B1%952024%E5%8F%B0%E5%8C%97%E5%9C%8B%E9%9A%9B%E9%9B%BB%E7%8E%A9%E5%B1%95%E5%B8%B6%E4%BE%86DragonsDogma2%E7%AD%89%E6%9C%80%E6%96%B0%E4%BD%9C%E5%93%81%E8%A9%A6%E7%8E%A9"
+    },
+    "igdb:389434": {
+      "igdb_id": 389434,
+      "name_en": "Castlevania: Belmont's Curse",
+      "name_zh_tw": "惡魔城：貝爾蒙特的詛咒",
+      "source": "傑仕登台灣官方代理商繁中商品頁（午夜版取本篇名稱）",
+      "url": "https://www.igamers.com.tw/zh-TW/products/castlevania-belmonts-curse-midnight-edition"
+    }
+  }
+}

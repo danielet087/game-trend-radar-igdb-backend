@@ -7,7 +7,7 @@ from datetime import date, datetime, timedelta, timezone
 import re
 from urllib.parse import urlparse
 
-from opencc import OpenCC
+from .chinese_names import names, previous_lookup
 from .igdb import CollectionError
 
 PLATFORMS = {130: {"id": 130, "name": "Nintendo Switch", "code": "NS"},
@@ -21,7 +21,6 @@ CATEGORIES = {0: "main_game", 4: "standalone_expansion", 8: "remake", 9: "remast
 EXPLICIT = re.compile(r"\b(?:hentai|pornograph(?:y|ic)|sex game|adult game|sexually explicit|"
                       r"explicit sexual|uncensored sexual|sex scenes|sexual acts|lots of sex)\b", re.I)
 STRONG_CONTENT = {"strong sexual content", "explicit sexual content", "explicit sex", "sexo explicito"}
-_S2T = OpenCC("s2t")
 
 
 def reference(value, field="name"):
@@ -147,33 +146,7 @@ def content_policy(game):
             "source": "IGDB", "themes": themes, "age_ratings": ratings, "summary_present": bool(summary.strip())}
 
 
-def names(game):
-    english = game.get("name")
-    if not isinstance(english, str) or not english.strip():
-        raise CollectionError("invalid_game_name")
-    localized = {}
-    localizations = game.get("game_localizations") or []
-    if not isinstance(localizations, list):
-        raise CollectionError("invalid_localization_metadata")
-    for row in localizations:
-        if not isinstance(row, dict) or not isinstance(row.get("name"), str):
-            continue
-        region = row.get("region") or {}
-        if not isinstance(region, dict):
-            continue
-        locale = str(region.get("identifier") or "").lower().replace("_", "-")
-        if locale in {"zh-tw", "zh-hant", "zh-hk"}:
-            localized.setdefault("traditional", row["name"])
-        elif locale in {"zh-cn", "zh-hans"}:
-            localized.setdefault("simplified", row["name"])
-    traditional = localized.get("traditional")
-    if not traditional and localized.get("simplified"):
-        traditional = _S2T.convert(localized["simplified"])
-    return {"display_name": traditional or english, "name_en": english, "name_zh_tw": traditional,
-            "name_source": "IGDB game_localizations" if traditional else "IGDB name"}
-
-
-def normalize_game(game, start: date, end: date, checked_at: str, *, previous=None):
+def normalize_game(game, start: date, end: date, checked_at: str, *, previous=None, name_registry=None):
     if not isinstance(game, dict) or type(game.get("id")) is not int or game["id"] <= 0:
         raise CollectionError("invalid_game_identity")
     hypes = game.get("hypes")
@@ -255,7 +228,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if isinstance(website, dict) and (website_url := safe_url(website.get("url"))):
             websites.append({"url": website_url})
     nintendo_urls = [row["url"] for row in websites if safe_url(row["url"], ["nintendo.com", "nintendo.co.jp", "nintendo.com.hk"])]
-    result = {"id": "igdb:" + str(game["id"]), "igdb_id": game["id"], **names(game),
+    result = {"id": "igdb:" + str(game["id"]), "igdb_id": game["id"],
+              **names(game, registry=name_registry, previous=previous),
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
               "popularity_status": popularity, "platforms": tracked, "known_platforms": known,
               "platform_data_complete": platform_complete,
@@ -274,10 +248,12 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     if latest is None or any(latest.get(key) != value for key, value in snapshot.items()):
         history.append({"checked_at": checked_at, **snapshot})
     result["platform_history"] = history[-100:]
+    if lookup := previous_lookup(game, previous):
+        result["steam_name_lookup"] = lookup
     return result
 
 
-def build_documents(raw_games, *, start: date, checked_at: str, previous=None, source=None):
+def build_documents(raw_games, *, start: date, checked_at: str, previous=None, source=None, name_registry=None):
     end = start + timedelta(days=365)
     prior_games = (previous or {}).get("games") or {}
     games = {}
@@ -285,7 +261,7 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
         key = "igdb:" + str(raw.get("id")) if isinstance(raw, dict) else "invalid"
         if key in games:
             raise CollectionError("duplicate_game_identity")
-        games[key] = normalize_game(raw, start, end, checked_at, previous=prior_games.get(key))
+        games[key] = normalize_game(raw, start, end, checked_at, previous=prior_games.get(key), name_registry=name_registry)
     missing_prior = set(prior_games) - set(games)
     if missing_prior:
         raise CollectionError("previous_game_lookup_incomplete")
@@ -296,7 +272,7 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     for row in games.values():
         if row["calendar_eligible"]:
             public.append({key: deepcopy(value) for key, value in row.items()
-                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history"}})
+                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup"}})
     public.sort(key=lambda row: (min(r["date"] for r in row["releases"]), row["id"]))
     counts = {status: sum(row["popularity_status"] == status for row in games.values())
               for status in ("qualified", "observe", "below_threshold", "unknown")}

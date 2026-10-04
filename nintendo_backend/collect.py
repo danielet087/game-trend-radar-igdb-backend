@@ -10,6 +10,7 @@ import tempfile
 from zoneinfo import ZoneInfo
 
 from .catalog import build_documents
+from .chinese_names import SteamNameClient, enrich_documents, load_registry
 from .igdb import CollectionError, IGDBClient, paginated_releases
 
 GAME_FIELDS = (
@@ -19,7 +20,9 @@ GAME_FIELDS = (
     "release_dates.d,release_dates.human,release_dates.region,release_dates.release_region.region,release_dates.status.name,"
     "themes.name,age_ratings.synopsis,age_ratings.rating_category.rating,age_ratings.organization.name,"
     "age_ratings.rating_content_descriptions.description,age_ratings.rating_content_descriptions.description_type.name,"
-    "age_ratings.content_descriptions.description,game_localizations.name,game_localizations.region.identifier,cover.url,websites.url"
+    "age_ratings.content_descriptions.description,game_localizations.name,game_localizations.region.identifier,"
+    "alternative_names.name,alternative_names.comment,external_games.uid,external_games.game,"
+    "external_games.external_game_source.name,cover.url,websites.url"
 )
 
 
@@ -39,7 +42,8 @@ def load_existing(path):
     return existing
 
 
-def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100):
+def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
+            name_registry=None, name_client=None):
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
@@ -65,10 +69,14 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
         raw_games.extend(rows)
     if checked_at is None:
         checked_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
-    return build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
+    master, catalog, status = build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
+                           name_registry=name_registry,
                            source={"discovery_release_count": len(releases), "request_count": client.request_count,
                                    "retry_count": client.retry_count, "platform_ids_verified": [130, 508],
                                    "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"})
+    if name_client is not None:
+        status["name_enrichment"] = enrich_documents(master, catalog, name_client)
+    return master, catalog, status
 
 
 def write_json_atomic(path: Path, document):
@@ -89,14 +97,17 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", default="output")
     parser.add_argument("--existing", default="data/nintendo_master.json")
+    parser.add_argument("--chinese-names", default="data/chinese_names.json")
     parser.add_argument("--today", type=date.fromisoformat, default=None)
     args = parser.parse_args(argv)
     out = Path(args.output_dir)
     try:
         previous = load_existing(args.existing)
+        name_registry = load_registry(args.chinese_names)
         client = IGDBClient(os.environ.get("TWITCH_CLIENT_ID", ""), os.environ.get("TWITCH_CLIENT_SECRET", ""))
         start = args.today or datetime.now(ZoneInfo("Asia/Taipei")).date()
-        master, catalog, status = collect(client, start=start, previous=previous)
+        master, catalog, status = collect(client, start=start, previous=previous,
+                                         name_registry=name_registry, name_client=SteamNameClient())
         # All API, completeness and qualification gates have passed before any data write.
         write_json_atomic(out / "nintendo_master.json", master)
         write_json_atomic(out / "nintendo_upcoming.json", catalog)

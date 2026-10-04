@@ -2,7 +2,7 @@ name: Test Nintendo backend
 on:
   push:
     branches: [main]
-    paths: ['nintendo_backend/**', 'scripts/**', 'tests/**', 'requirements*.txt', '.github/workflows/test.yml']
+    paths: ['nintendo_backend/**', 'scripts/**', 'tests/**', 'data/chinese_names.json', 'requirements*.txt', '.github/workflows/test.yml']
   pull_request:
 permissions:
   contents: read

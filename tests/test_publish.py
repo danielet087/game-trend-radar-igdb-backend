@@ -6,6 +6,8 @@ import pytest
 import requests
 
 from nintendo_backend.catalog import build_documents
+from nintendo_backend.chinese_names import SteamNameClient, enrich_documents, names
+import scripts.publish as P
 from scripts.publish import ALLOWED_PATHS, BACKEND, FILES, FRONTEND, GitHub, PublishError, _serialize, main, publish, validate_bundle
 
 NOW = datetime(2026, 10, 3, 16, 15, tzinfo=timezone.utc)
@@ -125,6 +127,91 @@ def test_gate_rejects_incomplete_or_ineligible_data_before_remote_writes(mutatio
 
 def test_unmodified_bundle_passes_full_formal_qualification_gate():
     validate_bundle(bundle(), now=NOW)
+
+
+@pytest.fixture
+def official_name_bundle(tmp_path, monkeypatch):
+    assert P.CHINESE_NAME_REGISTRY.is_absolute()
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    raw["game_localizations"] = [{"name": "IGDB 中文別名", "region": {"identifier": "zh-TW"}}]
+    registry = {"igdb:12345": {"igdb_id": 12345, "name_en": raw["name"],
+                "name_zh_tw": "任天堂官方冒險", "source": "Nintendo official Traditional Chinese product page",
+                "url": "https://www.nintendo.com/tw/store/products/test-adventure/"}}
+    path = tmp_path / "chinese_names.json"
+    path.write_text(json.dumps({"schema_version": 1, "games": registry}), encoding="utf-8")
+    monkeypatch.setattr(P, "CHINESE_NAME_REGISTRY", path)
+    docs = build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED, name_registry=registry)
+    return dict(zip(FILES, docs)), registry, path
+
+
+def test_gate_rebuild_uses_repository_official_name_before_conflicting_igdb_chinese(official_name_bundle, monkeypatch, tmp_path):
+    data, _, _ = official_name_bundle
+    # Publication can be invoked outside the checkout; registry identity stays fixed.
+    outside = tmp_path / "another-working-directory"
+    outside.mkdir()
+    monkeypatch.chdir(outside)
+    original = deepcopy(data)
+    validate_bundle(data, now=NOW)
+    assert data == original
+    client = RecordingClient()
+    publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    frontend = next(call[2] for call in client.calls if call[:2] == ("commit", FRONTEND))
+    assert frontend["data/nintendo_upcoming.json"]["games"][0]["display_name"] == "任天堂官方冒險"
+
+
+@pytest.mark.parametrize("fields", [
+    {"display_name": "捏造的遊戲", "name_zh_tw": "捏造的遊戲"},
+    {"name_source": "An unreviewed claim of an official source"},
+    {"name_url": "https://example.test/fake-official-title"},
+    {"steam_appid": 987654},
+])
+def test_gate_rejects_self_reported_official_name_changes_before_remote_writes(official_name_bundle, fields):
+    data, _, _ = official_name_bundle
+    data["nintendo_master.json"]["games"]["igdb:12345"].update(fields)
+    data["nintendo_upcoming.json"]["games"][0].update(fields)
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+def test_gate_does_not_accept_an_official_registry_claim_missing_from_repository_registry(official_name_bundle):
+    data, registry, path = official_name_bundle
+    path.write_text(json.dumps({"schema_version": 1, "games": {}}), encoding="utf-8")
+    # The bundle still carries valid-looking identity, Chinese locale and HTTPS
+    # evidence, but none of them authorize an absent curated registry entry.
+    assert data["nintendo_master.json"]["games"]["igdb:12345"]["name_evidence"] == names(
+        data["nintendo_master.json"]["games"]["igdb:12345"]["raw"], registry=registry)["name_evidence"]
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+def test_gate_accepts_identity_verified_steam_names_and_preserves_master_only_lookup_state():
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    raw["websites"] = [{"url": "https://store.steampowered.com/app/21/Test_adventure/"}]
+    master, public, status = build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED)
+
+    class NameSession:
+        def get(self, *_args, **_kwargs):
+            return Response(200, {"21": {"success": True, "data": {
+                "steam_appid": 21, "type": "game", "name": "測試冒險"}}})
+
+    enrich_documents(master, public, SteamNameClient(session=NameSession()))
+    data = dict(zip(FILES, (master, public, status)))
+    validate_bundle(data, now=NOW)
+    assert master["games"]["igdb:12345"]["steam_name_lookup"]["status"] == "matched"
+    assert "steam_name_lookup" not in public["games"][0]
+    assert public["games"][0]["display_name"] == "測試冒險"
+
+    # Both copies agreeing cannot authorize a name URL for a different game.
+    master["games"]["igdb:12345"]["name_url"] = "https://store.steampowered.com/app/22/"
+    public["games"][0]["name_url"] = "https://store.steampowered.com/app/22/"
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
 
 
 class Response:

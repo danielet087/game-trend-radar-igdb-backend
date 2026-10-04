@@ -5,6 +5,7 @@ import json
 import pytest
 
 from nintendo_backend.collect import collect, load_existing, main
+from nintendo_backend.chinese_names import SteamNameClient
 from nintendo_backend.igdb import CollectionError
 
 
@@ -63,3 +64,45 @@ def test_malformed_previous_state_not_silently_replaced(tmp_path):
     path.write_text('{"schema_version":1,"games":{"igdb:1":{"igdb_id":2}}}')
     with pytest.raises(CollectionError, match="invalid_previous_master"):
         load_existing(path)
+
+
+def test_collect_enriches_only_qualified_names_with_verified_steam_identity():
+    class Response:
+        status_code = 200
+
+        def json(self):
+            return {"789": {"success": True, "data": {"steam_appid": 789, "type": "game", "name": "Steam 繁中遊戲"}}}
+
+    class Session:
+        calls = 0
+
+        def get(self, *args, **kwargs):
+            self.calls += 1
+            return Response()
+
+    raw = {"id": 1, "name": "One", "hypes": 30, "platforms": [{"id": 508}], "category": 0,
+           "summary": "A tactical adventure.", "websites": [{"url": "https://store.steampowered.com/app/789/"}],
+           "release_dates": [{"id": 9, "platform": {"id": 508}, "category": 0, "y": 2027, "m": 3, "d": 1, "region": 8}]}
+    unqualified = {**raw, "id": 2, "name": "Two", "hypes": 29}
+    api = Client([{"count": 2}, [{"id": 4, "game": 1, "platform": 508}, {"id": 5, "game": 2, "platform": 508}],
+                  {"count": 2}, [raw, unqualified]])
+    session = Session()
+    names_api = SteamNameClient(session=session, clock=lambda: 0, sleep=lambda _: None)
+    master, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", name_client=names_api)
+    assert public["games"][0]["display_name"] == master["games"]["igdb:1"]["display_name"] == "Steam 繁中遊戲"
+    assert session.calls == status["name_enrichment"]["steam_request_count"] == 1
+    assert master["games"]["igdb:2"]["name_zh_tw"] is None
+    assert "alternative_names.comment" in api.calls[-1][1] and "external_games.external_game_source.name" in api.calls[-1][1]
+
+
+def test_invalid_name_registry_preserves_existing_outputs(tmp_path):
+    output = tmp_path / "output"
+    output.mkdir()
+    old = '{"old":"catalog"}\n'
+    (output / "nintendo_upcoming.json").write_text(old)
+    registry = tmp_path / "chinese_names.json"
+    registry.write_text('{"schema_version":1,"games":{"igdb:1":{"igdb_id":2}}}')
+    assert main(["--output-dir", str(output), "--existing", str(tmp_path / "missing.json"),
+                 "--chinese-names", str(registry)]) == 1
+    assert (output / "nintendo_upcoming.json").read_text() == old
+    assert json.loads((output / "nintendo_refresh_status.json").read_text())["reason"] == "invalid_chinese_name_registry"
