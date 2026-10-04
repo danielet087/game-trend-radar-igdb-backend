@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T04:25:16Z",
+  "generated_at": "2026-10-04T06:14:09Z",
   "window": {
     "start": "2026-10-04",
     "end": "2027-10-04",
@@ -67,6 +67,24 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -138,7 +156,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -185,6 +203,24 @@
           "name": "Xbox Series X|S"
         }
       ],
+      "platform_language_support": {
+        "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -247,7 +283,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -294,6 +330,24 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -356,7 +410,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -399,6 +453,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方軟體商品語言資料",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup?spage=2",
+          "checked_at": "2026-10-04T06:08:03.026509Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -464,7 +581,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -511,6 +628,69 @@
           "name": "Xbox Series X|S"
         }
       ],
+      "platform_language_support": {
+        "NS": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方軟體商品語言資料",
+          "source_url": "https://www.nintendo.com/tw/api/search?k=Castlevania&directory=software&size=24",
+          "checked_at": "2026-10-04T06:08:03.026523Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -573,7 +753,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -636,6 +816,24 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -707,7 +905,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -758,6 +956,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "united_kingdom",
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "zh",
+              "name": "中文"
+            },
+            {
+              "code": "pl",
+              "name": "波蘭文"
+            }
+          ],
+          "complete": true,
+          "source": "Nintendo UK 官方商品語言資料",
+          "source_url": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-2-games/Hell-is-Us-3182915.html",
+          "checked_at": "2026-10-04T06:05:55Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -838,7 +1099,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -873,6 +1134,73 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "nl",
+              "name": "荷蘭文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734754Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "confirmed",
@@ -880,7 +1208,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-04T04:25:26Z",
+        "checked_at": "2026-10-04T06:14:20Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -924,7 +1252,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -975,6 +1303,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734749Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1049,7 +1440,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1096,6 +1487,61 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734745Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1161,7 +1607,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1209,6 +1655,24 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1283,7 +1747,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1330,6 +1794,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "nl",
+              "name": "荷蘭文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734737Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1395,7 +1922,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1442,6 +1969,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734730Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1507,7 +2097,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1554,6 +2144,114 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS": {
+          "status": "confirmed",
+          "region": "worldwide",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            }
+          ],
+          "complete": true,
+          "source": "LEVEL5 官方產品規格（逐一列明 NS 與 NS2）",
+          "source_url": "https://www.layton.jp/jouki/en/",
+          "checked_at": "2026-10-04T06:05:55Z",
+          "evidence_type": "official_product_languages"
+        },
+        "NS2": {
+          "status": "confirmed",
+          "region": "worldwide",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            }
+          ],
+          "complete": true,
+          "source": "LEVEL5 官方產品規格（逐一列明 NS 與 NS2）",
+          "source_url": "https://www.layton.jp/jouki/en/",
+          "checked_at": "2026-10-04T06:05:55Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1613,7 +2311,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1660,6 +2358,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734724Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1716,7 +2477,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1763,6 +2524,65 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734684Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1819,7 +2639,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1870,6 +2690,24 @@
           "name": "Xbox Series X|S"
         }
       ],
+      "platform_language_support": {
+        "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -1935,7 +2773,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1976,6 +2814,24 @@
           "name": "Xbox Series X|S"
         }
       ],
+      "platform_language_support": {
+        "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -2029,7 +2885,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2076,6 +2932,69 @@
           "code": "NS2"
         }
       ],
+      "platform_language_support": {
+        "NS2": {
+          "status": "confirmed",
+          "region": "taiwan",
+          "languages": {
+            "tchinese": true,
+            "schinese": true,
+            "english": true,
+            "chinese": true
+          },
+          "supported_languages": [
+            {
+              "code": "en",
+              "name": "英文"
+            },
+            {
+              "code": "fr",
+              "name": "法文"
+            },
+            {
+              "code": "de",
+              "name": "德文"
+            },
+            {
+              "code": "it",
+              "name": "義大利文"
+            },
+            {
+              "code": "ja",
+              "name": "日文"
+            },
+            {
+              "code": "ko",
+              "name": "韓文"
+            },
+            {
+              "code": "pt",
+              "name": "葡萄牙文"
+            },
+            {
+              "code": "ru",
+              "name": "俄文"
+            },
+            {
+              "code": "zh-Hans",
+              "name": "簡體中文"
+            },
+            {
+              "code": "es",
+              "name": "西班牙文"
+            },
+            {
+              "code": "zh-Hant",
+              "name": "繁體中文"
+            }
+          ],
+          "complete": true,
+          "source": "任天堂台灣官方 Nintendo Switch 2 軟體一覽（商品語言資料）",
+          "source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "checked_at": "2026-10-04T06:06:03.734667Z",
+          "evidence_type": "official_product_languages"
+        }
+      },
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -2144,7 +3063,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T04:25:16Z",
+      "checked_at": "2026-10-04T06:14:09Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
