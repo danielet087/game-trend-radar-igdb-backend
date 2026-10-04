@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T02:30:32Z",
+  "generated_at": "2026-10-04T03:17:54Z",
   "complete": false,
   "status": "prepared",
   "candidate_count": 5008,
@@ -27,13 +27,18 @@
     ],
     "candidate_scope": "Nintendo platform release records: window/overlapping year/undated, plus previous ledger"
   },
+  "name_enrichment": {
+    "steam_request_count": 10,
+    "steam_failure_count": 0,
+    "steam_rate_limited": false
+  },
   "exclusivity_counts": {
     "confirmed": 1,
     "listed_only": 0,
     "multi_platform": 18,
     "unknown": 0
   },
-  "target_slot": "2026-10-04T02:29:47Z",
+  "target_slot": "2026-10-04T03:17:09Z",
   "trigger_source": "manual",
   "run_id": "37137013480",
   "backend_mirror": "published"
