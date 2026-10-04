@@ -1,4 +1,4 @@
-"""Repository-reviewed native platform release dates for Taiwan.
+"""Repository-reviewed native platform release dates for Taiwan and Nintendo HK.
 
 An IGDB worldwide/Asia date and a Unix timestamp do not independently prove
 Taiwan availability. Official calendar dates are bound to game and platform.
@@ -9,7 +9,7 @@ from copy import deepcopy
 from datetime import date, datetime
 import json
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 from zoneinfo import ZoneInfo
 
 from .igdb import CollectionError
@@ -19,6 +19,22 @@ from .playstation import (official_url as playstation_url, product_id as playsta
 REGISTRY_PATH = Path(__file__).resolve().parents[1] / "data" / "nintendo_release_dates.json"
 PLAYSTATION_REGISTRY_PATH = Path(__file__).resolve().parents[1] / "data" / "playstation_release_dates.json"
 OFFICIAL_DOMAINS = {"www.nintendo.com", "asia.sega.com", "www.playtombraider.com", "www.konami.com"}
+NINTENDO_HK_DOMAINS = {"nintendo.com.hk", "www.nintendo.com.hk", "store.nintendo.com.hk"}
+
+
+def nintendo_hong_kong_url(parsed):
+    """Only Nintendo's actual HK hosts or its migrated HK regional namespace."""
+    if parsed.query or parsed.fragment:
+        return False
+    # URL clients normalize dot segments before loading a page. A /hk/ prefix
+    # must not permit a URL that actually navigates into another region.
+    path = unquote(parsed.path)
+    if "\\" in path or any(part in {".", ".."} for part in path.split("/")):
+        return False
+    if parsed.hostname in NINTENDO_HK_DOMAINS:
+        return parsed.path not in {"", "/", "/index.html", "/index.htm"}
+    return (parsed.hostname == "www.nintendo.com" and parsed.path.startswith("/hk/")
+            and parsed.path[len("/hk/"):] not in {"", "index.html", "index.htm"})
 
 
 def validate_registry(document):
@@ -31,7 +47,7 @@ def validate_registry(document):
                 or not isinstance(game.get("name_en"), str) or not 0 < len(game["name_en"].strip()) <= 240
                 or not isinstance(game.get("releases"), list) or not game["releases"]):
             raise CollectionError("invalid_taiwan_release_registry")
-        platforms = set()
+        platform_regions = set()
         for row in game["releases"]:
             try:
                 if not isinstance(row, dict):
@@ -41,16 +57,22 @@ def validate_registry(document):
                 checked = datetime.fromisoformat(row["verified_at"].replace("Z", "+00:00"))
                 url = urlparse(row["url"])
                 sony = row.get("platform") == "PS5"
-                source_valid = (playstation_url(row.get("url"), region="taiwan") is not None if sony else
-                                url.hostname in OFFICIAL_DOMAINS and
-                                (url.hostname != "www.nintendo.com" or url.path.startswith("/tw/")))
+                region = row.get("region", "taiwan")
+                if region == "hong_kong":
+                    source_valid = not sony and nintendo_hong_kong_url(url)
+                else:
+                    source_valid = (playstation_url(row.get("url"), region="taiwan") is not None if sony else
+                                    url.hostname in OFFICIAL_DOMAINS and
+                                    (url.hostname != "www.nintendo.com" or url.path.startswith("/tw/")))
                 concept_id = playstation_concept_id(row.get("url")) if sony else None
                 store_id = playstation_product_id(row.get("url")) if sony and not concept_id else None
                 time_matches = True
-                if sony and "release_time_utc" in row:
+                if (sony or region == "hong_kong") and "release_time_utc" in row:
                     stamp = datetime.fromisoformat(row["release_time_utc"].replace("Z", "+00:00"))
                     time_matches = stamp.utcoffset() is not None and stamp.astimezone(ZoneInfo("Asia/Taipei")).date() == day
-                if (row.get("platform") not in {"NS", "NS2", "PS5"} or row["platform"] in platforms
+                if (row.get("platform") not in {"NS", "NS2", "PS5"}
+                        or region not in {"taiwan", "hong_kong"}
+                        or (row["platform"], region) in platform_regions
                         or day.isoformat() != row["date"]
                         or original_day.isoformat() != row["verified_source_date"] or checked.utcoffset() is None
                         or not isinstance(row.get("source"), str) or not 0 < len(row["source"].strip()) <= 240
@@ -63,7 +85,7 @@ def validate_registry(document):
                         or url.username or url.password or url.port is not None
                         or len(row["url"]) > 2000):
                     raise ValueError
-                platforms.add(row["platform"])
+                platform_regions.add((row["platform"], region))
             except (ValueError, TypeError, KeyError, AttributeError):
                 raise CollectionError("invalid_taiwan_release_registry") from None
     return document["games"]
@@ -87,8 +109,8 @@ def load_combined_registry(nintendo_path=REGISTRY_PATH, playstation_path=PLAYSTA
         existing = result[key]
         if existing["name_en"] != game["name_en"] or existing["igdb_id"] != game["igdb_id"]:
             raise CollectionError("conflicting_taiwan_release_registry_identity")
-        platforms = {row["platform"] for row in existing["releases"]}
-        if platforms & {row["platform"] for row in game["releases"]}:
+        versions = {(row["platform"], row.get("region", "taiwan")) for row in existing["releases"]}
+        if versions & {(row["platform"], row.get("region", "taiwan")) for row in game["releases"]}:
             raise CollectionError("conflicting_taiwan_release_registry_platform")
         existing["releases"].extend(deepcopy(game["releases"]))
     return result

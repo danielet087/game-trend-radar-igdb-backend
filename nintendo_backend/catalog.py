@@ -33,6 +33,12 @@ RELEASE_FIELDS = ("date", "platform", "precision", "region", "source", "date_bas
                   "official_product_id", "official_concept_id", "official_release_time_utc")
 
 
+def calendar_region_rank(record):
+    if record["region"] == "hong_kong" and record["source"] == "official_registry":
+        return -1
+    return {"taiwan": -2, "asia": 0, "worldwide": 1, "japan": 2, "china": 3, "korea": 4}.get(record["region"], 5)
+
+
 def reference(value, field="name"):
     if type(value) is int and value > 0:
         return {"id": value}
@@ -199,19 +205,25 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
             row.update(PLATFORMS[row["id"]])
     tracked = [deepcopy(PLATFORMS[id_]) for id_ in sorted(known_ids & PLATFORMS.keys())]
     # Keep each IGDB record intact, including region and timestamp. A reviewed
-    # Taiwan product/announcement date is a separate record and takes priority.
+    # Regional product/announcement dates are separate records. Taiwan is
+    # preferred; reviewed Nintendo HK dates provide the same UTC+8 calendar day
+    # without claiming that Taiwan availability was independently confirmed.
     for official in official_releases(game, release_registry):
+        official_region = official.get("region", "taiwan")
+        if official_region not in {"taiwan", "hong_kong"} or (official_region == "hong_kong" and official["platform"] == "PS5"):
+            continue
         platform_id = next(id_ for id_, platform in PLATFORMS.items() if platform["code"] == official["platform"])
         if platform_id not in known_ids:
             continue
-        originals = [row for row in releases if row["platform_id"] == platform_id and row["precision"] == "day"]
+        originals = [row for row in releases if row["source"] == "IGDB"
+                     and row["platform_id"] == platform_id and row["precision"] == "day"]
         ranks = {"asia": 0, "worldwide": 1, "japan": 2, "china": 3, "korea": 4}
         if originals:
             best_rank = min(ranks.get(row["region"], 5) for row in originals)
             originals = [row for row in originals if ranks.get(row["region"], 5) == best_rank]
         original = originals[0] if originals and len({row["date"] for row in originals}) == 1 else None
         # A later changed/ambiguous IGDB date invalidates this reviewed snapshot.
-        # The same Taiwan date appearing in IGDB does not invalidate it.
+        # The same reviewed official date appearing in IGDB does not invalidate it.
         if not original or original["date"] not in {official["verified_source_date"], official["date"]}:
             continue
         row = deepcopy(original) if original else {
@@ -219,9 +231,9 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
             "time_zone": "Asia/Taipei", "timestamp_taipei_date": None}
         row.update({"id": None, "platform": official["platform"], "platform_id": platform_id,
                     "date": official["date"], "range_start": official["date"], "range_end": official["date"],
-                    "precision": "day", "region": "taiwan", "status": None, "human": official["date"],
-                    "source": "official_registry", "date_basis": "taiwan_official_calendar_day",
-                    "timezone_status": "taiwan_official_date", "taiwan_release_confirmed": True,
+                    "precision": "day", "region": official_region, "status": None, "human": official["date"],
+                    "source": "official_registry", "date_basis": official_region + "_official_calendar_day",
+                    "timezone_status": official_region + "_official_date", "taiwan_release_confirmed": official_region == "taiwan",
                     "official_source_url": official["url"], "official_source_name": official["source"],
                     "official_verified_at": official["verified_at"],
                     "official_product_id": official.get("product_id"),
@@ -252,9 +264,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
                  and not str(r["status"] or "").lower().startswith(("cancel", "rumor"))]
         if not exact:
             continue
-        ranks = {"taiwan": -1, "asia": 0, "worldwide": 1, "japan": 2, "china": 3, "korea": 4}
-        best_rank = min(ranks.get(r["region"], 5) for r in exact)
-        best = [r for r in exact if ranks.get(r["region"], 5) == best_rank]
+        best_rank = min(calendar_region_rank(r) for r in exact)
+        best = [r for r in exact if calendar_region_rank(r) == best_rank]
         dates = {r["date"] for r in best}
         if len(dates) != 1:
             continue  # Conflicting equally relevant records require review.
