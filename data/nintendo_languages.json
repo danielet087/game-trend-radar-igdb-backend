@@ -524,6 +524,102 @@
           "identity_evidence": "官方商品描述明確包含 KINGDOM HEARTS III 本體與 Re Mind DLC；平台列為 Nintendo Switch 2 原生下載軟體。語言僅適用此香港 NS2 販售版本。"
         }
       }
+    },
+    "igdb:115060": {
+      "igdb_id": 115060,
+      "name_en": "Dragon's Dogma II",
+      "platforms": {
+        "NS2": {
+          "region": "australia",
+          "supported_languages": [
+            "ja",
+            "en",
+            "es",
+            "pt",
+            "fr",
+            "de",
+            "it",
+            "ru",
+            "ko",
+            "zh-Hans",
+            "zh-Hant",
+            "pl"
+          ],
+          "complete": true,
+          "source": "任天堂澳洲官方 Dragon's Dogma 2: Dark Arisen 商品語言資料",
+          "source_url": "https://www.nintendo.com/au/games/nintendo-switch-2/dragons-dogma-2-dark-arisen/",
+          "checked_at": "2026-10-04T06:46:35Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000118032",
+          "official_title": "Dragon's Dogma 2: Dark Arisen",
+          "source_languages": [
+            "Japanese",
+            "English",
+            "Spanish",
+            "Portuguese",
+            "French",
+            "German",
+            "Italian",
+            "Russian",
+            "Korean",
+            "Chinese (Simplified)",
+            "Chinese (Traditional)",
+            "Polish"
+          ],
+          "identity_relation": "base_game_included",
+          "identity_source_url": "https://captown.capcom.com/en/theaters/dragonsdogma/57",
+          "identity_evidence": "CAPCOM 官方明確說明包含 Dragon's Dogma 2 本體與 Dark Arisen 擴充內容，首次登上原生 NS2；此商品不是第一代 Dragon's Dogma: Dark Arisen。"
+        }
+      }
+    },
+    "igdb:19686": {
+      "igdb_id": 19686,
+      "name_en": "Resident Evil 2",
+      "platforms": {
+        "NS2": {
+          "region": "australia",
+          "supported_languages": [
+            "ja",
+            "en",
+            "es",
+            "pt",
+            "fr",
+            "de",
+            "it",
+            "ru",
+            "ko",
+            "zh-Hans",
+            "zh-Hant",
+            "th",
+            "pl"
+          ],
+          "complete": true,
+          "source": "任天堂澳洲官方 Resident Evil 2 Deluxe Edition 商品語言資料",
+          "source_url": "https://ec.nintendo.com/AU/en/titles/70010000114443",
+          "checked_at": "2026-10-04T06:46:35Z",
+          "evidence_type": "official_product_languages",
+          "product_id": "70010000114443",
+          "official_title": "Resident Evil 2 Deluxe Edition",
+          "source_languages": [
+            "Japanese",
+            "English",
+            "Spanish",
+            "Portuguese",
+            "French",
+            "German",
+            "Italian",
+            "Russian",
+            "Korean",
+            "Chinese (Simplified)",
+            "Chinese (Traditional)",
+            "Thai",
+            "Polish"
+          ],
+          "identity_relation": "base_game_included",
+          "identity_source_url": "https://ec.nintendo.com/AU/en/titles/70010000114443",
+          "identity_evidence": "官方商品描述明確列出 Resident Evil 2 Main Game 與追加內容，原生平台為 Nintendo Switch 2；不是 NS Cloud 版。"
+        }
+      }
     }
   }
 }

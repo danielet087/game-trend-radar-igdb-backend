@@ -3,34 +3,16 @@
   "purpose": "Unresolved investigation notes only; not approved language support evidence.",
   "investigations": [
     {
-      "igdb_id": 115060,
-      "name_en": "Dragon's Dogma II",
-      "platform": "NS2",
-      "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "本體 NS2 適用語言清單未確認，不套用 Dark Arisen 版本。",
-      "inspected_urls": [
-        "https://www.dragonsdogma.com/2/"
-      ]
-    },
-    {
-      "igdb_id": 19686,
-      "name_en": "Resident Evil 2",
-      "platform": "NS2",
-      "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "NS2 本體語言未確認，不套用 Deluxe 或 NS Cloud 版本。",
-      "inspected_urls": []
-    },
-    {
       "igdb_id": 313597,
       "name_en": "Silver Pines",
       "platform": "NS",
       "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "官方僅列平台介紹，未取得適用 NS 版本的語言清單。",
+      "checked_at": "2026-10-04T06:50:09Z",
+      "reason": "尚未取得與原生Nintendo平台及版本精確對應的官方完整語言表；官方發售／介紹資料不等於語言支援證據。",
       "inspected_urls": [
-        "https://www.team17.com/news/announcing-silver-pines"
+        "https://www.nintendo.com/hk/api/search?k=Silver%20Pines&directory=software&size=24",
+        "https://store.nintendo.com.hk/",
+        "https://www.silverpinesgame.com/"
       ]
     },
     {
@@ -38,10 +20,12 @@
       "name_en": "Eriksholm: The Stolen Dream",
       "platform": "NS2",
       "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "Nintendo 發售公告只有日期與操作說明，未列 NS2 語言清單。",
+      "checked_at": "2026-10-04T06:50:09Z",
+      "reason": "尚未取得與原生Nintendo平台及版本精確對應的官方完整語言表；官方發售／介紹資料不等於語言支援證據。",
       "inspected_urls": [
-        "https://www.nintendo.dk/nyheder/nintendo-direct-praesenterer-metroid-ravenous-kirby-and-the-world-beyond-og-flere-spil-til-nintendo-switch-2-og-nintendo-switch"
+        "https://www.nintendo.com/hk/api/search?k=Eriksholm&directory=software&size=24",
+        "https://store.nintendo.com.hk/",
+        "https://www.nintendo.com/us/whatsnew/nintendo-direct-reveals-metroid-ravenous-kirby-and-the-world-beyond-and-more-games-for-nintendo-switch-2-and-nintendo-switch/"
       ]
     },
     {
@@ -49,10 +33,12 @@
       "name_en": "Grave Seasons",
       "platform": "NS",
       "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "官方介紹未列可確認的 NS 版本語言清單。",
+      "checked_at": "2026-10-04T06:51:00Z",
+      "reason": "官方介紹未列 NS 完整語言表；開發者 FAQ 提到目前 Steam 語言清單，但未明確列出 Nintendo 版本語言，仍待確認。",
       "inspected_urls": [
-        "https://www.blumhouse.com/games/grave-seasons"
+        "https://www.perfectgarbage.com/grave-seasons",
+        "https://www.blumhouse.com/games/grave-seasons",
+        "https://steamcommunity.com/app/3255110/discussions/0/568163524345407894/"
       ]
     },
     {
@@ -60,8 +46,8 @@
       "name_en": "Mariachi Legends",
       "platform": "NS",
       "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "官方介紹未列適用 Nintendo 版本語言清單。",
+      "checked_at": "2026-10-04T06:51:00Z",
+      "reason": "已重新查核發行商官方介紹，未取得原生 NS 商品完整語言表，仍待確認。",
       "inspected_urls": [
         "https://www.halberdstudios.com/mariachi-legends"
       ]

@@ -18,7 +18,7 @@ OFFICIAL_DOMAINS = {"www.nintendo.com", "www.nintendo.co.jp", "www.nintendo.com.
                     "ec.nintendo.com", "asia.sega.com", "www.konami.com",
                     "www.playtombraider.com", "www.layton.jp"}
 REGIONS = {"taiwan", "north_america", "japan", "hong_kong", "asia", "worldwide",
-           "united_kingdom", "europe"}
+           "united_kingdom", "europe", "australia"}
 LANGUAGE_NAMES = {
     "zh-Hant": "繁體中文", "zh-Hans": "簡體中文", "zh": "中文",
     "en": "英文", "ja": "日文", "ko": "韓文", "fr": "法文", "de": "德文",
@@ -41,15 +41,17 @@ def _source_url(value, region):
             return False
         if url.hostname == "www.nintendo.com":
             return url.path.startswith({"taiwan": "/tw/", "north_america": "/us/",
-                                        "united_kingdom": "/en-gb/", "europe": "/en-gb/"}.get(region, "\0"))
+                                        "united_kingdom": "/en-gb/", "europe": "/en-gb/",
+                                        "australia": "/au/"}.get(region, "\0"))
         if url.hostname == "www.nintendo.co.jp":
             return region == "japan"
         if url.hostname == "www.nintendo.com.hk":
             return region == "hong_kong"
         if url.hostname == "ec.nintendo.com":
-            prefix = {"taiwan": "/TW/", "hong_kong": "/HK/", "japan": "/JP/"}.get(region, "\0")
+            prefix = {"taiwan": "/TW/", "hong_kong": "/HK/", "japan": "/JP/",
+                      "australia": "/AU/"}.get(region, "\0")
             return url.path.startswith(prefix)
-        return True
+        return region != "australia"
     except ValueError:
         return False
 

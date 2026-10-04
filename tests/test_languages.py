@@ -49,6 +49,29 @@ def test_chinese_icon_does_not_assert_english_or_chinese_variants():
         "tchinese": None, "schinese": None, "english": None, "chinese": True}
 
 
+@pytest.mark.parametrize("url", [
+    "https://www.nintendo.com/au/games/nintendo-switch-2/a-game/",
+    "https://ec.nintendo.com/AU/en/titles/70010000114443",
+])
+def test_australian_evidence_requires_matching_official_store_region(url):
+    doc = document()
+    row = doc["games"]["igdb:1"]["platforms"]["NS"]
+    row.update(region="australia", source_url=url)
+    support = platform_language_support({"id": 1, "name": "A game"}, [{"code": "NS"}], validate_registry(doc))["NS"]
+    assert support["region"] == "australia" and support["languages"]["tchinese"] is True
+    for region in ("taiwan", "hong_kong", "north_america"):
+        row["region"] = region
+        with pytest.raises(CollectionError, match="invalid_nintendo_language_registry"):
+            validate_registry(doc)
+    row["region"] = "australia"
+    for wrong_url in ("https://www.nintendo.com/us/store/products/a-game/",
+                      "https://ec.nintendo.com/HK/zh/titles/70010000114443",
+                      "https://asia.sega.com/a-game/"):
+        row["source_url"] = wrong_url
+        with pytest.raises(CollectionError, match="invalid_nintendo_language_registry"):
+            validate_registry(doc)
+
+
 def test_complete_language_list_can_establish_non_support():
     doc = document()
     doc["games"]["igdb:1"]["platforms"]["NS"]["supported_languages"] = ["ja"]
