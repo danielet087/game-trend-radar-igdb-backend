@@ -56,11 +56,20 @@ def official_url(value, *, region=None):
 
 
 def product_id(value):
+    """Return the legacy store identity (a product or concept ID)."""
     url = official_url(value)
     if not url or urlsplit(url).hostname != "store.playstation.com":
         return None
     match = _STORE_PATH.fullmatch(urlsplit(url).path)
     return match[3] or match[5]
+
+
+def concept_id(value):
+    """Return a concept identity only for an explicit regional concept route."""
+    url = official_url(value)
+    if not url or urlsplit(url).hostname != "store.playstation.com":
+        return None
+    return _STORE_PATH.fullmatch(urlsplit(url).path)[5]
 
 
 def _normalize(value):
@@ -91,9 +100,24 @@ class _StoreHTML(HTMLParser):
         self.subtitles = []
         self._subtitles = False
         self._subtitle_parts = []
+        self.release_times = []
+        self.native_headers = []
+        self._proof_tag = None
+        self._proof_depth = 0
+        self._proof_kind = None
+        self._proof_parts = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if self._proof_tag == tag:
+            self._proof_depth += 1
+        if self._proof_tag is None:
+            qa = attrs.get("data-qa") or ""
+            kind = ("release_times" if qa == "mfe-game-title#release-date" else
+                    "native_headers" if re.fullmatch(r"mfe-compatibility-notices#notices#notice[0-9]+#compatTextHeader", qa) else None)
+            if kind:
+                self._proof_tag, self._proof_depth, self._proof_kind = tag, 1, kind
+                self._proof_parts = []
         if tag == "script" and attrs.get("type", "").lower() == "application/json":
             self._read = True
             self._parts = []
@@ -106,8 +130,16 @@ class _StoreHTML(HTMLParser):
             self._parts.append(value)
         if self._subtitles:
             self._subtitle_parts.append(value)
+        if self._proof_tag:
+            self._proof_parts.append(value)
 
     def handle_endtag(self, tag):
+        if tag == self._proof_tag:
+            self._proof_depth -= 1
+            if self._proof_depth == 0:
+                getattr(self, self._proof_kind).append("".join(self._proof_parts).strip())
+                self._proof_tag = self._proof_kind = None
+                self._proof_parts = []
         if tag == "script" and self._read:
             self.scripts.append("".join(self._parts))
             self._read = False
@@ -129,6 +161,83 @@ _LANGUAGES = {
 }
 
 
+def _concept_release(parser, documents, match, name_en, region):
+    """Read an announced native concept only with a displayed UTC instant.
+
+    Some future games have no purchasable product yet. Their exact concept
+    cache, native version notice, and displayed time can still authenticate a
+    release instant. A date-only value or a generic site PS5 label cannot.
+    """
+    identity = match[5]
+    if not identity:
+        return None
+    concept = {}
+    for document in documents:
+        if document.get("args", {}).get("conceptId") != identity:
+            continue
+        row = document["cache"].get("Concept:" + identity)
+        if row is None:
+            continue
+        if (not isinstance(row, dict) or row.get("id") != identity
+                or row.get("__typename") != "Concept"):
+            return None
+        for key in ("name", "invariantName", "defaultProduct", "isAnnounce", "products",
+                    "platforms", "compatibilityNoticesByPlatform", "releaseDate"):
+            if key not in row:
+                continue
+            value = row[key]
+            if key == "releaseDate":
+                if not isinstance(value, dict):
+                    return None
+                previous = concept.setdefault(key, {})
+                for field in ("type", "value"):
+                    if field not in value:
+                        continue
+                    if field in previous and previous[field] != value[field]:
+                        return None
+                    previous[field] = deepcopy(value[field])
+            elif key in concept and concept[key] != value:
+                return None
+            else:
+                concept[key] = deepcopy(value)
+    if (not isinstance(concept.get("name"), str) or not _title_matches(concept["name"], name_en)
+            or (concept.get("invariantName") and _normalize(concept["invariantName"]) != _normalize(name_en))
+            or concept.get("isAnnounce") is not True or concept.get("defaultProduct") is not None
+            or concept.get("products") != [] or concept.get("platforms") not in (None, [], ["PS5"])):
+        return None
+    notices = concept.get("compatibilityNoticesByPlatform")
+    if (not isinstance(notices, dict)
+            or any(value for code, value in notices.items() if code not in {"__typename", "PS5", "Common"})):
+        return None
+    native = notices.get("PS5")
+    if (not isinstance(native, list) or not native
+            or not all(isinstance(row, dict) and row.get("targetPlatforms") == ["PS5"] for row in native)
+            or not parser.native_headers
+            or any(label not in {"PS5版本", "PS5 Version", "PS5 version"} for label in parser.native_headers)):
+        return None
+    release = concept.get("releaseDate")
+    if (not isinstance(release, dict) or release.get("type") != "DAY_MONTH_YEAR"
+            or not isinstance(release.get("value"), str) or not parser.release_times):
+        return None
+    try:
+        stamp = datetime.fromisoformat(release["value"].replace("Z", "+00:00"))
+        if stamp.utcoffset() is None:
+            return None
+        utc = stamp.astimezone(timezone.utc)
+        displayed = [datetime.strptime(re.sub(r"\s+", " ", text), "%d/%m/%Y %I:%M %p UTC").replace(tzinfo=timezone.utc)
+                     for text in parser.release_times]
+        if any(value != utc for value in displayed):
+            return None
+    except (ValueError, TypeError, OverflowError):
+        return None
+    return {"product_id": None, "concept_id": identity, "official_title": concept["name"],
+            "region": region, "source_url": "https://store.playstation.com/" +
+            ("zh-hant-tw" if region == "taiwan" else "zh-hant-hk") + "/concept/" + identity,
+            "supported_languages": [], "complete": False, "evidence_type": "official_concept_release_time",
+            "release_time_utc": utc.isoformat(timespec="seconds").replace("+00:00", "Z"),
+            "date": utc.astimezone(ZoneInfo("Asia/Taipei")).date().isoformat()}
+
+
 def parse_store_metadata(html, url, name_en):
     """Read only the page's exact product caches; reject conflicts and editions."""
     safe = official_url(url)
@@ -139,6 +248,7 @@ def parse_store_metadata(html, url, name_en):
     parser = _StoreHTML()
     parser.feed(html)
     products = {}
+    documents = []
     exact_id = match[3]
     for script in parser.scripts:
         try:
@@ -153,6 +263,7 @@ def parse_store_metadata(html, url, name_en):
         args = document.get("args", {})
         if not isinstance(args, dict):
             continue
+        documents.append(document)
         selected = args.get("productId") if isinstance(args, dict) else None
         if exact_id:
             if selected != exact_id:
@@ -197,6 +308,8 @@ def parse_store_metadata(html, url, name_en):
     candidates = [row for row in products.values() if isinstance(row.get("name"), str)
                   and _title_matches(row["name"], name_en)
                   and (not match[5] or row.get("concept_ref") == "Concept:" + match[5])]
+    if not products:
+        return _concept_release(parser, documents, match, name_en, region)
     if len(candidates) != 1:
         return None
     product = candidates[0]
@@ -330,7 +443,8 @@ class PlayStationStoreClient:
                     if found or rate_limited:
                         break
                 result["igdb:" + str(game["id"])] = {"igdb_id": game["id"], "name_en": game["name"],
-                    "status": "confirmed_product" if found else last_status, "attempted_urls": attempted,
+                    "status": ("confirmed_concept" if found.get("concept_id") else "confirmed_product") if found else last_status,
+                    "attempted_urls": attempted,
                     "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
                     "evidence": found}
         finally:

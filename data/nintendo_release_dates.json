@@ -140,6 +140,70 @@
           "verified_at": "2026-10-04T04:20:18Z"
         }
       ]
+    },
+    "igdb:2933": {
+      "igdb_id": 2933,
+      "name_en": "Kingdom Hearts III",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-10-08",
+          "source": "任天堂台灣官方發售日程（Nintendo Switch 2，KINGDOM HEARTS III + Re Mind (DLC)）",
+          "url": "https://www.nintendo.com/tw/schedule",
+          "verified_source_date": "2026-10-08",
+          "verified_at": "2026-10-04T15:03:21Z"
+        }
+      ]
+    },
+    "igdb:115060": {
+      "igdb_id": 115060,
+      "name_en": "Dragon's Dogma II",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-10-09",
+          "source": "任天堂台灣官方發售日程（Nintendo Switch 2，Dragon's Dogma 2: Dark Arisen）",
+          "url": "https://www.nintendo.com/tw/schedule",
+          "verified_source_date": "2026-10-09",
+          "verified_at": "2026-10-04T15:03:21Z"
+        }
+      ]
+    },
+    "igdb:19686": {
+      "igdb_id": 19686,
+      "name_en": "Resident Evil 2",
+      "releases": [
+        {
+          "platform": "NS2",
+          "date": "2026-10-16",
+          "source": "任天堂台灣官方發售日程（Nintendo Switch 2，Resident Evil 2 Deluxe Edition）",
+          "url": "https://www.nintendo.com/tw/schedule",
+          "verified_source_date": "2026-10-16",
+          "verified_at": "2026-10-04T15:03:21Z"
+        }
+      ]
+    },
+    "igdb:236665": {
+      "igdb_id": 236665,
+      "name_en": "Professor Layton and the New World of Steam",
+      "releases": [
+        {
+          "platform": "NS",
+          "date": "2026-12-10",
+          "source": "任天堂台灣官方遊戲軟體廠商資訊（雷頓教授與蒸氣新世界，逐一列明 NS 與 NS2）",
+          "url": "https://www.nintendo.com/tw/topics/article/7tfkAGMc0TlDiEP21mc0RK",
+          "verified_source_date": "2026-12-10",
+          "verified_at": "2026-10-04T15:05:17Z"
+        },
+        {
+          "platform": "NS2",
+          "date": "2026-12-10",
+          "source": "任天堂台灣官方遊戲軟體廠商資訊（雷頓教授與蒸氣新世界，逐一列明 NS 與 NS2）",
+          "url": "https://www.nintendo.com/tw/topics/article/7tfkAGMc0TlDiEP21mc0RK",
+          "verified_source_date": "2026-12-10",
+          "verified_at": "2026-10-04T15:05:17Z"
+        }
+      ]
     }
   }
 }

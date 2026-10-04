@@ -13,7 +13,8 @@ from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 from .igdb import CollectionError
-from .playstation import official_url as playstation_url, product_id as playstation_product_id
+from .playstation import (official_url as playstation_url, product_id as playstation_product_id,
+                          concept_id as playstation_concept_id)
 
 REGISTRY_PATH = Path(__file__).resolve().parents[1] / "data" / "nintendo_release_dates.json"
 PLAYSTATION_REGISTRY_PATH = Path(__file__).resolve().parents[1] / "data" / "playstation_release_dates.json"
@@ -43,7 +44,8 @@ def validate_registry(document):
                 source_valid = (playstation_url(row.get("url"), region="taiwan") is not None if sony else
                                 url.hostname in OFFICIAL_DOMAINS and
                                 (url.hostname != "www.nintendo.com" or url.path.startswith("/tw/")))
-                store_id = playstation_product_id(row.get("url")) if sony else None
+                concept_id = playstation_concept_id(row.get("url")) if sony else None
+                store_id = playstation_product_id(row.get("url")) if sony and not concept_id else None
                 time_matches = True
                 if sony and "release_time_utc" in row:
                     stamp = datetime.fromisoformat(row["release_time_utc"].replace("Z", "+00:00"))
@@ -54,6 +56,9 @@ def validate_registry(document):
                         or not isinstance(row.get("source"), str) or not 0 < len(row["source"].strip()) <= 240
                         or url.scheme != "https" or not source_valid
                         or (sony and store_id and row.get("product_id") != store_id)
+                        or (sony and concept_id and (row.get("concept_id") != concept_id
+                            or row.get("product_id") is not None or "release_time_utc" not in row))
+                        or (sony and not concept_id and row.get("concept_id") is not None)
                         or not time_matches
                         or url.username or url.password or url.port is not None
                         or len(row["url"]) > 2000):

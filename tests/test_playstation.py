@@ -209,3 +209,107 @@ def test_actual_concept_args_and_vendor_codes_use_displayed_single_native_langua
            '<dd data-qa="gameInfo#releaseInformation#subtitles-value">Chinese (Traditional), English</dd>'
     support = ps.parse_store_metadata(body, "https://store.playstation.com/en-tw/concept/10000001", "A game")
     assert support["complete"] is False and support["supported_languages"] == ["zh"]
+
+
+CONCEPT = "10000001"
+CONCEPT_URL = "https://store.playstation.com/en-tw/concept/" + CONCEPT
+
+
+def concept_document():
+    return {"args": {"conceptId": CONCEPT}, "overrides": {"locale": "en-tw"},
+            "cache": {"Concept:" + CONCEPT: {
+                "id": CONCEPT, "__typename": "Concept", "name": "A game", "invariantName": "A game",
+                "isAnnounce": True, "defaultProduct": None, "products": [],
+                "releaseDate": {"type": "DAY_MONTH_YEAR", "value": "2026-10-13T18:00:00Z"},
+                "compatibilityNoticesByPlatform": {"PS5": [{"targetPlatforms": ["PS5"]}]}}}}
+
+
+def concept_html(doc=None, *, release="13/10/2026 06:00 PM UTC", platform="PS5 Version", extra=None):
+    body = '<script type="application/json">' + json.dumps(doc or concept_document()) + '</script>'
+    if extra is not None:
+        body += '<script type="application/json">' + json.dumps(extra) + '</script>'
+    if release is not None:
+        body += '<span data-qa="mfe-game-title#release-date">' + release + '</span>'
+    if platform is not None:
+        body += '<h3 data-qa="mfe-compatibility-notices#notices#notice0#compatTextHeader">' + platform + '</h3>'
+    return body
+
+
+@pytest.mark.parametrize("release,display,date,platform", [
+    ("2026-10-13T18:00:00Z", "13/10/2026 06:00 PM UTC", "2026-10-14", "PS5 Version"),
+    ("2026-10-13T00:00:00Z", "13/10/2026 12:00 AM UTC", "2026-10-13", "PS5版本"),
+])
+def test_announced_native_ps5_concept_converts_verified_instant_without_inventing_product_or_languages(
+        release, display, date, platform):
+    doc = concept_document()
+    doc["cache"]["Concept:" + CONCEPT]["releaseDate"]["value"] = release
+    original = deepcopy(doc)
+    result = ps.parse_store_metadata(concept_html(doc, release=display, platform=platform), CONCEPT_URL, "A game")
+    assert result is not None
+    assert result["concept_id"] == CONCEPT and result["product_id"] is None
+    assert result["date"] == date and result["release_time_utc"] == release
+    assert result["region"] == "taiwan"
+    assert result["source_url"] == CONCEPT_URL.replace("en-tw", "zh-hant-tw")
+    assert result["evidence_type"] == "official_concept_release_time"
+    assert result["supported_languages"] == [] and result["complete"] is False
+    assert doc == original
+
+
+@pytest.mark.parametrize("mutation", [
+    lambda doc: doc["args"].update(conceptId="10000002"),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(id="10000002"),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(__typename="Product"),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(name="Other game"),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(invariantName="Other game"),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(isAnnounce=False),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(defaultProduct={"__ref": "Product:" + PRODUCT}),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(products=[{"__ref": "Product:" + PRODUCT}]),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(compatibilityNoticesByPlatform={"PS4": [{"targetPlatforms": ["PS4"]}]}),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(compatibilityNoticesByPlatform={"PS5": [{"targetPlatforms": ["PS4"]}]}),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(compatibilityNoticesByPlatform={"PS5": [{"targetPlatforms": ["PS5", "PS4"]}]}),
+    lambda doc: doc["cache"]["Concept:" + CONCEPT].update(compatibilityNoticesByPlatform={"PS5": [{"targetPlatforms": ["PS5"]}], "PC": [{"targetPlatforms": ["PC"]}]}),
+])
+def test_announced_concept_requires_exact_announced_game_identity_and_single_native_ps5_version(mutation):
+    doc = concept_document()
+    mutation(doc)
+    assert ps.parse_store_metadata(concept_html(doc), CONCEPT_URL, "A game") is None
+
+
+@pytest.mark.parametrize("release", [None, "PS4 Version", "PS5 and PS4 Version"])
+def test_concept_native_ps5_cache_alone_does_not_replace_displayed_exact_version(release):
+    assert ps.parse_store_metadata(concept_html(platform=release), CONCEPT_URL, "A game") is None
+
+
+def test_generic_site_ps5_wording_cannot_authenticate_concept_platform():
+    doc = concept_document()
+    doc["cache"]["Concept:" + CONCEPT].pop("compatibilityNoticesByPlatform")
+    body = concept_html(doc, platform=None) + "<nav>PS5 Version</nav>"
+    assert ps.parse_store_metadata(body, CONCEPT_URL, "A game") is None
+
+
+@pytest.mark.parametrize("value,type_,display", [
+    ("2026-10-13T18:00:00", "DAY_MONTH_YEAR", "13/10/2026 06:00 PM UTC"),
+    ("2026-10-13", "DAY_MONTH_YEAR", "13/10/2026 06:00 PM UTC"),
+    ("2026-10-13T18:00:00Z", "MONTH_YEAR", "13/10/2026 06:00 PM UTC"),
+    ("2026-10-13T18:00:00Z", "DAY_MONTH_YEAR", None),
+    ("2026-10-13T18:00:00Z", "DAY_MONTH_YEAR", "13/10/2026 05:00 PM UTC"),
+    ("2026-10-13T18:00:00Z", "DAY_MONTH_YEAR", "13/10/2026"),
+])
+def test_concept_release_requires_precise_aware_cache_instant_matching_rendered_utc(value, type_, display):
+    doc = concept_document()
+    doc["cache"]["Concept:" + CONCEPT]["releaseDate"] = {"type": type_, "value": value}
+    assert ps.parse_store_metadata(concept_html(doc, release=display), CONCEPT_URL, "A game") is None
+
+
+def test_conflicting_concept_release_caches_are_rejected():
+    extra = concept_document()
+    extra["cache"]["Concept:" + CONCEPT]["releaseDate"]["value"] = "2026-10-14T18:00:00Z"
+    assert ps.parse_store_metadata(concept_html(extra=extra), CONCEPT_URL, "A game") is None
+
+
+def test_concept_release_does_not_bypass_ambiguous_existing_product_identity():
+    doc = concept_document()
+    other_id = "HP0001-PPSA12345_00-DIFFERENT0000000"
+    doc["cache"]["Product:" + PRODUCT] = metadata()
+    doc["cache"]["Product:" + other_id] = metadata(id=other_id)
+    assert ps.parse_store_metadata(concept_html(doc), CONCEPT_URL, "A game") is None

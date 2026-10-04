@@ -162,6 +162,47 @@ def test_ps5_bundle_rebuilds_reviewed_regional_date_and_separate_languages(ps5_b
     assert row["platform_language_support"]["PS5"]["languages"]["tchinese"] is False
 
 
+@pytest.fixture
+def ps5_concept_bundle(tmp_path, monkeypatch):
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    raw["platforms"] = [{"id": 167, "name": "PlayStation 5"}]
+    raw["release_dates"][0]["platform"] = {"id": 167}
+    releases = {"igdb:12345": {"igdb_id": 12345, "name_en": raw["name"], "releases": [{
+        "platform": "PS5", "date": "2026-10-16", "verified_source_date": "2026-10-15",
+        "verified_at": CHECKED, "source": "PlayStation Store 台灣官方",
+        "url": "https://store.playstation.com/zh-hant-tw/concept/10000001",
+        "concept_id": "10000001", "release_time_utc": "2026-10-15T18:00:00Z"}]}}
+    path = tmp_path / "ps5_concepts.json"
+    path.write_text(json.dumps({"schema_version": 1, "games": releases}))
+    monkeypatch.setattr(P, "PLAYSTATION_RELEASE_REGISTRY", path)
+    return dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+        release_registry=releases, source={"platform_ids_verified": [130, 167, 508]})))
+
+
+def test_ps5_concept_publication_rebuilds_trusted_utc_conversion_and_retains_igdb_day(ps5_concept_bundle):
+    validate_bundle(ps5_concept_bundle, now=NOW)
+    row = ps5_concept_bundle["nintendo_upcoming.json"]["games"][0]
+    release = row["releases"][0]
+    assert release["date"] == "2026-10-16" and release["source_date"] == "2026-10-15"
+    assert release["official_concept_id"] == "10000001" and release["official_product_id"] is None
+    assert release["official_release_time_utc"] == "2026-10-15T18:00:00Z"
+    assert row["platform_language_support"]["PS5"]["status"] == "unknown"
+
+
+@pytest.mark.parametrize("field,value", [
+    ("official_concept_id", "10000002"),
+    ("official_release_time_utc", "2026-10-15T19:00:00Z"),
+    ("official_source_url", "https://store.playstation.com/zh-hant-tw/concept/10000002"),
+    ("official_product_id", "10000001"),
+])
+def test_ps5_matching_public_and_master_cannot_forge_concept_proof(ps5_concept_bundle, field, value):
+    for row in (ps5_concept_bundle["nintendo_master.json"]["games"]["igdb:12345"],
+                ps5_concept_bundle["nintendo_upcoming.json"]["games"][0]):
+        row["releases"][0][field] = value
+    with pytest.raises(PublishError, match="qualification_gate_failed"):
+        validate_bundle(ps5_concept_bundle, now=NOW)
+
+
 def test_ps5_publication_requires_verified_native_platform_id(ps5_bundle):
     for payload in ps5_bundle.values():
         payload["source"]["platform_ids_verified"] = [130, 508]

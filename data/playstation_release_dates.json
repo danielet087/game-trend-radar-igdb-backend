@@ -80,6 +80,141 @@
           "verified_at": "2026-10-04T13:53:59Z"
         }
       ]
+    },
+    "igdb:381248": {
+      "igdb_id": 381248,
+      "name_en": "Star Wars: Galactic Racer",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2026-10-06",
+          "verified_source_date": "2026-10-06",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1",
+          "release_time_utc": "2026-10-06T09:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "product_id": "UP8737-PPSA28416_00-SWGALACTICRACER1"
+        }
+      ]
+    },
+    "igdb:313597": {
+      "igdb_id": 313597,
+      "name_en": "Silver Pines",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2026-10-08",
+          "verified_source_date": "2026-10-08",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10017331",
+          "release_time_utc": "2026-10-07T16:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10017331",
+          "product_id": null
+        }
+      ]
+    },
+    "igdb:361833": {
+      "igdb_id": 361833,
+      "name_en": "Valor Mortis",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2026-10-14",
+          "verified_source_date": "2026-10-13",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10016571",
+          "release_time_utc": "2026-10-13T18:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10016571",
+          "product_id": null
+        }
+      ]
+    },
+    "igdb:314449": {
+      "igdb_id": 314449,
+      "name_en": "Hela: Of Mice & Magic",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2026-12-01",
+          "verified_source_date": "2026-12-01",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10012485",
+          "release_time_utc": "2026-12-01T10:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10012485",
+          "product_id": null
+        }
+      ]
+    },
+    "igdb:378225": {
+      "igdb_id": 378225,
+      "name_en": "Armatus",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-01-08",
+          "verified_source_date": "2027-01-07",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10017555",
+          "release_time_utc": "2027-01-07T17:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10017555",
+          "product_id": null
+        }
+      ]
+    },
+    "igdb:262712": {
+      "igdb_id": 262712,
+      "name_en": "Ananta",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-01-15",
+          "verified_source_date": "2027-01-15",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10009022",
+          "release_time_utc": "2027-01-15T10:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10009022",
+          "product_id": null
+        }
+      ]
+    },
+    "igdb:381208": {
+      "igdb_id": 381208,
+      "name_en": "TankRat",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-01-15",
+          "verified_source_date": "2027-01-15",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10005291",
+          "release_time_utc": "2027-01-14T16:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10005291",
+          "product_id": null
+        }
+      ]
+    },
+    "igdb:279621": {
+      "igdb_id": 279621,
+      "name_en": "Exodus",
+      "releases": [
+        {
+          "platform": "PS5",
+          "date": "2027-04-08",
+          "verified_source_date": "2027-04-07",
+          "source": "PlayStation Store 台灣官方發售時間（UTC 轉 Asia/Taipei）",
+          "url": "https://store.playstation.com/zh-hant-tw/concept/10013615",
+          "release_time_utc": "2027-04-07T16:00:00Z",
+          "verified_at": "2026-10-04T15:05:11Z",
+          "concept_id": "10013615",
+          "product_id": null
+        }
+      ]
     }
   }
 }

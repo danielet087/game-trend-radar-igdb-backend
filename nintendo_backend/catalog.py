@@ -30,7 +30,7 @@ RELEASE_FIELDS = ("date", "platform", "precision", "region", "source", "date_bas
                   "source_date", "source_timestamp", "source_region", "time_zone",
                   "timestamp_taipei_date", "timezone_status", "taiwan_release_confirmed",
                   "official_source_url", "official_source_name", "official_verified_at",
-                  "official_product_id", "official_release_time_utc")
+                  "official_product_id", "official_concept_id", "official_release_time_utc")
 
 
 def reference(value, field="name"):
@@ -137,7 +137,7 @@ def release_record(row):
             "time_zone": "Asia/Taipei", "timestamp_taipei_date": converted_day,
             "timezone_status": timezone_status, "taiwan_release_confirmed": False,
             "official_source_url": None, "official_source_name": None, "official_verified_at": None,
-            "official_product_id": None, "official_release_time_utc": None}
+            "official_product_id": None, "official_concept_id": None, "official_release_time_utc": None}
 
 
 def content_policy(game):
@@ -225,6 +225,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
                     "official_source_url": official["url"], "official_source_name": official["source"],
                     "official_verified_at": official["verified_at"],
                     "official_product_id": official.get("product_id"),
+                    "official_concept_id": official.get("concept_id"),
                     "official_release_time_utc": official.get("release_time_utc")})
         releases.append(row)
     outside = known_ids - PLATFORMS.keys()
