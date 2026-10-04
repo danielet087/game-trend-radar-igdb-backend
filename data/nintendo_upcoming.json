@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T03:17:54Z",
+  "generated_at": "2026-10-04T04:25:16Z",
   "window": {
     "start": "2026-10-04",
     "end": "2027-10-04",
@@ -81,7 +81,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tpy.jpg",
@@ -128,7 +138,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -189,7 +199,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaxvl.jpg",
@@ -227,105 +247,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
-      "first_observed_at": "2026-10-03T16:40:12Z"
-    },
-    {
-      "id": "igdb:381222",
-      "igdb_id": 381222,
-      "display_name": "沉星之序",
-      "name_en": "Order of the Sinking Star",
-      "name_zh_tw": "沉星之序",
-      "name_source": "Steam 官方繁中商品名稱（已核對同款 AppID 499170）",
-      "name_url": "https://store.steampowered.com/app/499170/?l=tchinese",
-      "name_evidence": {
-        "provider": "official_registry",
-        "locale": "zh-Hant",
-        "converted": false,
-        "igdb_id": 381222,
-        "name_en": "Order of the Sinking Star"
-      },
-      "hypes": 30,
-      "hypes_status": "available",
-      "popularity_status": "qualified",
-      "platforms": [
-        {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
-        }
-      ],
-      "known_platforms": [
-        {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 167,
-          "name": "PlayStation 5"
-        },
-        {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
-        }
-      ],
-      "platform_data_complete": true,
-      "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
-        "source": "IGDB",
-        "url": "https://www.igdb.com/games/order-of-the-sinking-star"
-      },
-      "releases": [
-        {
-          "date": "2026-10-08",
-          "platform": "NS2",
-          "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
-        }
-      ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc954.jpg",
-      "url": "https://www.igdb.com/games/order-of-the-sinking-star",
-      "websites": [
-        {
-          "url": "https://store.steampowered.com/app/499170"
-        },
-        {
-          "url": "https://www.orderofthesinkingstar.com/"
-        },
-        {
-          "url": "https://discord.gg/PcCxqvfeKK"
-        },
-        {
-          "url": "https://x.com/SinkingStarGame"
-        },
-        {
-          "url": "https://www.facebook.com/SinkingStarGame/"
-        },
-        {
-          "url": "https://www.instagram.com/sinkingstargame/"
-        },
-        {
-          "url": "https://www.youtube.com/@SinkingStarGame"
-        },
-        {
-          "url": "https://store.playstation.com/en-us/concept/10017166"
-        },
-        {
-          "url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/"
-        },
-        {
-          "url": "https://www.twitch.tv/directory/category/order-of-the-sinking-star"
-        }
-      ],
-      "nintendo_url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/",
-      "game_type": "main_game",
-      "sexual_content_screened": true,
-      "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -386,7 +308,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-09",
+          "source_timestamp": 1791504000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-09",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co833w.jpg",
@@ -424,7 +356,115 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:381222",
+      "igdb_id": 381222,
+      "display_name": "沉星之序",
+      "name_en": "Order of the Sinking Star",
+      "name_zh_tw": "沉星之序",
+      "name_source": "Steam 官方繁中商品名稱（已核對同款 AppID 499170）",
+      "name_url": "https://store.steampowered.com/app/499170/?l=tchinese",
+      "name_evidence": {
+        "provider": "official_registry",
+        "locale": "zh-Hant",
+        "converted": false,
+        "igdb_id": 381222,
+        "name_en": "Order of the Sinking Star"
+      },
+      "hypes": 30,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/order-of-the-sinking-star"
+      },
+      "releases": [
+        {
+          "date": "2026-10-09",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-10-08",
+          "source_timestamp": 1791417600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-08",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/schedule",
+          "official_source_name": "任天堂台灣官方發售日程",
+          "official_verified_at": "2026-10-04T04:20:18Z"
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc954.jpg",
+      "url": "https://www.igdb.com/games/order-of-the-sinking-star",
+      "websites": [
+        {
+          "url": "https://store.steampowered.com/app/499170"
+        },
+        {
+          "url": "https://www.orderofthesinkingstar.com/"
+        },
+        {
+          "url": "https://discord.gg/PcCxqvfeKK"
+        },
+        {
+          "url": "https://x.com/SinkingStarGame"
+        },
+        {
+          "url": "https://www.facebook.com/SinkingStarGame/"
+        },
+        {
+          "url": "https://www.instagram.com/sinkingstargame/"
+        },
+        {
+          "url": "https://www.youtube.com/@SinkingStarGame"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/concept/10017166"
+        },
+        {
+          "url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/order-of-the-sinking-star"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/order-of-the-sinking-star-switch-2/",
+      "game_type": "main_game",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -483,9 +523,19 @@
           "date": "2026-10-15",
           "platform": "NS",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-10-15",
+          "source_timestamp": 1792022400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-15",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.konami.com/games/castlevania/belmonts_curse/asia/zh-tw/",
+          "official_source_name": "KONAMI 官方亞洲繁中 Nintendo Switch 發售公告（台灣 CSRR 分級）",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocrky.jpg",
@@ -523,7 +573,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -600,7 +650,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-16",
+          "source_timestamp": 1792108800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-16",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1ir3.jpg",
@@ -647,7 +707,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -668,6 +728,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "schinese"
       },
+      "steam_appid": 1620730,
       "hypes": 146,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -711,7 +772,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-10-27",
+          "source_timestamp": 1793059200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-27",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co9vum.jpg",
@@ -767,9 +838,8 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
-      "first_observed_at": "2026-10-03T16:40:12Z",
-      "steam_appid": 1620730
+      "checked_at": "2026-10-04T04:25:16Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
       "id": "igdb:405460",
@@ -810,7 +880,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-04T03:18:03Z",
+        "checked_at": "2026-10-04T04:25:26Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -819,9 +889,19 @@
           "date": "2026-11-05",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-11-05",
+          "source_timestamp": 1793836800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-11-05",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cocv5r.jpg",
@@ -844,7 +924,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -907,9 +987,19 @@
           "date": "2026-11-12",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-11-12",
+          "source_timestamp": 1794441600,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-11-12",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co8d9t.jpg",
@@ -959,7 +1049,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1018,9 +1108,19 @@
           "date": "2026-12-01",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-12-01",
+          "source_timestamp": 1796083200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-01",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coax99.jpg",
@@ -1061,7 +1161,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1123,7 +1223,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-12-03",
+          "source_timestamp": 1796256000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-03",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coa5u5.jpg",
@@ -1173,7 +1283,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1232,9 +1342,19 @@
           "date": "2026-12-03",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-12-03",
+          "source_timestamp": 1796256000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-03",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc5tb.jpg",
@@ -1275,7 +1395,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1334,9 +1454,19 @@
           "date": "2026-12-04",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2026-12-04",
+          "source_timestamp": 1796342400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-04",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co904o.jpg",
@@ -1377,7 +1507,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1438,7 +1568,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-12-10",
+          "source_timestamp": 1796860800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-10",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         },
         {
           "date": "2026-12-10",
@@ -1446,7 +1586,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2026-12-10",
+          "source_timestamp": 1796860800,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-12-10",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co66va.jpg",
@@ -1463,7 +1613,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1519,12 +1669,22 @@
       },
       "releases": [
         {
-          "date": "2027-01-07",
+          "date": "2027-01-08",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-01-07",
+          "source_timestamp": 1799280000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-01-07",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coave0.jpg",
@@ -1556,7 +1716,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1612,12 +1772,22 @@
       },
       "releases": [
         {
-          "date": "2027-02-12",
+          "date": "2027-02-13",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-02-12",
+          "source_timestamp": 1802390400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-02-12",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cob1kg.jpg",
@@ -1649,7 +1819,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1670,6 +1840,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "schinese"
       },
+      "steam_appid": 3255110,
       "hypes": 44,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -1713,7 +1884,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-03-09",
+          "source_timestamp": 1804550400,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-03-09",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobtwq.jpg",
@@ -1754,9 +1935,8 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
-      "first_observed_at": "2026-10-03T16:40:12Z",
-      "steam_appid": 3255110
+      "checked_at": "2026-10-04T04:25:16Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
       "id": "igdb:252852",
@@ -1810,7 +1990,17 @@
           "precision": "day",
           "region": "worldwide",
           "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "date_basis": "regional_calendar_day",
+          "source_date": "2027-04-27",
+          "source_timestamp": 1808784000,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-04-27",
+          "timezone_status": "same_calendar_day",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co93lp.jpg",
@@ -1839,7 +2029,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1898,9 +2088,19 @@
           "date": "2027-05-20",
           "platform": "NS2",
           "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "regional_calendar_day"
+          "region": "taiwan",
+          "source": "official_registry",
+          "date_basis": "taiwan_official_calendar_day",
+          "source_date": "2027-05-20",
+          "source_timestamp": 1810771200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2027-05-20",
+          "timezone_status": "taiwan_official_date",
+          "taiwan_release_confirmed": true,
+          "official_source_url": "https://www.nintendo.com/tw/games/switch2/lineup",
+          "official_source_name": "任天堂台灣官方 Nintendo Switch 2 軟體一覽",
+          "official_verified_at": "2026-10-04T04:20:18Z"
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc7iu.jpg",
@@ -1944,7 +2144,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-04T03:17:54Z",
+      "checked_at": "2026-10-04T04:25:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
