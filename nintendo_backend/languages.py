@@ -9,6 +9,7 @@ from copy import deepcopy
 from datetime import datetime
 import json
 from pathlib import Path
+import re
 from urllib.parse import urlparse
 
 from .igdb import CollectionError
@@ -19,6 +20,7 @@ OFFICIAL_DOMAINS = {"www.nintendo.com", "www.nintendo.co.jp", "www.nintendo.com.
                     "www.playtombraider.com", "www.layton.jp"}
 REGIONS = {"taiwan", "north_america", "japan", "hong_kong", "asia", "worldwide",
            "united_kingdom", "europe", "australia"}
+EDITION_TYPES = {"base_plus_expansion", "deluxe", "base_plus_dlc"}
 LANGUAGE_NAMES = {
     "zh-Hant": "繁體中文", "zh-Hans": "簡體中文", "zh": "中文",
     "en": "英文", "ja": "日文", "ko": "韓文", "fr": "法文", "de": "德文",
@@ -56,6 +58,33 @@ def _source_url(value, region):
         return False
 
 
+def _edition_identity_url(value, region):
+    """Publisher base-inclusion proof may differ from the regional product URL."""
+    if _source_url(value, region):
+        return True
+    if not isinstance(value, str) or len(value) > 2000:
+        return False
+    try:
+        url = urlparse(value)
+        return (url.scheme == "https" and url.hostname == "captown.capcom.com"
+                and url.path.startswith("/en/theaters/") and not url.username and not url.password
+                and url.port is None and not url.fragment)
+    except ValueError:
+        return False
+
+
+def _edition_valid(row):
+    if "edition_type" not in row and "edition_label" not in row:
+        return True
+    return (row.get("edition_type") in EDITION_TYPES
+            and isinstance(row.get("edition_label"), str) and 0 < len(row["edition_label"].strip()) <= 120
+            and isinstance(row.get("official_title"), str) and 0 < len(row["official_title"].strip()) <= 240
+            and isinstance(row.get("product_id"), str) and re.fullmatch(r"[0-9]{14}", row["product_id"]) is not None
+            and row.get("identity_relation") == "base_game_included"
+            and isinstance(row.get("identity_evidence"), str) and 0 < len(row["identity_evidence"].strip()) <= 1000
+            and _edition_identity_url(row.get("identity_source_url"), row.get("region")))
+
+
 def validate_registry(document):
     if (not isinstance(document, dict) or type(document.get("schema_version")) is not int
             or document["schema_version"] != 1 or not isinstance(document.get("games"), dict)):
@@ -80,7 +109,8 @@ def validate_registry(document):
                         or checked.utcoffset() is None or not _source_url(row.get("source_url"), row["region"])
                         or row.get("evidence_type") not in {"official_product_languages", "official_chinese_unspecified"}
                         or (row["evidence_type"] == "official_chinese_unspecified"
-                            and (row["complete"] or codes != ["zh"]))):
+                            and (row["complete"] or codes != ["zh"]))
+                        or not _edition_valid(row)):
                     raise ValueError
             except (ValueError, TypeError, KeyError, AttributeError):
                 raise CollectionError("invalid_nintendo_language_registry") from None
@@ -126,3 +156,19 @@ def platform_language_support(game, tracked_platforms, registry=None):
                             "complete": complete, **{key: deepcopy(row[key]) for key in
                                                       ("source", "source_url", "checked_at", "evidence_type")}}
     return result
+
+
+def platform_editions(game, tracked_platforms, registry=None):
+    """Expose only reviewed bundled/deluxe versions; absence makes no base claim."""
+    if type(game.get("id")) is not int or not isinstance(game.get("name"), str):
+        return {}
+    official = (registry or {}).get("igdb:" + str(game["id"]))
+    if (not official or official.get("igdb_id") != game["id"]
+            or official.get("name_en") != game["name"].strip()):
+        return {}
+    tracked = {row["code"] for row in tracked_platforms}
+    return {platform: {"type": row["edition_type"], "label": row["edition_label"],
+                       "title": row["official_title"], "product_id": row["product_id"],
+                       "region": row["region"], "source_url": row["source_url"], "checked_at": row["checked_at"]}
+            for platform, row in official["platforms"].items()
+            if platform in tracked and "edition_type" in row}

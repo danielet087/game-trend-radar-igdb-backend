@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 
 from .chinese_names import names, previous_lookup
 from .igdb import CollectionError
-from .languages import platform_language_support
+from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
 
 PLATFORMS = {130: {"id": 130, "name": "Nintendo Switch", "code": "NS"},
@@ -285,6 +285,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
               "popularity_status": popularity, "platforms": tracked, "known_platforms": known,
               "platform_language_support": platform_language_support(game, tracked, language_registry),
+              "platform_editions": platform_editions(game, tracked, language_registry),
               "platform_data_complete": platform_complete,
               "exclusivity": {"status": exclusive_status, "platform": exclusive_platform, "source": "IGDB", "url": url},
               "releases": calendar_releases, "release_records": releases, "cover_image": cover_url, "url": url,

@@ -51,6 +51,8 @@ Nintendo 支援語言另由 `data/nintendo_languages.json` 保存已核對的官
 
 既有收集流程載入這份登錄檔（`--nintendo-languages`），公開 `platform_language_support.NS／NS2`，發布前從本倉庫的可信登錄檔重建比對，防止公開清單自行宣稱確認。缺少證據的版本保留 `unknown` 與 `null`，不當成不支援；核對時間不會隨 IGDB 每日收集改成今天。這份登錄檔是已人工調查的官方快照，既有排程重用已核對資料，尚未自動重新爬取官方語言清單。新版本與日後的官方變更需更新登錄檔；未解項目的調查紀錄在 `data/nintendo_language_investigations.json`，不作為語言支援證據。
 
+已核對的綑綁／Deluxe 商品另公開 `platform_editions.NS／NS2`，讓前端明示「本體＋擴充版」、「Deluxe 版」或「本體＋DLC」。登錄檔需明示 `edition_type`、`edition_label`、官方商品名稱與商品 ID，並提供 `identity_relation: base_game_included`、本體包含證據及官方證據網址；語言與版本標示分開保存。公開版本資料包含商品名稱、地區、商品網址及原核對時間，同樣由發布 gate 重新驗證。缺少已核對版本資料時不產生版本標示，不推定為普通本體版；日後原生 NS／NS2 對應改變或官方更改內容需重新核對。
+
 台灣日期優先使用 `data/nintendo_release_dates.json` 內核對的任天堂台灣／發行商台灣官方日期；每筆綁定 IGDB ID、英文全名、NS／NS2、確切日期、官方網址及核對時間。`--taiwan-releases` 可指定登錄檔，發布器仍從本倉庫的可信登錄檔重新驗證。保留 IGDB 原日期、區域及 Unix 秒，另外稽核 UTC→`Asia/Taipei` 日期；IGDB 日精度不是實際解鎖時刻，不顯示推算的 08:00。未有官方台灣證據且換算跨日時，保留待確認、暫停放入月曆，不能直接替區域日加一天。已核對的 IGDB 原日期若日後改成不同的新日期，撤回旧的台灣確認，避免舊登錄資料蓋住延期；台灣日期及原始 IGDB 記錄分開保存，月曆只使用選中的平台日期。
 
 來源：[IGDB API](https://api-docs.igdb.com/)、各遊戲 Nintendo 官方商品頁。

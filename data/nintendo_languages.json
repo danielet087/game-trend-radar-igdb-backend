@@ -521,7 +521,11 @@
             "韓文",
             "中文 (繁體字)"
           ],
-          "identity_evidence": "官方商品描述明確包含 KINGDOM HEARTS III 本體與 Re Mind DLC；平台列為 Nintendo Switch 2 原生下載軟體。語言僅適用此香港 NS2 販售版本。"
+          "identity_evidence": "官方商品描述明確包含 KINGDOM HEARTS III 本體與 Re Mind DLC；平台列為 Nintendo Switch 2 原生下載軟體。語言僅適用此香港 NS2 販售版本。",
+          "edition_type": "base_plus_dlc",
+          "edition_label": "本體＋Re Mind DLC",
+          "identity_relation": "base_game_included",
+          "identity_source_url": "https://ec.nintendo.com/HK/zh/titles/70010000117242"
         }
       }
     },
@@ -568,7 +572,9 @@
           ],
           "identity_relation": "base_game_included",
           "identity_source_url": "https://captown.capcom.com/en/theaters/dragonsdogma/57",
-          "identity_evidence": "CAPCOM 官方明確說明包含 Dragon's Dogma 2 本體與 Dark Arisen 擴充內容，首次登上原生 NS2；此商品不是第一代 Dragon's Dogma: Dark Arisen。"
+          "identity_evidence": "CAPCOM 官方明確說明包含 Dragon's Dogma 2 本體與 Dark Arisen 擴充內容，首次登上原生 NS2；此商品不是第一代 Dragon's Dogma: Dark Arisen。",
+          "edition_type": "base_plus_expansion",
+          "edition_label": "本體＋Dark Arisen 擴充版"
         }
       }
     },
@@ -617,7 +623,9 @@
           ],
           "identity_relation": "base_game_included",
           "identity_source_url": "https://ec.nintendo.com/AU/en/titles/70010000114443",
-          "identity_evidence": "官方商品描述明確列出 Resident Evil 2 Main Game 與追加內容，原生平台為 Nintendo Switch 2；不是 NS Cloud 版。"
+          "identity_evidence": "官方商品描述明確列出 Resident Evil 2 Main Game 與追加內容，原生平台為 Nintendo Switch 2；不是 NS Cloud 版。",
+          "edition_type": "deluxe",
+          "edition_label": "Deluxe 版"
         }
       }
     }

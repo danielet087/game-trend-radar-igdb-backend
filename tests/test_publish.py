@@ -181,6 +181,55 @@ def test_removing_approved_language_registry_withdraws_existing_confirmation(lan
 
 
 @pytest.fixture
+def edition_bundle(language_bundle):
+    data, path = language_bundle
+    doc = json.loads(path.read_text())
+    row = doc["games"]["igdb:12345"]["platforms"]["NS"]
+    row.update(edition_type="deluxe", edition_label="Deluxe 版", official_title="Nintendo test adventure Deluxe Edition",
+               product_id="70010000114443", identity_relation="base_game_included",
+               identity_evidence="官方商品描述包含 Nintendo test adventure 本體與追加內容。",
+               identity_source_url="https://ec.nintendo.com/TW/zh/titles/70010000114443")
+    path.write_text(json.dumps(doc))
+    raw = data["nintendo_master.json"]["games"]["igdb:12345"]["raw"]
+    result = dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+                                             language_registry=doc["games"])))
+    return result, path
+
+
+def test_edition_gate_accepts_independently_rebuilt_trusted_product_metadata(edition_bundle):
+    data, _ = edition_bundle
+    validate_bundle(data, now=NOW)
+    expected = data["nintendo_master.json"]["games"]["igdb:12345"]["platform_editions"]
+    assert data["nintendo_upcoming.json"]["games"][0]["platform_editions"] == expected
+    assert expected["NS"]["label"] == "Deluxe 版"
+
+
+@pytest.mark.parametrize("change", [
+    {"type": "base_plus_dlc", "label": "本體＋偽造 DLC"},
+    {"product_id": "70010000114444"}, {"source_url": "https://www.nintendo.com/tw/fake-product"},
+])
+def test_matching_master_and_public_cannot_forge_edition_metadata(edition_bundle, change):
+    data, _ = edition_bundle
+    for row in (data["nintendo_master.json"]["games"]["igdb:12345"], data["nintendo_upcoming.json"]["games"][0]):
+        row["platform_editions"]["NS"].update(change)
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
+def test_edition_claim_is_withdrawn_when_registry_review_is_removed(edition_bundle):
+    data, path = edition_bundle
+    doc = json.loads(path.read_text())
+    row = doc["games"]["igdb:12345"]["platforms"]["NS"]
+    row.pop("edition_type")
+    row.pop("edition_label")
+    path.write_text(json.dumps(doc))
+    with pytest.raises(PublishError):
+        validate_bundle(data, now=NOW)
+
+
+@pytest.fixture
 def taiwan_date_bundle(tmp_path, monkeypatch):
     assert P.TAIWAN_RELEASE_REGISTRY.is_absolute()
     raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
