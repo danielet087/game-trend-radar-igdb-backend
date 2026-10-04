@@ -3,17 +3,6 @@
   "purpose": "Unresolved investigation notes only; not approved language support evidence.",
   "investigations": [
     {
-      "igdb_id": 2933,
-      "name_en": "Kingdom Hearts III",
-      "platform": "NS2",
-      "status": "unknown",
-      "checked_at": "2026-10-04T06:05:55Z",
-      "reason": "不同版本：官方 HK 頁是 KINGDOM HEARTS III + Re Mind（DLC），不能套到本體。",
-      "inspected_urls": [
-        "https://ec.nintendo.com/HK/zh/titles/70010000117242"
-      ]
-    },
-    {
       "igdb_id": 115060,
       "name_en": "Dragon's Dogma II",
       "platform": "NS2",
