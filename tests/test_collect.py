@@ -1,5 +1,5 @@
 from collections import deque
-from datetime import date
+from datetime import date, datetime, timezone
 import json
 
 import pytest
@@ -48,6 +48,20 @@ def test_collect_discovers_ps5_without_dropping_previous_nintendo_ledger():
     assert set(master["games"]) == {"igdb:1", "igdb:2"}
     assert public["games"][0]["releases"][0]["platform"] == "PS5"
     assert status["complete"] is True
+
+
+def test_discovery_window_includes_previous_utc_year_that_is_new_year_in_taipei():
+    stamp = int(datetime(2026, 12, 31, 16, tzinfo=timezone.utc).timestamp())
+    raw = {"id": 1, "name": "New year adventure", "hypes": 30, "platforms": [{"id": 167}],
+           "category": 0, "summary": "An adventure.", "release_dates": [
+               {"platform": {"id": 167}, "category": 0, "date": stamp,
+                "y": 2026, "m": 12, "d": 31, "region": 8}]}
+    api = Client([{"count": 1}, [{"id": 4, "game": 1, "platform": 167}], {"count": 1}, [raw]])
+    _, public, _ = collect(api, start=date(2027, 1, 1), checked_at="2026-12-31T16:00:00Z")
+    query = api.calls[1][1]
+    upper = int(datetime(2027, 12, 31, 16, tzinfo=timezone.utc).timestamp())
+    assert f"date >= {stamp} & date < {upper}" in query
+    assert public["games"][0]["releases"][0]["date"] == "2027-01-01"
 
 
 def test_store_investigation_prioritizes_future_ps5_and_cannot_supply_public_proof():

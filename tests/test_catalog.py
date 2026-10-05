@@ -53,7 +53,7 @@ def test_platform_dates_track_later_port_without_global_first_release():
     published = row["releases"][0]
     assert [(item["date"], item["platform"]) for item in row["releases"]] == [("2027-03-01", "NS2")]
     assert published["region"] == "worldwide" and published["source"] == "IGDB"
-    assert published["date_basis"] == "regional_calendar_day"
+    assert published["date_basis"] == "igdb_timestamp_taipei"
     assert [p["code"] for p in row["platforms"]] == ["NS", "NS2"]
     assert row["exclusivity"]["status"] == "multi_platform"
 
@@ -127,7 +127,7 @@ def test_igdb_calendar_timestamp_is_audited_in_taipei_without_inventing_taiwan_a
     assert row["source_timestamp"] == raw["date"]
     assert row["source_region"] == "worldwide"
     assert row["time_zone"] == "Asia/Taipei"
-    assert row["timezone_status"] == "same_calendar_day"
+    assert row["timezone_status"] == "converted_to_taipei"
     assert row["taiwan_release_confirmed"] is False
     assert row["official_source_url"] is None
     assert raw == original
@@ -139,17 +139,39 @@ def test_date_parts_without_timestamp_remain_calendar_day_not_synthetic_instant(
     assert published["date"] == published["source_date"] == "2027-03-01"
     assert published["source_timestamp"] is None and published["timestamp_taipei_date"] is None
     assert published["timezone_status"] == "date_only"
+    assert published["date_basis"] == "igdb_calendar_day"
     assert published["taiwan_release_confirmed"] is False
 
 
-def test_unknown_day_precision_timestamp_crossing_taipei_day_requires_review():
-    stamp = int(datetime(2027, 3, 1, 20, tzinfo=timezone.utc).timestamp())
+@pytest.mark.parametrize("hour,minute,second,expected", [
+    (15, 59, 59, "2027-03-01"), (16, 0, 0, "2027-03-02"), (20, 0, 0, "2027-03-02"),
+])
+def test_igdb_timestamp_converts_to_taipei_calendar_day_without_unlock_claim(hour, minute, second, expected):
+    stamp = int(datetime(2027, 3, 1, hour, minute, second, tzinfo=timezone.utc).timestamp())
     row = normalize_game(game(release_dates=[release("2027-03-01", date=stamp)]), START, END, CHECKED)
     original = row["release_records"][0]
-    assert original["date"] == original["source_date"] == "2027-03-01"
-    assert original["timestamp_taipei_date"] == "2027-03-02"
-    assert original["timezone_status"] == "requires_time_evidence"
-    assert row["releases"] == [] and row["calendar_eligible"] is False
+    assert original["source_date"] == "2027-03-01"
+    assert original["date"] == original["range_start"] == original["range_end"] == expected
+    assert original["timestamp_taipei_date"] == expected
+    assert original["date_basis"] == "igdb_timestamp_taipei"
+    assert original["timezone_status"] == "converted_to_taipei"
+    assert original["source_timestamp"] == stamp
+    assert original["taiwan_release_confirmed"] is False
+    assert original["official_release_time_utc"] is None
+    assert row["releases"][0]["date"] == expected and row["calendar_eligible"] is True
+
+
+@pytest.mark.parametrize("source_day,hour,expected_day,eligible", [
+    ("2026-10-03", 15, "2026-10-03", False),
+    ("2026-10-03", 16, "2026-10-04", True),
+    ("2027-10-03", 15, "2027-10-03", True),
+    ("2027-10-03", 16, "2027-10-04", False),
+])
+def test_taipei_converted_day_controls_window_boundary(source_day, hour, expected_day, eligible):
+    instant = datetime.fromisoformat(source_day).replace(hour=hour, tzinfo=timezone.utc)
+    row = normalize_game(game(release_dates=[release(source_day, date=int(instant.timestamp()))]), START, END, CHECKED)
+    assert row["release_records"][0]["date"] == expected_day
+    assert row["calendar_eligible"] is eligible
 
 
 def official_registry(day="2027-03-02", platform="NS2"):
@@ -159,49 +181,42 @@ def official_registry(day="2027-03-02", platform="NS2"):
         "verified_at": CHECKED}]}}
 
 
-def test_official_taiwan_date_prioritizes_regional_availability_and_keeps_igdb_original():
+def test_official_taiwan_date_registry_cannot_override_igdb_display_policy():
     row = normalize_game(game(), START, END, CHECKED, release_registry=official_registry())
     published = row["releases"][0]
-    assert published["date"] == "2027-03-02"
-    assert published["region"] == "taiwan"
-    assert published["source_date"] == "2027-03-01" and published["source_region"] == "worldwide"
-    assert published["timestamp_taipei_date"] == "2027-03-01"
-    assert published["date_basis"] == "taiwan_official_calendar_day"
-    assert published["timezone_status"] == "taiwan_official_date"
-    assert published["taiwan_release_confirmed"] is True
-    assert published["official_source_url"] == "https://www.nintendo.com/tw/schedule"
-    assert row["release_records"][0]["date"] == "2027-03-01"
+    assert published["date"] == published["source_date"] == published["timestamp_taipei_date"] == "2027-03-01"
+    assert published["region"] == published["source_region"] == "worldwide"
+    assert published["date_basis"] == "igdb_timestamp_taipei"
+    assert published["timezone_status"] == "converted_to_taipei"
+    assert published["source"] == "IGDB" and published["taiwan_release_confirmed"] is False
+    assert all(value is None for key, value in published.items() if key.startswith("official_"))
+    assert len(row["release_records"]) == 1 and row["release_records"][0]["source"] == "IGDB"
 
 
-def test_official_taiwan_date_resolves_ambiguous_timestamp_without_faking_unlock_time():
+def test_official_date_and_unlock_time_cannot_change_igdb_taipei_conversion():
     stamp = int(datetime(2027, 3, 1, 20, tzinfo=timezone.utc).timestamp())
     raw = game(release_dates=[release("2027-03-01", date=stamp)])
-    row = normalize_game(raw, START, END, CHECKED, release_registry=official_registry())
+    registry = official_registry("2027-03-03")
+    registry["igdb:123"]["releases"][0]["release_time_utc"] = "2027-03-02T16:00:00Z"
+    row = normalize_game(raw, START, END, CHECKED, release_registry=registry)
     assert row["calendar_eligible"] is True and row["releases"][0]["date"] == "2027-03-02"
-    assert row["release_records"][0]["timezone_status"] == "requires_time_evidence"
+    assert row["release_records"][0]["timezone_status"] == "converted_to_taipei"
     assert row["releases"][0]["source_timestamp"] == stamp
+    assert row["releases"][0]["official_release_time_utc"] is None
 
 
-def test_official_taiwan_date_binds_exact_identity_and_platform():
-    for changes in ({"id": 124}, {"name": "A normal tactical game: Remastered"},
-                    {"platforms": [{"id": 130}], "release_dates": [release(platform=130)]}):
-        row = normalize_game(game(**changes), START, END, CHECKED, release_registry=official_registry())
-        assert all(item["taiwan_release_confirmed"] is False for item in row["releases"])
-
-
-def test_past_official_taiwan_release_does_not_fall_back_to_future_worldwide_date():
+def test_past_official_taiwan_registry_does_not_hide_future_igdb_date():
     row = normalize_game(game(), START, END, CHECKED, release_registry=official_registry("2026-09-01"))
-    assert row["releases"] == [] and row["calendar_eligible"] is False
+    assert row["releases"][0]["date"] == "2027-03-01" and row["calendar_eligible"] is True
 
 
-def test_changed_igdb_date_invalidates_old_official_snapshot_without_freezing_postponements():
-    row = normalize_game(game(release_dates=[release("2027-04-01")]), START, END, CHECKED,
-                         release_registry=official_registry())
-    assert row["releases"][0]["date"] == "2027-04-01"
-    assert row["releases"][0]["taiwan_release_confirmed"] is False
-    aligned = normalize_game(game(release_dates=[release("2027-03-02")]), START, END, CHECKED,
+def test_changed_igdb_date_remains_authoritative_even_if_aligned_with_official_registry():
+    for day in ("2027-04-01", "2027-03-02"):
+        row = normalize_game(game(release_dates=[release(day)]), START, END, CHECKED,
                              release_registry=official_registry())
-    assert aligned["releases"][0]["taiwan_release_confirmed"] is True
+        assert row["releases"][0]["date"] == day
+        assert row["releases"][0]["source"] == "IGDB"
+        assert row["releases"][0]["taiwan_release_confirmed"] is False
 
 
 def test_regional_priority_and_equal_priority_conflict():

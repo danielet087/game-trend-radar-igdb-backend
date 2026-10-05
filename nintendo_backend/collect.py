@@ -54,8 +54,11 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
     # A timestamp attached to a month is never mistaken for a precise day.
-    lower = int(datetime.combine(start, datetime.min.time(), tzinfo=timezone.utc).timestamp())
-    upper = int(datetime.combine(end, datetime.min.time(), tzinfo=timezone.utc).timestamp())
+    # Query the same Taipei calendar window used by the date conversion. This
+    # includes a previous UTC year's evening that becomes January 1 in Taipei.
+    taipei = ZoneInfo("Asia/Taipei")
+    lower = int(datetime.combine(start, datetime.min.time(), tzinfo=taipei).timestamp())
+    upper = int(datetime.combine(end, datetime.min.time(), tzinfo=taipei).timestamp())
     where = f"platform = (130,167,508) & ((date >= {lower} & date < {upper}) | (y >= {start.year} & y <= {end.year}) | date = null)"
     releases = paginated_releases(client, where, page_size=page_size, max_pages=max_pages)
     game_ids = {row["game"] for row in releases}
@@ -104,7 +107,7 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                              previous_attempt(row),
                              -(row.get("hypes") or 0), row["id"]))
         # Investigation reports are review material. Only reviewed repository
-        # registries affect dates/languages and the publisher rebuilds those.
+        # registries affect languages/store identity; dates use IGDB only.
         status["playstation_investigation"] = {"review_only": True,
             **playstation_client.investigate(investigation_games)}
         master["playstation_investigation"] = deepcopy(status["playstation_investigation"])

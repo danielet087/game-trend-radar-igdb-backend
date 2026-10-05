@@ -154,12 +154,13 @@ def ps5_bundle(tmp_path, monkeypatch):
         source={"platform_ids_verified": [130, 167, 508]})))
 
 
-def test_ps5_bundle_rebuilds_reviewed_regional_date_and_separate_languages(ps5_bundle):
+def test_ps5_bundle_uses_igdb_date_and_preserves_reviewed_languages_and_store_link(ps5_bundle):
     validate_bundle(ps5_bundle, now=NOW)
     row = ps5_bundle["nintendo_upcoming.json"]["games"][0]
-    assert row["releases"][0]["date"] == "2026-10-16"
-    assert row["releases"][0]["official_product_id"] == "JP0005-PPSA23593_00-APPLICATION00000"
+    assert row["releases"][0]["date"] == "2026-10-15"
+    assert row["releases"][0]["source"] == "IGDB" and row["releases"][0]["official_product_id"] is None
     assert row["platform_language_support"]["PS5"]["languages"]["tchinese"] is False
+    assert row["platform_urls"]["PS5"] == "https://store.playstation.com/zh-hant-tw/product/JP0005-PPSA23593_00-APPLICATION00000"
 
 
 @pytest.fixture
@@ -179,13 +180,14 @@ def ps5_concept_bundle(tmp_path, monkeypatch):
         release_registry=releases, source={"platform_ids_verified": [130, 167, 508]})))
 
 
-def test_ps5_concept_publication_rebuilds_trusted_utc_conversion_and_retains_igdb_day(ps5_concept_bundle):
+def test_ps5_concept_registry_retains_store_link_but_cannot_override_igdb_day(ps5_concept_bundle):
     validate_bundle(ps5_concept_bundle, now=NOW)
     row = ps5_concept_bundle["nintendo_upcoming.json"]["games"][0]
     release = row["releases"][0]
-    assert release["date"] == "2026-10-16" and release["source_date"] == "2026-10-15"
-    assert release["official_concept_id"] == "10000001" and release["official_product_id"] is None
-    assert release["official_release_time_utc"] == "2026-10-15T18:00:00Z"
+    assert release["date"] == release["source_date"] == "2026-10-15"
+    assert release["source"] == "IGDB" and release["official_concept_id"] is None and release["official_product_id"] is None
+    assert release["official_release_time_utc"] is None
+    assert row["platform_urls"]["PS5"] == "https://store.playstation.com/zh-hant-tw/concept/10000001"
     assert row["platform_language_support"]["PS5"]["status"] == "unknown"
 
 
@@ -343,23 +345,26 @@ def taiwan_date_bundle(tmp_path, monkeypatch):
     return data, path
 
 
-def test_gate_accepts_only_repository_verified_taiwan_date_and_source(taiwan_date_bundle, tmp_path, monkeypatch):
+def test_gate_rebuilds_igdb_dates_independently_of_taiwan_registry(taiwan_date_bundle, tmp_path, monkeypatch):
     data, _ = taiwan_date_bundle
     outside = tmp_path / "outside-checkout"
     outside.mkdir()
     monkeypatch.chdir(outside)
     validate_bundle(data, now=NOW)
     public = data["nintendo_upcoming.json"]["games"][0]["releases"][0]
-    assert public["date"] == "2026-10-16" and public["source_date"] == "2026-10-15"
-    assert public["taiwan_release_confirmed"] is True
+    assert public["date"] == public["source_date"] == "2026-10-15"
+    assert public["date_basis"] == "igdb_timestamp_taipei" and public["source"] == "IGDB"
+    assert public["taiwan_release_confirmed"] is False
 
 
 @pytest.mark.parametrize("field,value", [
     ("date", "2026-10-17"), ("official_source_url", "https://www.nintendo.com/tw/fake-product"),
     ("official_source_name", "A self-attested announcement"), ("source_timestamp", 1000000000),
     ("time_zone", "UTC"), ("timestamp_taipei_date", "2026-10-18"),
+    ("source", "official_registry"), ("date_basis", "taiwan_official_calendar_day"),
+    ("taiwan_release_confirmed", True), ("official_release_time_utc", "2026-10-15T16:00:00Z"),
 ])
-def test_matching_master_and_public_cannot_forge_taiwan_date_evidence(taiwan_date_bundle, field, value):
+def test_matching_master_and_public_cannot_forge_igdb_date_or_official_confirmation(taiwan_date_bundle, field, value):
     data, _ = taiwan_date_bundle
     for row in (data["nintendo_master.json"]["games"]["igdb:12345"], data["nintendo_upcoming.json"]["games"][0]):
         row["releases"][0][field] = value
@@ -369,13 +374,12 @@ def test_matching_master_and_public_cannot_forge_taiwan_date_evidence(taiwan_dat
     assert client.calls == []
 
 
-def test_registry_removed_or_changed_source_date_cannot_keep_taiwan_confirmation(taiwan_date_bundle):
+def test_removed_taiwan_date_registry_leaves_igdb_calendar_publishable(taiwan_date_bundle):
     data, path = taiwan_date_bundle
     path.write_text('{"schema_version":1,"games":{}}')
-    client = RecordingClient()
-    with pytest.raises(PublishError):
-        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
-    assert client.calls == []
+    validate_bundle(data, now=NOW)
+    public = data["nintendo_upcoming.json"]["games"][0]["releases"][0]
+    assert public["source"] == "IGDB" and public["taiwan_release_confirmed"] is False
 
 
 @pytest.fixture

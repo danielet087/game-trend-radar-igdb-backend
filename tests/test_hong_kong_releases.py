@@ -1,4 +1,4 @@
-"""Nintendo HK calendar evidence keeps its region and cannot self-authorize."""
+"""Nintendo HK registries remain validated but never override IGDB dates."""
 from copy import deepcopy
 from datetime import date, datetime, timezone
 import json
@@ -40,20 +40,21 @@ def registry_document(platform="NS2", **changes):
     "https://nintendo.com.hk/schedule/", "https://www.nintendo.com.hk/software/example.html",
     "https://store.nintendo.com.hk/70010000000001", "https://www.nintendo.com/hk/schedule",
 ])
-def test_reviewed_hk_native_day_uses_same_day_in_taipei_without_claiming_taiwan(platform, platform_id, url):
-    document = registry_document(platform, url=url)
+def test_reviewed_hk_registry_preserves_igdb_native_day_policy(platform, platform_id, url):
+    document = registry_document(platform, url=url, date="2027-03-02")
     original = deepcopy(document)
     registry = validate_registry(document)
     game = normalize_game(raw_game(platform_id), START, END, CHECKED, release_registry=registry)
     public = game["releases"][0]
-    assert public["date"] == public["source_date"] == "2027-03-01"
-    assert public["platform"] == platform and public["region"] == "hong_kong"
-    assert public["source"] == "official_registry" and public["date_basis"] == "hong_kong_official_calendar_day"
-    assert public["timezone_status"] == "hong_kong_official_date" and public["taiwan_release_confirmed"] is False
+    assert public["date"] == public["source_date"] == public["timestamp_taipei_date"] == "2027-03-01"
+    assert public["platform"] == platform and public["region"] == "worldwide"
+    assert public["source"] == "IGDB" and public["date_basis"] == "igdb_timestamp_taipei"
+    assert public["timezone_status"] == "converted_to_taipei" and public["taiwan_release_confirmed"] is False
     assert public["time_zone"] == "Asia/Taipei" and public["official_release_time_utc"] is None
-    assert public["official_source_url"] == url and public["official_verified_at"] == CHECKED
+    assert public["official_source_url"] is None and public["official_verified_at"] is None
     assert public["source_region"] == "worldwide" and public["source_timestamp"] == raw_game(platform_id)["release_dates"][0]["date"]
-    assert game["release_records"][0]["source"] == "IGDB" and game["calendar_eligible"] is True
+    assert len(game["release_records"]) == 1 and game["release_records"][0]["source"] == "IGDB"
+    assert game["calendar_eligible"] is True
     assert document == original
 
 
@@ -92,7 +93,7 @@ def test_hk_url_requires_explicit_hong_kong_region_and_ps5_cannot_enter_hk_backu
 
 
 @pytest.mark.parametrize("source_region", [8, 99])
-def test_taiwan_and_hk_snapshots_can_coexist_but_taiwan_native_day_wins(source_region):
+def test_taiwan_and_hk_snapshots_can_coexist_without_overriding_igdb(source_region):
     document = registry_document(date="2027-03-03")
     rows = document["games"]["igdb:123"]["releases"]
     rows.append({**rows[0], "region": "taiwan", "date": "2027-03-02",
@@ -100,21 +101,22 @@ def test_taiwan_and_hk_snapshots_can_coexist_but_taiwan_native_day_wins(source_r
     raw = raw_game()
     raw["release_dates"][0]["region"] = source_region
     game = normalize_game(raw, START, END, CHECKED, release_registry=validate_registry(document))
-    assert game["releases"][0]["region"] == "taiwan" and game["releases"][0]["date"] == "2027-03-02"
-    assert game["releases"][0]["taiwan_release_confirmed"] is True
-    assert {row["region"] for row in game["release_records"] if row["source"] == "official_registry"} == {"taiwan", "hong_kong"}
+    assert game["releases"][0]["region"] == ("worldwide" if source_region == 8 else "unknown")
+    assert game["releases"][0]["date"] == "2027-03-01"
+    assert game["releases"][0]["taiwan_release_confirmed"] is False
+    assert not any(row["source"] == "official_registry" for row in game["release_records"])
     assert all(row["source_date"] == "2027-03-01" for row in game["release_records"])
     rows.append(deepcopy(rows[0]))
     with pytest.raises(CollectionError, match="invalid_taiwan_release_registry"):
         validate_registry(document)
 
 
-def test_hk_official_day_overrides_igdb_asia_without_arbitrary_day_offset():
+def test_hk_official_day_cannot_override_igdb_asia():
     raw = raw_game()
     raw["release_dates"][0]["region"] = 7
     registry = validate_registry(registry_document(date="2027-03-03"))
     game = normalize_game(raw, START, END, CHECKED, release_registry=registry)
-    assert game["releases"][0]["date"] == "2027-03-03" and game["releases"][0]["source_region"] == "asia"
+    assert game["releases"][0]["date"] == "2027-03-01" and game["releases"][0]["source_region"] == "asia"
     assert game["releases"][0]["official_release_time_utc"] is None
 
 
@@ -128,8 +130,8 @@ def test_igdb_hk_day_does_not_gain_official_hk_priority_over_asia():
     assert unreviewed["releases"][0]["region"] == "asia" and unreviewed["releases"][0]["date"] == "2027-03-01"
     reviewed = normalize_game(raw, START, END, CHECKED,
                               release_registry=validate_registry(registry_document(date="2027-03-03")))
-    assert reviewed["releases"][0]["region"] == "hong_kong" and reviewed["releases"][0]["date"] == "2027-03-03"
-    assert reviewed["releases"][0]["source"] == "official_registry"
+    assert reviewed["releases"][0]["region"] == "asia" and reviewed["releases"][0]["date"] == "2027-03-01"
+    assert reviewed["releases"][0]["source"] == "IGDB"
 
 
 def test_hk_snapshot_withdraws_on_changed_igdb_day_or_wrong_native_identity():
@@ -143,11 +145,11 @@ def test_hk_snapshot_withdraws_on_changed_igdb_day_or_wrong_native_identity():
     assert renamed["releases"][0]["source"] == wrong_platform["releases"][0]["source"] == "IGDB"
 
 
-def test_optional_actual_hk_instant_is_checked_in_taipei_and_keeps_igdb_timestamp():
+def test_optional_actual_hk_instant_is_validated_but_not_used_for_igdb_display():
     registry = validate_registry(registry_document(date="2027-03-02", release_time_utc="2027-03-01T16:00:00Z"))
     game = normalize_game(raw_game(), START, END, CHECKED, release_registry=registry)
     public = game["releases"][0]
-    assert public["date"] == "2027-03-02" and public["official_release_time_utc"] == "2027-03-01T16:00:00Z"
+    assert public["date"] == "2027-03-01" and public["official_release_time_utc"] is None
     assert public["source_date"] == public["timestamp_taipei_date"] == "2027-03-01"
     assert public["source_timestamp"] == raw_game()["release_dates"][0]["date"]
     for stamp in ("2027-03-01T15:59:59Z", "2027-03-01T16:00:00", "2027-03-01"):
@@ -186,13 +188,13 @@ class NoWritesClient:
 
 
 @pytest.mark.parametrize("field,value", [
-    ("date", "2027-03-02"), ("region", "taiwan"), ("source", "IGDB"),
+    ("date", "2027-03-02"), ("region", "taiwan"), ("source", "official_registry"),
     ("date_basis", "taiwan_official_calendar_day"), ("timezone_status", "same_calendar_day"),
     ("taiwan_release_confirmed", True), ("official_source_url", "https://www.nintendo.com/us/game/"),
     ("official_verified_at", "2026-10-03T16:05:00"), ("source_region", "hong_kong"),
     ("source_timestamp", 1000000000), ("official_release_time_utc", "2027-02-28T16:00:00Z"),
 ])
-def test_matching_master_and_public_cannot_forge_or_relabel_hk_evidence(hk_bundle, field, value):
+def test_matching_master_and_public_cannot_forge_official_hk_dates(hk_bundle, field, value):
     data, _ = hk_bundle
     for row in (data["nintendo_master.json"]["games"]["igdb:123"], data["nintendo_upcoming.json"]["games"][0]):
         row["releases"][0][field] = value
@@ -202,10 +204,8 @@ def test_matching_master_and_public_cannot_forge_or_relabel_hk_evidence(hk_bundl
     assert client.calls == []
 
 
-def test_hk_publication_cannot_self_authorize_after_trusted_registry_is_removed(hk_bundle):
+def test_hk_registry_removal_does_not_change_igdb_only_calendar(hk_bundle):
     data, path = hk_bundle
     path.write_text('{"schema_version":1,"games":{}}')
-    client = NoWritesClient()
-    with pytest.raises(PublishError):
-        publish(data, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
-    assert client.calls == []
+    validate_bundle(data, now=NOW)
+    assert data["nintendo_upcoming.json"]["games"][0]["releases"][0]["source"] == "IGDB"

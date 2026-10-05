@@ -125,20 +125,23 @@ def release_record(row):
     region = region.lower().replace(" ", "_")
     status = row.get("status") or {}
     status_name = status.get("name") if isinstance(status, dict) else None
-    # IGDB's YYYYMMDD field has day precision, not an actual unlock time.
-    # Preserve the regional calendar day and audit its timestamp in Taipei.
-    # A cross-day conversion needs evidence of an instant before it may alter
-    # a release date; silently adding a day would invent a regional date.
+    # The calendar consistently displays IGDB timestamps in Asia/Taipei.
+    # IGDB's day precision does not establish an actual unlock time: publish
+    # only the converted calendar date, retaining the original day for audit.
+    # Without a timestamp, preserve the supplied day instead of inventing one.
     source_day = start.isoformat() if exact and start else None
     converted_day = taipei_day.isoformat() if taipei_day is not None else None
     timezone_status = ("imprecise_date" if precision != "day" else "date_only" if timestamp is None
-                       else "same_calendar_day" if source_day == converted_day else "requires_time_evidence")
+                       else "converted_to_taipei")
+    display_day = converted_day if precision == "day" and timestamp is not None else source_day
+    date_basis = "igdb_timestamp_taipei" if precision == "day" and timestamp is not None else "igdb_calendar_day"
     return {"id": row.get("id"), "platform": PLATFORMS[platform_id]["code"],
-            "platform_id": platform_id, "date": start.isoformat() if exact and start else None,
-            "range_start": start.isoformat() if start else None, "range_end": end.isoformat() if end else None,
+            "platform_id": platform_id, "date": display_day,
+            "range_start": display_day or (start.isoformat() if start else None),
+            "range_end": display_day or (end.isoformat() if end else None),
             "precision": precision, "region": region, "status": status_name,
             "human": row.get("human") if isinstance(row.get("human"), str) else None,
-            "source": "IGDB", "date_basis": "regional_calendar_day",
+            "source": "IGDB", "date_basis": date_basis,
             "source_date": source_day, "source_timestamp": timestamp, "source_region": region,
             "time_zone": "Asia/Taipei", "timestamp_taipei_date": converted_day,
             "timezone_status": timezone_status, "taiwan_release_confirmed": False,
@@ -204,42 +207,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if row["id"] in PLATFORMS:
             row.update(PLATFORMS[row["id"]])
     tracked = [deepcopy(PLATFORMS[id_]) for id_ in sorted(known_ids & PLATFORMS.keys())]
-    # Keep each IGDB record intact, including region and timestamp. A reviewed
-    # Regional product/announcement dates are separate records. Taiwan is
-    # preferred; reviewed Nintendo HK dates provide the same UTC+8 calendar day
-    # without claiming that Taiwan availability was independently confirmed.
-    for official in official_releases(game, release_registry):
-        official_region = official.get("region", "taiwan")
-        if official_region not in {"taiwan", "hong_kong"} or (official_region == "hong_kong" and official["platform"] == "PS5"):
-            continue
-        platform_id = next(id_ for id_, platform in PLATFORMS.items() if platform["code"] == official["platform"])
-        if platform_id not in known_ids:
-            continue
-        originals = [row for row in releases if row["source"] == "IGDB"
-                     and row["platform_id"] == platform_id and row["precision"] == "day"]
-        ranks = {"asia": 0, "worldwide": 1, "japan": 2, "china": 3, "korea": 4}
-        if originals:
-            best_rank = min(ranks.get(row["region"], 5) for row in originals)
-            originals = [row for row in originals if ranks.get(row["region"], 5) == best_rank]
-        original = originals[0] if originals and len({row["date"] for row in originals}) == 1 else None
-        # A later changed/ambiguous IGDB date invalidates this reviewed snapshot.
-        # The same reviewed official date appearing in IGDB does not invalidate it.
-        if not original or original["date"] not in {official["verified_source_date"], official["date"]}:
-            continue
-        row = deepcopy(original) if original else {
-            "source_date": None, "source_timestamp": None, "source_region": "unknown",
-            "time_zone": "Asia/Taipei", "timestamp_taipei_date": None}
-        row.update({"id": None, "platform": official["platform"], "platform_id": platform_id,
-                    "date": official["date"], "range_start": official["date"], "range_end": official["date"],
-                    "precision": "day", "region": official_region, "status": None, "human": official["date"],
-                    "source": "official_registry", "date_basis": official_region + "_official_calendar_day",
-                    "timezone_status": official_region + "_official_date", "taiwan_release_confirmed": official_region == "taiwan",
-                    "official_source_url": official["url"], "official_source_name": official["source"],
-                    "official_verified_at": official["verified_at"],
-                    "official_product_id": official.get("product_id"),
-                    "official_concept_id": official.get("concept_id"),
-                    "official_release_time_utc": official.get("release_time_utc")})
-        releases.append(row)
+    # Release dates come exclusively from IGDB. Reviewed store registries still
+    # identify product links below, but never override this calendar policy.
     outside = known_ids - PLATFORMS.keys()
     exclusive_status = "multi_platform" if outside or (platform_complete and len(known_ids) > 1) else "listed_only" if platform_complete else "unknown"
     exclusive_platform = tracked[0]["code"] if len(tracked) == 1 and not outside and platform_complete else None
@@ -270,8 +239,6 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if len(dates) != 1:
             continue  # Conflicting equally relevant records require review.
         selected = sorted(best, key=lambda row: (row["region"], row.get("id") or 0))[0]
-        if selected["timezone_status"] == "requires_time_evidence":
-            continue
         if start <= date.fromisoformat(selected["date"]) < end:
             calendar_releases.append({key: selected[key] for key in RELEASE_FIELDS})
     reasons = []
@@ -352,7 +319,8 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     if missing_prior:
         raise CollectionError("previous_game_lookup_incomplete")
     window = {"start": start.isoformat(), "end": end.isoformat(), "end_inclusive": False, "time_zone": "Asia/Taipei"}
-    provenance = {"provider": "IGDB", "complete": True, "hypes_threshold": 30, **(source or {})}
+    provenance = {"provider": "IGDB", "complete": True, "hypes_threshold": 30, **(source or {}),
+                  "release_date_policy": "igdb_taipei_v1"}
     master = {"schema_version": 1, "generated_at": checked_at, "window": window, "source": provenance, "games": games}
     public = []
     for row in games.values():
