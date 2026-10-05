@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 from .chinese_names import names, previous_lookup
+from .game_modes import game_modes, multiplayer_modes
 from .igdb import CollectionError
 from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
@@ -280,6 +281,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "popularity_status": popularity, "platforms": tracked, "known_platforms": known,
               "platform_language_support": platform_language_support(game, tracked, language_registry),
               "platform_editions": platform_editions(game, tracked, language_registry),
+              "game_modes": game_modes(game), "multiplayer_modes": multiplayer_modes(game),
               "platform_data_complete": platform_complete,
               "exclusivity": {"status": exclusive_status, "platform": exclusive_platform, "source": "IGDB", "url": url},
               "releases": calendar_releases, "release_records": releases, "cover_image": cover_url, "url": url,

@@ -20,6 +20,11 @@ from .persistence import decode_master
 
 GAME_FIELDS = (
     "id,name,hypes,url,category,game_type.type,status,game_status.status,summary,storyline,"
+    "game_modes.id,game_modes.name,multiplayer_modes.platform.id,"
+    "multiplayer_modes.campaigncoop,multiplayer_modes.dropin,multiplayer_modes.lancoop,"
+    "multiplayer_modes.offlinecoop,multiplayer_modes.offlinecoopmax,multiplayer_modes.offlinemax,"
+    "multiplayer_modes.onlinecoop,multiplayer_modes.onlinecoopmax,multiplayer_modes.onlinemax,"
+    "multiplayer_modes.splitscreen,multiplayer_modes.splitscreenonline,"
     "platforms.id,platforms.name,release_dates.id,release_dates.platform.id,release_dates.platform.name,"
     "release_dates.date,release_dates.date_format.format,release_dates.category,release_dates.y,release_dates.m,"
     "release_dates.d,release_dates.human,release_dates.region,release_dates.release_region.region,release_dates.status.name,"
