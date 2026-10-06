@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-05T07:20:33Z",
+  "generated_at": "2026-10-06T00:31:42Z",
   "window": {
-    "start": "2026-10-05",
-    "end": "2027-10-05",
+    "start": "2026-10-06",
+    "end": "2027-10-06",
     "end_inclusive": false,
     "time_zone": "Asia/Taipei"
   },
@@ -11,7 +11,7 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8656,
+    "discovery_release_count": 8669,
     "request_count": 89,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -215,7 +215,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -452,7 +452,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -637,7 +637,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -864,7 +864,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1085,7 +1085,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1233,7 +1233,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1485,7 +1485,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1735,7 +1735,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1964,14 +1964,14 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
       "id": "igdb:250618",
       "igdb_id": 250618,
       "display_name": "影之刃零",
-      "name_en": "Phantom Blade 0",
+      "name_en": "Phantom Blade Zero",
       "name_zh_tw": "影之刃零",
       "name_source": "Steam appdetails (tchinese)",
       "name_url": "https://store.steampowered.com/app/4115450/?l=tchinese",
@@ -1980,12 +1980,11 @@
         "locale": "zh-Hant",
         "converted": false,
         "igdb_id": 250618,
-        "name_en": "Phantom Blade 0",
+        "name_en": "Phantom Blade Zero",
         "steam_appid": 4115450,
         "identity_source": "IGDB external_games Steam",
         "language": "tchinese"
       },
-      "steam_appid": 4115450,
       "hypes": 215,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -2038,7 +2037,7 @@
         "status": "multi_platform",
         "platform": null,
         "source": "IGDB",
-        "url": "https://www.igdb.com/games/phantom-blade-0"
+        "url": "https://www.igdb.com/games/phantom-blade-zero"
       },
       "releases": [
         {
@@ -2064,7 +2063,7 @@
         }
       ],
       "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cococe.jpg",
-      "url": "https://www.igdb.com/games/phantom-blade-0",
+      "url": "https://www.igdb.com/games/phantom-blade-zero",
       "websites": [
         {
           "url": "https://www.youtube.com/@PhantomBladeZero"
@@ -2112,8 +2111,9 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
-      "first_observed_at": "2026-10-04T13:58:41Z"
+      "checked_at": "2026-10-06T00:31:42Z",
+      "first_observed_at": "2026-10-04T13:58:41Z",
+      "steam_appid": 4115450
     },
     {
       "id": "igdb:361880",
@@ -2254,7 +2254,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2371,7 +2371,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-05T07:21:16Z",
+        "checked_at": "2026-10-06T00:32:41Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -2420,7 +2420,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2643,7 +2643,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2789,7 +2789,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3026,7 +3026,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3201,7 +3201,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3440,7 +3440,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3658,7 +3658,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3931,7 +3931,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4155,7 +4155,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4320,7 +4320,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4452,7 +4452,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4587,7 +4587,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4731,7 +4731,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4855,7 +4855,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5010,7 +5010,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5228,7 +5228,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5352,7 +5352,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5594,7 +5594,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5784,7 +5784,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5928,7 +5928,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -6108,7 +6108,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-05T07:20:33Z",
+      "checked_at": "2026-10-06T00:31:42Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
