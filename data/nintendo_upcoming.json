@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-06T00:31:42Z",
+  "generated_at": "2026-10-07T00:32:29Z",
   "window": {
-    "start": "2026-10-06",
-    "end": "2027-10-06",
+    "start": "2026-10-07",
+    "end": "2027-10-07",
     "end_inclusive": false,
     "time_zone": "Asia/Taipei"
   },
@@ -11,7 +11,7 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8669,
+    "discovery_release_count": 8680,
     "request_count": 89,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -23,201 +23,6 @@
     "release_date_policy": "igdb_taipei_v1"
   },
   "games": [
-    {
-      "id": "igdb:381248",
-      "igdb_id": 381248,
-      "display_name": "星際大戰：銀河賽車手™",
-      "name_en": "Star Wars: Galactic Racer",
-      "name_zh_tw": "星際大戰：銀河賽車手™",
-      "name_source": "Steam appdetails (tchinese)",
-      "name_url": "https://store.steampowered.com/app/4078430/?l=tchinese",
-      "name_evidence": {
-        "provider": "steam_appdetails",
-        "locale": "zh-Hant",
-        "converted": false,
-        "igdb_id": 381248,
-        "name_en": "Star Wars: Galactic Racer",
-        "steam_appid": 4078430,
-        "identity_source": "IGDB external_games Steam",
-        "language": "tchinese"
-      },
-      "steam_appid": 4078430,
-      "hypes": 81,
-      "hypes_status": "available",
-      "popularity_status": "qualified",
-      "platforms": [
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        }
-      ],
-      "known_platforms": [
-        {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        },
-        {
-          "id": 169,
-          "name": "Xbox Series X|S"
-        }
-      ],
-      "platform_language_support": {
-        "PS5": {
-          "status": "unknown",
-          "region": null,
-          "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
-          },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
-        }
-      },
-      "platform_editions": {},
-      "game_modes": [
-        {
-          "id": 1,
-          "name": "Single player"
-        },
-        {
-          "id": 2,
-          "name": "Multiplayer"
-        }
-      ],
-      "multiplayer_modes": [
-        {
-          "platform": {
-            "id": 167
-          },
-          "campaigncoop": false,
-          "dropin": false,
-          "lancoop": false,
-          "offlinecoop": false,
-          "onlinecoop": false,
-          "splitscreen": false,
-          "offlinemax": 1,
-          "onlinemax": 12
-        },
-        {
-          "platform": {
-            "id": 6
-          },
-          "campaigncoop": false,
-          "dropin": false,
-          "lancoop": false,
-          "offlinecoop": false,
-          "onlinecoop": false,
-          "splitscreen": false,
-          "offlinemax": 1,
-          "onlinemax": 12
-        },
-        {
-          "platform": {
-            "id": 169
-          },
-          "campaigncoop": false,
-          "dropin": false,
-          "lancoop": false,
-          "offlinecoop": false,
-          "onlinecoop": false,
-          "splitscreen": false,
-          "offlinemax": 1,
-          "onlinemax": 12
-        }
-      ],
-      "platform_data_complete": true,
-      "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
-        "source": "IGDB",
-        "url": "https://www.igdb.com/games/star-wars-galactic-racer"
-      },
-      "releases": [
-        {
-          "date": "2026-10-06",
-          "platform": "PS5",
-          "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "igdb_timestamp_taipei",
-          "source_date": "2026-10-06",
-          "source_timestamp": 1791244800,
-          "source_region": "worldwide",
-          "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2026-10-06",
-          "timezone_status": "converted_to_taipei",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
-          "official_product_id": null,
-          "official_concept_id": null,
-          "official_release_time_utc": null
-        }
-      ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cobihx.jpg",
-      "url": "https://www.igdb.com/games/star-wars-galactic-racer",
-      "websites": [
-        {
-          "url": "https://store.steampowered.com/app/4078430"
-        },
-        {
-          "url": "https://starwarsgalacticracer.com/"
-        },
-        {
-          "url": "https://www.twitch.tv/directory/category/star-wars-galactic-racer"
-        },
-        {
-          "url": "https://x.com/SWGalacticRacer"
-        },
-        {
-          "url": "https://www.facebook.com/profile.php?id=61580982123086"
-        },
-        {
-          "url": "https://www.instagram.com/starwarsgalacticracer/"
-        },
-        {
-          "url": "https://www.youtube.com/channel/UC57GnaDS_gIMHRquyknLcnQ"
-        },
-        {
-          "url": "https://store.epicgames.com/p/star-wars-galactic-racer-246fdc"
-        },
-        {
-          "url": "https://store.playstation.com/en-us/concept/10014146"
-        },
-        {
-          "url": "https://www.xbox.com/en-us/games/store/star-wars-galactic-racer/9mxdpxsrvml5"
-        },
-        {
-          "url": "https://starwars.fandom.com/wiki/Star_Wars:_Galactic_Racer"
-        },
-        {
-          "url": "https://en.wikipedia.org/wiki/Star_Wars%3A_Galactic_Racer"
-        }
-      ],
-      "nintendo_url": null,
-      "playstation_url": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1",
-      "platform_urls": {
-        "PS5": "https://store.playstation.com/zh-hant-tw/product/UP8737-PPSA28416_00-SWGALACTICRACER1"
-      },
-      "game_type": "main_game",
-      "sexual_content_screened": true,
-      "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
-      "first_observed_at": "2026-10-04T13:58:41Z"
-    },
     {
       "id": "igdb:2933",
       "igdb_id": 2933,
@@ -452,7 +257,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -637,7 +442,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -864,7 +669,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1085,7 +890,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1233,7 +1038,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1251,7 +1056,7 @@
         "igdb_id": 389434,
         "name_en": "Castlevania: Belmont's Curse"
       },
-      "hypes": 72,
+      "hypes": 74,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -1485,7 +1290,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1735,7 +1540,231 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
+      "first_observed_at": "2026-10-03T16:40:12Z"
+    },
+    {
+      "id": "igdb:405454",
+      "igdb_id": 405454,
+      "display_name": "Final Fantasy Resonance",
+      "name_en": "Final Fantasy Resonance",
+      "name_zh_tw": null,
+      "name_source": "IGDB name",
+      "name_url": null,
+      "name_evidence": null,
+      "hypes": 30,
+      "hypes_status": "available",
+      "popularity_status": "qualified",
+      "platforms": [
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "known_platforms": [
+        {
+          "id": 6,
+          "name": "PC (Microsoft Windows)"
+        },
+        {
+          "id": 130,
+          "name": "Nintendo Switch",
+          "code": "NS"
+        },
+        {
+          "id": 167,
+          "name": "PlayStation 5",
+          "code": "PS5"
+        },
+        {
+          "id": 169,
+          "name": "Xbox Series X|S"
+        },
+        {
+          "id": 508,
+          "name": "Nintendo Switch 2",
+          "code": "NS2"
+        }
+      ],
+      "platform_language_support": {
+        "NS": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
+        "PS5": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        },
+        "NS2": {
+          "status": "unknown",
+          "region": null,
+          "languages": {
+            "tchinese": null,
+            "schinese": null,
+            "english": null,
+            "chinese": null
+          },
+          "supported_languages": [],
+          "complete": false,
+          "source": null,
+          "source_url": null,
+          "checked_at": null,
+          "evidence_type": null
+        }
+      },
+      "platform_editions": {},
+      "game_modes": [
+        {
+          "id": 1,
+          "name": "Single player"
+        }
+      ],
+      "multiplayer_modes": [],
+      "platform_data_complete": true,
+      "exclusivity": {
+        "status": "multi_platform",
+        "platform": null,
+        "source": "IGDB",
+        "url": "https://www.igdb.com/games/final-fantasy-resonance"
+      },
+      "releases": [
+        {
+          "date": "2026-10-22",
+          "platform": "NS",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "igdb_timestamp_taipei",
+          "source_date": "2026-10-22",
+          "source_timestamp": 1792627200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-22",
+          "timezone_status": "converted_to_taipei",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_concept_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-10-22",
+          "platform": "NS2",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "igdb_timestamp_taipei",
+          "source_date": "2026-10-22",
+          "source_timestamp": 1792627200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-22",
+          "timezone_status": "converted_to_taipei",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_concept_id": null,
+          "official_release_time_utc": null
+        },
+        {
+          "date": "2026-10-22",
+          "platform": "PS5",
+          "precision": "day",
+          "region": "worldwide",
+          "source": "IGDB",
+          "date_basis": "igdb_timestamp_taipei",
+          "source_date": "2026-10-22",
+          "source_timestamp": 1792627200,
+          "source_region": "worldwide",
+          "time_zone": "Asia/Taipei",
+          "timestamp_taipei_date": "2026-10-22",
+          "timezone_status": "converted_to_taipei",
+          "taiwan_release_confirmed": false,
+          "official_source_url": null,
+          "official_source_name": null,
+          "official_verified_at": null,
+          "official_product_id": null,
+          "official_concept_id": null,
+          "official_release_time_utc": null
+        }
+      ],
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coc7q4.jpg",
+      "url": "https://www.igdb.com/games/final-fantasy-resonance",
+      "websites": [
+        {
+          "url": "https://www.nintendo.com/us/store/products/final-fantasy-resonance-switch/"
+        },
+        {
+          "url": "https://store.steampowered.com/app/3259780"
+        },
+        {
+          "url": "https://www.twitch.tv/directory/category/final-fantasy-resonance"
+        },
+        {
+          "url": "https://x.com/FinalFantasy"
+        },
+        {
+          "url": "https://www.facebook.com/SquareEnix"
+        },
+        {
+          "url": "https://www.youtube.com/SquareEnixNA"
+        },
+        {
+          "url": "https://www.square-enix.com/finalfantasyresonance"
+        },
+        {
+          "url": "https://www.xbox.com/en-us/games/store/final-fantasy-resonance/9nncprh9vwg4"
+        },
+        {
+          "url": "https://store.playstation.com/en-us/product/JP0082-PPSA31544_00-FFRSSTDWW0000000"
+        }
+      ],
+      "nintendo_url": "https://www.nintendo.com/us/store/products/final-fantasy-resonance-switch/",
+      "playstation_url": null,
+      "platform_urls": {},
+      "game_type": "remake",
+      "sexual_content_screened": true,
+      "calendar_eligible": true,
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1964,7 +1993,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1985,6 +2014,7 @@
         "identity_source": "IGDB external_games Steam",
         "language": "tchinese"
       },
+      "steam_appid": 4115450,
       "hypes": 215,
       "hypes_status": "available",
       "popularity_status": "qualified",
@@ -2111,9 +2141,8 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
-      "first_observed_at": "2026-10-04T13:58:41Z",
-      "steam_appid": 4115450
+      "checked_at": "2026-10-07T00:32:29Z",
+      "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
       "id": "igdb:361880",
@@ -2254,7 +2283,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2371,7 +2400,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-06T00:32:41Z",
+        "checked_at": "2026-10-07T00:33:13Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -2420,7 +2449,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2643,7 +2672,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2789,7 +2818,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2807,7 +2836,7 @@
         "igdb_id": 314449,
         "name_en": "Hela: Of Mice & Magic"
       },
-      "hypes": 46,
+      "hypes": 47,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -3026,7 +3055,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3201,7 +3230,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3440,7 +3469,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3658,7 +3687,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3931,7 +3960,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4155,7 +4184,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4320,7 +4349,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4452,7 +4481,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4587,7 +4616,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4731,7 +4760,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4855,7 +4884,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4877,7 +4906,7 @@
         "language": "tchinese"
       },
       "steam_appid": 2590240,
-      "hypes": 109,
+      "hypes": 108,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -5010,7 +5039,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5228,7 +5257,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5352,7 +5381,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5370,7 +5399,7 @@
         "igdb_id": 348210,
         "name_en": "Persona 4 Revival"
       },
-      "hypes": 70,
+      "hypes": 71,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -5594,7 +5623,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5784,7 +5813,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5928,7 +5957,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -6108,7 +6137,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-06T00:31:42Z",
+      "checked_at": "2026-10-07T00:32:29Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
