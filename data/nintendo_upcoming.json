@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T00:32:29Z",
+  "generated_at": "2026-10-08T00:32:20Z",
   "window": {
-    "start": "2026-10-07",
-    "end": "2027-10-07",
+    "start": "2026-10-08",
+    "end": "2027-10-08",
     "end_inclusive": false,
     "time_zone": "Asia/Taipei"
   },
@@ -11,7 +11,7 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8680,
+    "discovery_release_count": 8698,
     "request_count": 89,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -257,7 +257,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -275,7 +275,7 @@
         "igdb_id": 313597,
         "name_en": "Silver Pines"
       },
-      "hypes": 39,
+      "hypes": 41,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -403,7 +403,7 @@
           "official_release_time_utc": null
         }
       ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaxvl.jpg",
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cod2rg.jpg",
       "url": "https://www.igdb.com/games/silver-pines",
       "websites": [
         {
@@ -442,7 +442,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -669,7 +669,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -890,7 +890,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1038,7 +1038,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1056,7 +1056,7 @@
         "igdb_id": 389434,
         "name_en": "Castlevania: Belmont's Curse"
       },
-      "hypes": 74,
+      "hypes": 75,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -1290,7 +1290,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1540,7 +1540,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1764,7 +1764,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1993,7 +1993,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2141,7 +2141,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2283,7 +2283,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2400,7 +2400,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-07T00:33:13Z",
+        "checked_at": "2026-10-08T00:33:07Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -2449,7 +2449,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2672,7 +2672,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2818,7 +2818,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3055,7 +3055,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3230,7 +3230,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3469,7 +3469,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3687,7 +3687,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3960,7 +3960,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4184,7 +4184,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4349,7 +4349,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4481,7 +4481,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4616,7 +4616,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4760,7 +4760,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4884,7 +4884,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5039,7 +5039,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5257,7 +5257,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5381,7 +5381,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5623,7 +5623,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5813,7 +5813,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5957,7 +5957,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -6137,7 +6137,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-07T00:32:29Z",
+      "checked_at": "2026-10-08T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
