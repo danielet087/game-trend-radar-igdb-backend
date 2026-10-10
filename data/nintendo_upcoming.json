@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-09T00:32:26Z",
+  "generated_at": "2026-10-10T00:32:20Z",
   "window": {
-    "start": "2026-10-09",
-    "end": "2027-10-09",
+    "start": "2026-10-10",
+    "end": "2027-10-10",
     "end_inclusive": false,
     "time_zone": "Asia/Taipei"
   },
@@ -11,7 +11,7 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8735,
+    "discovery_release_count": 8754,
     "request_count": 89,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -23,227 +23,6 @@
     "release_date_policy": "igdb_taipei_v1"
   },
   "games": [
-    {
-      "id": "igdb:115060",
-      "igdb_id": 115060,
-      "display_name": "龍族教義 2",
-      "name_en": "Dragon's Dogma II",
-      "name_zh_tw": "龍族教義 2",
-      "name_source": "傑仕登台灣官方代理商活動公告（同款 Dragon's Dogma 2 試玩）",
-      "name_url": "https://www.justdan.com/tw/news/hot/%E5%82%91%E4%BB%95%E7%99%BB%E5%AE%A3%E5%B8%83%E5%8F%83%E5%B1%952024%E5%8F%B0%E5%8C%97%E5%9C%8B%E9%9A%9B%E9%9B%BB%E7%8E%A9%E5%B1%95%E5%B8%B6%E4%BE%86DragonsDogma2%E7%AD%89%E6%9C%80%E6%96%B0%E4%BD%9C%E5%93%81%E8%A9%A6%E7%8E%A9",
-      "name_evidence": {
-        "provider": "official_registry",
-        "locale": "zh-Hant",
-        "converted": false,
-        "igdb_id": 115060,
-        "name_en": "Dragon's Dogma II"
-      },
-      "hypes": 31,
-      "hypes_status": "available",
-      "popularity_status": "qualified",
-      "platforms": [
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        },
-        {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
-        }
-      ],
-      "known_platforms": [
-        {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        },
-        {
-          "id": 169,
-          "name": "Xbox Series X|S"
-        },
-        {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
-        }
-      ],
-      "platform_language_support": {
-        "PS5": {
-          "status": "unknown",
-          "region": null,
-          "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
-          },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
-        },
-        "NS2": {
-          "status": "confirmed",
-          "region": "australia",
-          "languages": {
-            "tchinese": true,
-            "schinese": true,
-            "english": true,
-            "chinese": true
-          },
-          "supported_languages": [
-            {
-              "code": "ja",
-              "name": "日文"
-            },
-            {
-              "code": "en",
-              "name": "英文"
-            },
-            {
-              "code": "es",
-              "name": "西班牙文"
-            },
-            {
-              "code": "pt",
-              "name": "葡萄牙文"
-            },
-            {
-              "code": "fr",
-              "name": "法文"
-            },
-            {
-              "code": "de",
-              "name": "德文"
-            },
-            {
-              "code": "it",
-              "name": "義大利文"
-            },
-            {
-              "code": "ru",
-              "name": "俄文"
-            },
-            {
-              "code": "ko",
-              "name": "韓文"
-            },
-            {
-              "code": "zh-Hans",
-              "name": "簡體中文"
-            },
-            {
-              "code": "zh-Hant",
-              "name": "繁體中文"
-            },
-            {
-              "code": "pl",
-              "name": "波蘭文"
-            }
-          ],
-          "complete": true,
-          "source": "任天堂澳洲官方 Dragon's Dogma 2: Dark Arisen 商品語言資料",
-          "source_url": "https://www.nintendo.com/au/games/nintendo-switch-2/dragons-dogma-2-dark-arisen/",
-          "checked_at": "2026-10-04T06:46:35Z",
-          "evidence_type": "official_product_languages"
-        }
-      },
-      "platform_editions": {
-        "NS2": {
-          "type": "base_plus_expansion",
-          "label": "本體＋Dark Arisen 擴充版",
-          "title": "Dragon's Dogma 2: Dark Arisen",
-          "product_id": "70010000118032",
-          "region": "australia",
-          "source_url": "https://www.nintendo.com/au/games/nintendo-switch-2/dragons-dogma-2-dark-arisen/",
-          "checked_at": "2026-10-04T06:46:35Z"
-        }
-      },
-      "game_modes": [
-        {
-          "id": 1,
-          "name": "Single player"
-        }
-      ],
-      "multiplayer_modes": [],
-      "platform_data_complete": true,
-      "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
-        "source": "IGDB",
-        "url": "https://www.igdb.com/games/dragons-dogma-ii"
-      },
-      "releases": [
-        {
-          "date": "2026-10-09",
-          "platform": "NS2",
-          "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "igdb_timestamp_taipei",
-          "source_date": "2026-10-09",
-          "source_timestamp": 1791504000,
-          "source_region": "worldwide",
-          "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2026-10-09",
-          "timezone_status": "converted_to_taipei",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
-          "official_product_id": null,
-          "official_concept_id": null,
-          "official_release_time_utc": null
-        }
-      ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co833w.jpg",
-      "url": "https://www.igdb.com/games/dragons-dogma-ii",
-      "websites": [
-        {
-          "url": "https://twitter.com/dragonsdogma"
-        },
-        {
-          "url": "https://www.xbox.com/en-us/games/store/dragon's-dogma-2/9PJQMBMJ3154"
-        },
-        {
-          "url": "https://store.playstation.com/en-us/concept/10005844"
-        },
-        {
-          "url": "https://www.youtube.com/c/dragonsdogma"
-        },
-        {
-          "url": "https://www.dragonsdogma.com/2/en-uk/"
-        },
-        {
-          "url": "https://store.steampowered.com/app/2054970"
-        },
-        {
-          "url": "https://www.facebook.com/dragonsdogma"
-        },
-        {
-          "url": "https://www.twitch.tv/directory/game/Dragon%E2%80%99s%20Dogma%20II"
-        },
-        {
-          "url": "https://en.wikipedia.org/wiki/Dragon%27s_Dogma_2"
-        }
-      ],
-      "nintendo_url": null,
-      "playstation_url": null,
-      "platform_urls": {},
-      "game_type": "main_game",
-      "sexual_content_screened": true,
-      "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
-      "first_observed_at": "2026-10-03T16:40:12Z"
-    },
     {
       "id": "igdb:361833",
       "igdb_id": 361833,
@@ -389,7 +168,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -641,7 +420,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -891,7 +670,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1115,7 +894,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1344,7 +1123,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1492,7 +1271,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1634,7 +1413,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1751,7 +1530,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-09T00:33:06Z",
+        "checked_at": "2026-10-10T00:33:06Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -1800,7 +1579,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2023,7 +1802,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2169,7 +1948,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -2187,7 +1966,7 @@
         "igdb_id": 314449,
         "name_en": "Hela: Of Mice & Magic"
       },
-      "hypes": 47,
+      "hypes": 48,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -2312,7 +2091,53 @@
           "name": "Split screen"
         }
       ],
-      "multiplayer_modes": [],
+      "multiplayer_modes": [
+        {
+          "platform": {
+            "id": 167
+          },
+          "campaigncoop": false,
+          "dropin": true,
+          "lancoop": false,
+          "offlinecoop": true,
+          "onlinecoop": true,
+          "splitscreen": true,
+          "offlinecoopmax": 2,
+          "offlinemax": 2,
+          "onlinecoopmax": 4,
+          "onlinemax": 4
+        },
+        {
+          "platform": {
+            "id": 169
+          },
+          "campaigncoop": false,
+          "dropin": true,
+          "lancoop": false,
+          "offlinecoop": true,
+          "onlinecoop": true,
+          "splitscreen": true,
+          "offlinecoopmax": 2,
+          "offlinemax": 2,
+          "onlinecoopmax": 4,
+          "onlinemax": 4
+        },
+        {
+          "platform": {
+            "id": 508
+          },
+          "campaigncoop": false,
+          "dropin": true,
+          "lancoop": false,
+          "offlinecoop": true,
+          "onlinecoop": true,
+          "splitscreen": true,
+          "offlinecoopmax": 2,
+          "offlinemax": 2,
+          "onlinecoopmax": 4,
+          "onlinemax": 4
+        }
+      ],
       "platform_data_complete": true,
       "exclusivity": {
         "status": "multi_platform",
@@ -2364,7 +2189,7 @@
           "official_release_time_utc": null
         }
       ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coax99.jpg",
+      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/cod34q.jpg",
       "url": "https://www.igdb.com/games/hela-of-mice-and-magic",
       "websites": [
         {
@@ -2412,7 +2237,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2587,7 +2412,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2826,7 +2651,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3044,7 +2869,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3317,7 +3142,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3541,7 +3366,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3706,7 +3531,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3838,7 +3663,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3973,7 +3798,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4117,7 +3942,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4241,7 +4066,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4396,7 +4221,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4414,7 +4239,7 @@
         "igdb_id": 381235,
         "name_en": "Tomb Raider: Legacy of Atlantis"
       },
-      "hypes": 140,
+      "hypes": 142,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4614,7 +4439,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4626,7 +4451,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 108,
+      "hypes": 110,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4738,7 +4563,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4980,7 +4805,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5170,7 +4995,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -5182,7 +5007,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 150,
+      "hypes": 151,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -5314,7 +5139,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5494,7 +5319,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-09T00:32:26Z",
+      "checked_at": "2026-10-10T00:32:20Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]

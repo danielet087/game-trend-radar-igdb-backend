@@ -1,24 +1,24 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-09T00:32:26Z",
+  "generated_at": "2026-10-10T00:32:20Z",
   "complete": false,
   "status": "prepared",
-  "candidate_count": 6658,
-  "public_count": 29,
+  "candidate_count": 6671,
+  "public_count": 28,
   "popularity_counts": {
     "qualified": 204,
     "observe": 88,
-    "below_threshold": 1499,
-    "unknown": 4867
+    "below_threshold": 1505,
+    "unknown": 4874
   },
-  "content_review_count": 546,
+  "content_review_count": 548,
   "content_excluded_count": 15,
   "pending_count": 0,
   "source": {
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8735,
+    "discovery_release_count": 8754,
     "request_count": 89,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -45,7 +45,7 @@
         "name_en": "Professor Layton and the New World of Steam",
         "status": "no_exact_store_url",
         "attempted_urls": [],
-        "checked_at": "2026-10-09T00:32:42Z",
+        "checked_at": "2026-10-10T00:32:37Z",
         "evidence": null
       },
       "igdb:261146": {
@@ -53,7 +53,7 @@
         "name_en": "Titan Quest II",
         "status": "no_exact_store_url",
         "attempted_urls": [],
-        "checked_at": "2026-10-09T00:32:42Z",
+        "checked_at": "2026-10-10T00:32:37Z",
         "evidence": null
       },
       "igdb:252852": {
@@ -61,27 +61,8 @@
         "name_en": "Mariachi Legends",
         "status": "no_exact_store_url",
         "attempted_urls": [],
-        "checked_at": "2026-10-09T00:32:42Z",
+        "checked_at": "2026-10-10T00:32:37Z",
         "evidence": null
-      },
-      "igdb:405454": {
-        "igdb_id": 405454,
-        "name_en": "Final Fantasy Resonance",
-        "status": "confirmed_product",
-        "attempted_urls": [
-          "https://store.playstation.com/en-tw/product/JP0082-PPSA31544_00-FFRSSTDWW0000000"
-        ],
-        "checked_at": "2026-10-09T00:32:43Z",
-        "evidence": {
-          "product_id": "JP0082-PPSA31544_00-FFRSSTDWW0000000",
-          "official_title": "FINAL FANTASY RESONANCE (English, Japanese)",
-          "region": "taiwan",
-          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0082-PPSA31544_00-FFRSSTDWW0000000",
-          "supported_languages": [],
-          "complete": false,
-          "release_time_utc": "2026-10-21T16:00:00Z",
-          "date": "2026-10-22"
-        }
       },
       "igdb:378225": {
         "igdb_id": 378225,
@@ -90,7 +71,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10017555"
         ],
-        "checked_at": "2026-10-09T00:32:43Z",
+        "checked_at": "2026-10-10T00:32:38Z",
         "evidence": {
           "product_id": null,
           "concept_id": "10017555",
@@ -111,7 +92,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10005291"
         ],
-        "checked_at": "2026-10-09T00:32:43Z",
+        "checked_at": "2026-10-10T00:32:39Z",
         "evidence": {
           "product_id": null,
           "concept_id": "10005291",
@@ -125,6 +106,25 @@
           "date": "2027-01-15"
         }
       },
+      "igdb:405454": {
+        "igdb_id": 405454,
+        "name_en": "Final Fantasy Resonance",
+        "status": "confirmed_product",
+        "attempted_urls": [
+          "https://store.playstation.com/en-tw/product/JP0082-PPSA31544_00-FFRSSTDWW0000000"
+        ],
+        "checked_at": "2026-10-10T00:32:40Z",
+        "evidence": {
+          "product_id": "JP0082-PPSA31544_00-FFRSSTDWW0000000",
+          "official_title": "FINAL FANTASY RESONANCE (English, Japanese)",
+          "region": "taiwan",
+          "source_url": "https://store.playstation.com/zh-hant-tw/product/JP0082-PPSA31544_00-FFRSSTDWW0000000",
+          "supported_languages": [],
+          "complete": false,
+          "release_time_utc": "2026-10-21T16:00:00Z",
+          "date": "2026-10-22"
+        }
+      },
       "igdb:52189": {
         "igdb_id": 52189,
         "name_en": "Grand Theft Auto VI",
@@ -133,7 +133,7 @@
           "https://store.playstation.com/en-tw/concept/10000730",
           "https://store.playstation.com/en-hk/concept/10000730"
         ],
-        "checked_at": "2026-10-09T00:32:45Z",
+        "checked_at": "2026-10-10T00:32:41Z",
         "evidence": null
       },
       "igdb:250618": {
@@ -143,7 +143,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10017620"
         ],
-        "checked_at": "2026-10-09T00:32:45Z",
+        "checked_at": "2026-10-10T00:32:42Z",
         "evidence": {
           "product_id": "UB2134-PPSA34579_00-0622032276386943",
           "official_title": "Phantom Blade Zero (Simplified Chinese, English, Korean, Thai, Japanese, Traditional Chinese)",
@@ -170,7 +170,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10013615"
         ],
-        "checked_at": "2026-10-09T00:32:46Z",
+        "checked_at": "2026-10-10T00:32:42Z",
         "evidence": {
           "product_id": null,
           "concept_id": "10013615",
@@ -192,7 +192,7 @@
           "https://store.playstation.com/en-tw/concept/10014491",
           "https://store.playstation.com/en-hk/concept/10014491"
         ],
-        "checked_at": "2026-10-09T00:32:47Z",
+        "checked_at": "2026-10-10T00:32:44Z",
         "evidence": null
       },
       "igdb:325599": {
@@ -202,7 +202,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10017939"
         ],
-        "checked_at": "2026-10-09T00:32:48Z",
+        "checked_at": "2026-10-10T00:32:45Z",
         "evidence": {
           "product_id": "JP0177-PPSA34972_00-MAINGAME00000000",
           "official_title": "STRANGER THAN HEAVEN (English/Chinese/Korean/Japanese Ver.)",
@@ -225,7 +225,7 @@
           "https://store.playstation.com/en-tw/concept/10009337",
           "https://store.playstation.com/en-hk/concept/10009337"
         ],
-        "checked_at": "2026-10-09T00:32:49Z",
+        "checked_at": "2026-10-10T00:32:46Z",
         "evidence": null
       },
       "igdb:404063": {
@@ -235,7 +235,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10009461"
         ],
-        "checked_at": "2026-10-09T00:32:50Z",
+        "checked_at": "2026-10-10T00:32:46Z",
         "evidence": {
           "product_id": "UP9000-PPSA19249_00-LAUFEY0000000000",
           "official_title": "God of War Laufey™ (English/Chinese/Korean Ver.)",
@@ -257,7 +257,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10009022"
         ],
-        "checked_at": "2026-10-09T00:32:50Z",
+        "checked_at": "2026-10-10T00:32:47Z",
         "evidence": {
           "product_id": null,
           "concept_id": "10009022",
@@ -278,7 +278,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10016571"
         ],
-        "checked_at": "2026-10-09T00:32:51Z",
+        "checked_at": "2026-10-10T00:32:47Z",
         "evidence": {
           "product_id": null,
           "concept_id": "10016571",
@@ -299,7 +299,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10018186"
         ],
-        "checked_at": "2026-10-09T00:32:52Z",
+        "checked_at": "2026-10-10T00:32:49Z",
         "evidence": {
           "product_id": "JP0101-PPSA35399_00-CVBCAPP000000000",
           "official_title": "Castlevania: Belmont's Curse (Simplified Chinese, English, Korean, Japanese, Traditional Chinese)",
@@ -325,7 +325,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10011107"
         ],
-        "checked_at": "2026-10-09T00:32:53Z",
+        "checked_at": "2026-10-10T00:32:50Z",
         "evidence": {
           "product_id": "JP0005-PPSA23593_00-APPLICATION00000",
           "official_title": "Persona 4 Revival (English/Chinese/Korean/Japanese Ver.)",
@@ -347,7 +347,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10004067"
         ],
-        "checked_at": "2026-10-09T00:32:54Z",
+        "checked_at": "2026-10-10T00:32:51Z",
         "evidence": {
           "product_id": "EP9000-PPSA05719_00-UNTILDAWN2000001",
           "official_title": "Until Dawn 2 (English/Chinese/Korean/Japanese Ver.)",
@@ -370,7 +370,7 @@
           "https://store.playstation.com/en-tw/concept/10017364",
           "https://store.playstation.com/en-hk/concept/10017364"
         ],
-        "checked_at": "2026-10-09T00:32:55Z",
+        "checked_at": "2026-10-10T00:32:52Z",
         "evidence": null
       },
       "igdb:314449": {
@@ -380,7 +380,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10012485"
         ],
-        "checked_at": "2026-10-09T00:32:56Z",
+        "checked_at": "2026-10-10T00:32:53Z",
         "evidence": {
           "product_id": null,
           "concept_id": "10012485",
@@ -402,7 +402,7 @@
           "https://store.playstation.com/en-tw/concept/10014259",
           "https://store.playstation.com/en-hk/concept/10014259"
         ],
-        "checked_at": "2026-10-09T00:32:57Z",
+        "checked_at": "2026-10-10T00:32:54Z",
         "evidence": null
       },
       "igdb:361880": {
@@ -413,7 +413,7 @@
           "https://store.playstation.com/en-tw/concept/10016673",
           "https://store.playstation.com/en-hk/concept/10016673"
         ],
-        "checked_at": "2026-10-09T00:32:58Z",
+        "checked_at": "2026-10-10T00:32:55Z",
         "evidence": null
       },
       "igdb:196954": {
@@ -423,7 +423,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10005051"
         ],
-        "checked_at": "2026-10-09T00:32:58Z",
+        "checked_at": "2026-10-10T00:32:56Z",
         "evidence": {
           "product_id": "EP6665-PPSA09259_00-HIU0000000000000",
           "official_title": "Hell is Us (Simplified Chinese, English, Korean, Japanese)",
@@ -456,7 +456,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10005176"
         ],
-        "checked_at": "2026-10-09T00:33:00Z",
+        "checked_at": "2026-10-10T00:32:57Z",
         "evidence": {
           "product_id": "UP0102-PPSA07862_00-MHWILDSSTANDARD0",
           "official_title": "Monster Hunter Wilds (Simplified Chinese, English, Korean, Thai, Japanese, Traditional Chinese)",
@@ -483,7 +483,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10009571"
         ],
-        "checked_at": "2026-10-09T00:33:00Z",
+        "checked_at": "2026-10-10T00:32:58Z",
         "evidence": {
           "product_id": "EB0757-PPSA20548_00-0286086241569047",
           "official_title": "Eriksholm: The Stolen Dream (Simplified Chinese, English, Japanese)",
@@ -512,7 +512,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/229500"
         ],
-        "checked_at": "2026-10-09T00:33:01Z",
+        "checked_at": "2026-10-10T00:32:59Z",
         "evidence": {
           "product_id": "HP0102-PPSA04290_00-BH2R000000000001",
           "official_title": "RESIDENT EVIL 2 (Simplified Chinese, English, Korean, Thai, Japanese, Traditional Chinese)",
@@ -539,15 +539,7 @@
         "attempted_urls": [
           "https://store.playstation.com/en-tw/concept/10001029"
         ],
-        "checked_at": "2026-10-09T00:33:01Z",
-        "evidence": null
-      },
-      "igdb:115060": {
-        "igdb_id": 115060,
-        "name_en": "Dragon's Dogma II",
-        "status": "budget_exhausted",
-        "attempted_urls": [],
-        "checked_at": "2026-10-09T00:33:01Z",
+        "checked_at": "2026-10-10T00:33:00Z",
         "evidence": null
       }
     }
@@ -555,11 +547,11 @@
   "exclusivity_counts": {
     "confirmed": 1,
     "listed_only": 2,
-    "multi_platform": 26,
+    "multi_platform": 25,
     "unknown": 0
   },
-  "target_slot": "2026-10-09T00:30:00Z",
+  "target_slot": "2026-10-10T00:30:00Z",
   "trigger_source": "cloudflare",
-  "run_id": "37865194144",
+  "run_id": "38009399262",
   "backend_mirror": "published"
 }
