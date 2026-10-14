@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T00:32:15Z",
+  "generated_at": "2026-10-14T00:32:41Z",
   "window": {
-    "start": "2026-10-13",
-    "end": "2027-10-13",
+    "start": "2026-10-14",
+    "end": "2027-10-14",
     "end_inclusive": false,
     "time_zone": "Asia/Taipei"
   },
@@ -11,8 +11,8 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8787,
-    "request_count": 89,
+    "discovery_release_count": 8822,
+    "request_count": 90,
     "retry_count": 0,
     "platform_ids_verified": [
       130,
@@ -23,154 +23,6 @@
     "release_date_policy": "igdb_taipei_v1"
   },
   "games": [
-    {
-      "id": "igdb:361833",
-      "igdb_id": 361833,
-      "display_name": "不朽遺志 Valor Mortis",
-      "name_en": "Valor Mortis",
-      "name_zh_tw": "不朽遺志 Valor Mortis",
-      "name_source": "Steam appdetails (schinese)",
-      "name_url": "https://store.steampowered.com/app/2828710/?l=schinese",
-      "name_evidence": {
-        "provider": "steam_appdetails",
-        "locale": "zh-Hans",
-        "converted": true,
-        "igdb_id": 361833,
-        "name_en": "Valor Mortis",
-        "steam_appid": 2828710,
-        "identity_source": "IGDB external_games Steam",
-        "language": "schinese"
-      },
-      "steam_appid": 2828710,
-      "hypes": 88,
-      "hypes_status": "available",
-      "popularity_status": "qualified",
-      "platforms": [
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        }
-      ],
-      "known_platforms": [
-        {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        },
-        {
-          "id": 169,
-          "name": "Xbox Series X|S"
-        }
-      ],
-      "platform_language_support": {
-        "PS5": {
-          "status": "unknown",
-          "region": null,
-          "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
-          },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
-        }
-      },
-      "platform_editions": {},
-      "game_modes": [
-        {
-          "id": 1,
-          "name": "Single player"
-        }
-      ],
-      "multiplayer_modes": [],
-      "platform_data_complete": true,
-      "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
-        "source": "IGDB",
-        "url": "https://www.igdb.com/games/valor-mortis"
-      },
-      "releases": [
-        {
-          "date": "2026-10-13",
-          "platform": "PS5",
-          "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "igdb_timestamp_taipei",
-          "source_date": "2026-10-13",
-          "source_timestamp": 1791849600,
-          "source_region": "worldwide",
-          "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2026-10-13",
-          "timezone_status": "converted_to_taipei",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
-          "official_product_id": null,
-          "official_concept_id": null,
-          "official_release_time_utc": null
-        }
-      ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/coaazc.jpg",
-      "url": "https://www.igdb.com/games/valor-mortis",
-      "websites": [
-        {
-          "url": "https://bsky.app/profile/valormortis.bsky.social"
-        },
-        {
-          "url": "https://store.playstation.com/en-us/concept/10016571/"
-        },
-        {
-          "url": "https://discord.gg/valormortis"
-        },
-        {
-          "url": "https://www.reddit.com/r/ValorMortis/"
-        },
-        {
-          "url": "https://www.xbox.com/en-US/games/store/valor-mortis/9p861v1542bl"
-        },
-        {
-          "url": "https://www.twitch.tv/directory/category/valor-mortis"
-        },
-        {
-          "url": "https://www.facebook.com/people/Valor-Mortis/61579025174559/"
-        },
-        {
-          "url": "https://store.steampowered.com/app/2828710"
-        },
-        {
-          "url": "https://www.instagram.com/valormortisgame/"
-        },
-        {
-          "url": "https://x.com/ValorMortis"
-        },
-        {
-          "url": "https://valormortis.com"
-        }
-      ],
-      "nintendo_url": null,
-      "playstation_url": "https://store.playstation.com/zh-hant-tw/concept/10016571",
-      "platform_urls": {
-        "PS5": "https://store.playstation.com/zh-hant-tw/concept/10016571"
-      },
-      "game_type": "main_game",
-      "sexual_content_screened": true,
-      "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
-      "first_observed_at": "2026-10-04T13:58:41Z"
-    },
     {
       "id": "igdb:389434",
       "igdb_id": 389434,
@@ -186,7 +38,7 @@
         "igdb_id": 389434,
         "name_en": "Castlevania: Belmont's Curse"
       },
-      "hypes": 77,
+      "hypes": 80,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -420,7 +272,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -670,7 +522,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -894,236 +746,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
-      "first_observed_at": "2026-10-03T16:40:12Z"
-    },
-    {
-      "id": "igdb:196954",
-      "igdb_id": 196954,
-      "display_name": "Hell is Us 地獄即我們",
-      "name_en": "Hell is Us",
-      "name_zh_tw": "Hell is Us 地獄即我們",
-      "name_source": "Steam appdetails (schinese)",
-      "name_url": "https://store.steampowered.com/app/1620730/?l=schinese",
-      "name_evidence": {
-        "provider": "steam_appdetails",
-        "locale": "zh-Hans",
-        "converted": true,
-        "igdb_id": 196954,
-        "name_en": "Hell is Us",
-        "steam_appid": 1620730,
-        "identity_source": "IGDB external_games Steam",
-        "language": "schinese"
-      },
-      "steam_appid": 1620730,
-      "hypes": 146,
-      "hypes_status": "available",
-      "popularity_status": "qualified",
-      "platforms": [
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        },
-        {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
-        }
-      ],
-      "known_platforms": [
-        {
-          "id": 6,
-          "name": "PC (Microsoft Windows)"
-        },
-        {
-          "id": 167,
-          "name": "PlayStation 5",
-          "code": "PS5"
-        },
-        {
-          "id": 169,
-          "name": "Xbox Series X|S"
-        },
-        {
-          "id": 508,
-          "name": "Nintendo Switch 2",
-          "code": "NS2"
-        }
-      ],
-      "platform_language_support": {
-        "PS5": {
-          "status": "unknown",
-          "region": null,
-          "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": null,
-            "chinese": null
-          },
-          "supported_languages": [],
-          "complete": false,
-          "source": null,
-          "source_url": null,
-          "checked_at": null,
-          "evidence_type": null
-        },
-        "NS2": {
-          "status": "confirmed",
-          "region": "united_kingdom",
-          "languages": {
-            "tchinese": null,
-            "schinese": null,
-            "english": true,
-            "chinese": true
-          },
-          "supported_languages": [
-            {
-              "code": "ja",
-              "name": "日文"
-            },
-            {
-              "code": "en",
-              "name": "英文"
-            },
-            {
-              "code": "es",
-              "name": "西班牙文"
-            },
-            {
-              "code": "fr",
-              "name": "法文"
-            },
-            {
-              "code": "de",
-              "name": "德文"
-            },
-            {
-              "code": "it",
-              "name": "義大利文"
-            },
-            {
-              "code": "pt",
-              "name": "葡萄牙文"
-            },
-            {
-              "code": "ru",
-              "name": "俄文"
-            },
-            {
-              "code": "ko",
-              "name": "韓文"
-            },
-            {
-              "code": "zh",
-              "name": "中文"
-            },
-            {
-              "code": "pl",
-              "name": "波蘭文"
-            }
-          ],
-          "complete": true,
-          "source": "Nintendo UK 官方商品語言資料",
-          "source_url": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-2-games/Hell-is-Us-3182915.html",
-          "checked_at": "2026-10-04T06:05:55Z",
-          "evidence_type": "official_product_languages"
-        }
-      },
-      "platform_editions": {},
-      "game_modes": [
-        {
-          "id": 1,
-          "name": "Single player"
-        }
-      ],
-      "multiplayer_modes": [],
-      "platform_data_complete": true,
-      "exclusivity": {
-        "status": "multi_platform",
-        "platform": null,
-        "source": "IGDB",
-        "url": "https://www.igdb.com/games/hell-is-us"
-      },
-      "releases": [
-        {
-          "date": "2026-10-27",
-          "platform": "NS2",
-          "precision": "day",
-          "region": "worldwide",
-          "source": "IGDB",
-          "date_basis": "igdb_timestamp_taipei",
-          "source_date": "2026-10-27",
-          "source_timestamp": 1793059200,
-          "source_region": "worldwide",
-          "time_zone": "Asia/Taipei",
-          "timestamp_taipei_date": "2026-10-27",
-          "timezone_status": "converted_to_taipei",
-          "taiwan_release_confirmed": false,
-          "official_source_url": null,
-          "official_source_name": null,
-          "official_verified_at": null,
-          "official_product_id": null,
-          "official_concept_id": null,
-          "official_release_time_utc": null
-        }
-      ],
-      "cover_image": "https://images.igdb.com/igdb/image/upload/t_cover_big/co9vum.jpg",
-      "url": "https://www.igdb.com/games/hell-is-us",
-      "websites": [
-        {
-          "url": "https://store.epicgames.com/en-US/p/hell-is-us-b9c06d"
-        },
-        {
-          "url": "https://www.xbox.com/en-US/games/store/hell-is-us/9n9097g0xzmb"
-        },
-        {
-          "url": "https://store.playstation.com/en-us/concept/10005051"
-        },
-        {
-          "url": "https://en.wikipedia.org/wiki/Hell_Is_Us"
-        },
-        {
-          "url": "https://hell-is-us.com/"
-        },
-        {
-          "url": "https://store.steampowered.com/app/1620730"
-        },
-        {
-          "url": "https://youtube.com/Nacon"
-        },
-        {
-          "url": "https://facebook.com/HELLisUSgame"
-        },
-        {
-          "url": "https://www.twitch.tv/directory/category/hell-is-us"
-        },
-        {
-          "url": "https://www.instagram.com/HELLisUSgame"
-        },
-        {
-          "url": "https://twitter.com/HELLisUSgame"
-        },
-        {
-          "url": "https://hellisus.wiki.fextralife.com/Hell_Is_Us_Wiki"
-        },
-        {
-          "url": "https://www.reddit.com/r/HellisUs/"
-        },
-        {
-          "url": "https://discord.gg/vKnb5SBJ4a"
-        },
-        {
-          "url": "https://www.nintendo.com/us/store/products/hell-is-us-switch-2/"
-        }
-      ],
-      "nintendo_url": "https://www.nintendo.com/us/store/products/hell-is-us-switch-2/",
-      "playstation_url": null,
-      "platform_urls": {},
-      "game_type": "main_game",
-      "sexual_content_screened": true,
-      "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1145,7 +768,7 @@
         "language": "tchinese"
       },
       "steam_appid": 4115450,
-      "hypes": 216,
+      "hypes": 215,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -1271,7 +894,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1413,7 +1036,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1431,7 +1054,7 @@
         "igdb_id": 405460,
         "name_en": "The Legend of Zelda: Ocarina of Time"
       },
-      "hypes": 72,
+      "hypes": 73,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -1530,7 +1153,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-13T00:33:06Z",
+        "checked_at": "2026-10-14T00:33:23Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -1579,7 +1202,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1802,7 +1425,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2091,7 +1714,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2266,7 +1889,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2284,7 +1907,7 @@
         "igdb_id": 404044,
         "name_en": "Rayman Legends Retold"
       },
-      "hypes": 58,
+      "hypes": 59,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -2505,7 +2128,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2723,7 +2346,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2996,7 +2619,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3220,7 +2843,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3242,7 +2865,7 @@
         "language": "tchinese"
       },
       "steam_appid": 4814120,
-      "hypes": 92,
+      "hypes": 93,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -3385,7 +3008,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3517,7 +3140,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3652,7 +3275,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3796,7 +3419,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3808,7 +3431,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 61,
+      "hypes": 62,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -3920,7 +3543,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3942,7 +3565,7 @@
         "language": "tchinese"
       },
       "steam_appid": 2590240,
-      "hypes": 109,
+      "hypes": 110,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4075,7 +3698,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4093,7 +3716,7 @@
         "igdb_id": 381235,
         "name_en": "Tomb Raider: Legacy of Atlantis"
       },
-      "hypes": 143,
+      "hypes": 145,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4293,7 +3916,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4305,7 +3928,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 111,
+      "hypes": 112,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4417,7 +4040,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4659,7 +4282,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4849,7 +4472,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4993,7 +4616,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -5173,7 +4796,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-13T00:32:15Z",
+      "checked_at": "2026-10-14T00:32:41Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
