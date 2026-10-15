@@ -35,6 +35,16 @@ python -m nintendo_backend.exclusivity --output-dir output
 
 只有通過月曆資格且尚無已驗證繁中名的遊戲才會查 Steam 名稱備援。必須有 IGDB 明示 Steam 服務的 AppID 或官方 Steam 商品網址；矛盾 AppID 不採用。先查官方 `appdetails` 繁中，再查簡中轉繁；檢查回傳 AppID、正式遊戲類型與實際中文名稱，不能因請求繁中仍回英文／日文就宣告成功。每輪最多 30 次串行請求、90 秒，遇 429 停止，網路失敗保留已有中文名。候選保存名稱來源、語區、身分證據與嘗試時間，下輪優先處理未嘗試或較久未查的遊戲，避免請求額度一直卡在前幾款。這條備援只補名稱，不使用 Steam 的平台、發售日期、Followers 或內容資格。
 
+## 中文簡介與後續更新
+
+公開資料提供 `short_description`、`short_description_en`、`short_description_language`、`short_description_source`、`description_source_url`。官方中文優先；沒有中文時直接顯示 IGDB 英文原文，不自動翻譯。IGDB 優先使用 `summary`，空白時改用 `storyline`；英文同時保存於 `short_description_en`，日文不冒充英文。中文簡體字透過 OpenCC `s2tw` 轉為繁體，僅進行字形轉換。這些欄位只負責介紹，不改變遊戲內支援語言、日期、平台或收錄資格。
+
+簡介階段只處理已符合公開資格的遊戲。官方中文只調查既有發售、語言與名稱登錄檔已綁定同款商品的 Nintendo／PlayStation 台港精確商品網址，不搜尋全網，不把公告清單、豪華版或另一款遊戲的描述套用進來。只有商品身分與實際中文內容都符合才可升級為官方簡介；已知對應以外的主機遊戲使用 IGDB 原文。官方商品文案出現中文與遊戲內新增中文支援是兩件事。
+
+官方中文獨立到期檢查，不會因已有英文介紹或英文未變而永久跳過：未有官方中文且上市前 60 日至上市後 30 日每日查，其餘每週；已有官方中文每週查。已核對的官方文案、商品身分及嘗試時間保存在完整主資料，沿用既有三檔發布流程持久保存。每輪最多 30 次官方請求、90 秒，遇限流停止，較久未查的作品下輪優先；暫時抓取失敗不清空已核實的官方中文。舊機器翻譯不作為中文來源。
+
+`nintendo_refresh_status.json.description_enrichment` 顯示官方中文筆數、請求與失敗數、限流狀態、英文備援數及無介紹數。流程不依賴翻譯 API、翻譯服務金鑰或本地翻譯模型。
+
 ## 自動更新
 
 Cloudflare 的既有控制器每天台灣 **08:30** 派發獨立的 **Collect IGDB console catalog** workflow，原 Cron 字串保持不變。執行入口暫放於已有憑證的 [Twitch 後端 Actions](https://github.com/danielet087/game-trend-radar-twitch-backend/actions/workflows/collect-nintendo.yml)，每次 checkout 本倉庫的最新 `main`。本倉庫管理 IGDB 主機收集程式與測試，不需複製 Secrets，也沒有 GitHub 原生 cron。

@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo
 
 from .chinese_names import names, previous_lookup
 from .game_modes import game_modes, multiplayer_modes
+from .descriptions import PRIVATE_FIELDS as DESCRIPTION_PRIVATE_FIELDS, describe
+from .official_descriptions import candidates as description_candidates
 from .igdb import CollectionError
 from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
@@ -292,6 +294,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "sexual_content_screened": screening["status"] == "screened", "calendar_eligible": not reasons,
               "eligibility_reasons": reasons, "possible_in_window": bool(possible), "checked_at": checked_at,
               "first_observed_at": (previous or {}).get("first_observed_at", checked_at), "raw": deepcopy(game)}
+    result.update(describe(game, previous=previous, official_candidates=description_candidates(
+        game, language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)))
     history = deepcopy((previous or {}).get("platform_history") or [])
     if not isinstance(history, list):
         raise CollectionError("invalid_previous_history")
@@ -328,7 +332,7 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     for row in games.values():
         if row["calendar_eligible"]:
             public.append({key: deepcopy(value) for key, value in row.items()
-                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup"}})
+                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup", *DESCRIPTION_PRIVATE_FIELDS}})
     public.sort(key=lambda row: (min(r["date"] for r in row["releases"]), row["id"]))
     counts = {status: sum(row["popularity_status"] == status for row in games.values())
               for status in ("qualified", "observe", "below_threshold", "unknown")}
