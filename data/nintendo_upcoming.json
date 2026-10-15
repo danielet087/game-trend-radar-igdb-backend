@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-14T00:32:41Z",
+  "generated_at": "2026-10-15T00:32:16Z",
   "window": {
-    "start": "2026-10-14",
-    "end": "2027-10-14",
+    "start": "2026-10-15",
+    "end": "2027-10-15",
     "end_inclusive": false,
     "time_zone": "Asia/Taipei"
   },
@@ -11,7 +11,7 @@
     "provider": "IGDB",
     "complete": true,
     "hypes_threshold": 30,
-    "discovery_release_count": 8822,
+    "discovery_release_count": 8825,
     "request_count": 90,
     "retry_count": 0,
     "platform_ids_verified": [
@@ -38,7 +38,7 @@
         "igdb_id": 389434,
         "name_en": "Castlevania: Belmont's Curse"
       },
-      "hypes": 80,
+      "hypes": 82,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -272,7 +272,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -522,7 +522,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -534,7 +534,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 30,
+      "hypes": 31,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -746,7 +746,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -768,7 +768,7 @@
         "language": "tchinese"
       },
       "steam_appid": 4115450,
-      "hypes": 215,
+      "hypes": 219,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -894,7 +894,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1036,7 +1036,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -1153,7 +1153,7 @@
         "source": "Nintendo official",
         "url": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-ocarina-of-time-switch-2/",
         "evidence": "Nintendo Switch 2 Exclusive",
-        "checked_at": "2026-10-14T00:33:23Z",
+        "checked_at": "2026-10-15T00:32:54Z",
         "evidence_title": "The Legend of Zelda: Ocarina of Time – Nintendo Switch 2 Exclusive - Nintendo Official Site",
         "evidence_method": "product_metadata"
       },
@@ -1202,7 +1202,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1425,7 +1425,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1714,7 +1714,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -1889,7 +1889,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2128,7 +2128,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2346,7 +2346,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2619,7 +2619,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -2843,7 +2843,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -3008,7 +3008,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3020,7 +3020,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 111,
+      "hypes": 114,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -3140,7 +3140,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3275,7 +3275,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3419,7 +3419,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3543,7 +3543,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3698,7 +3698,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -3716,7 +3716,7 @@
         "igdb_id": 381235,
         "name_en": "Tomb Raider: Legacy of Atlantis"
       },
-      "hypes": 145,
+      "hypes": 146,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -3916,7 +3916,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4040,7 +4040,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4058,7 +4058,7 @@
         "igdb_id": 348210,
         "name_en": "Persona 4 Revival"
       },
-      "hypes": 71,
+      "hypes": 72,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4282,7 +4282,7 @@
       "game_type": "remake",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4304,7 +4304,7 @@
         "language": "schinese"
       },
       "steam_appid": 3255110,
-      "hypes": 44,
+      "hypes": 45,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4472,7 +4472,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     },
     {
@@ -4484,7 +4484,7 @@
       "name_source": "IGDB name",
       "name_url": null,
       "name_evidence": null,
-      "hypes": 151,
+      "hypes": 152,
       "hypes_status": "available",
       "popularity_status": "qualified",
       "platforms": [
@@ -4616,7 +4616,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-04T13:58:41Z"
     },
     {
@@ -4796,7 +4796,7 @@
       "game_type": "main_game",
       "sexual_content_screened": true,
       "calendar_eligible": true,
-      "checked_at": "2026-10-14T00:32:41Z",
+      "checked_at": "2026-10-15T00:32:16Z",
       "first_observed_at": "2026-10-03T16:40:12Z"
     }
   ]
