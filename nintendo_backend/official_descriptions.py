@@ -104,7 +104,11 @@ def candidates(raw_game, *, language_registry=None, release_registry=None, name_
         product = row.get("product_id")
         if platform in {"NS", "NS2"} and row.get("region", "taiwan") in {"taiwan", "hong_kong"} and isinstance(product, str) and re.fullmatch(r"[0-9]{14}", product):
             region = "TW" if row.get("region", "taiwan") == "taiwan" else "HK"
-            urls.append(f"https://ec.nintendo.com/{region}/zh/titles/{product}")
+            # Nintendo's reviewed NSUID identifies this same product. A
+            # regional storefront may not exist yet, so try the other Chinese
+            # storefront for this exact ID rather than searching by title.
+            for candidate_region in (region, "HK" if region == "TW" else "TW"):
+                urls.append(f"https://ec.nintendo.com/{candidate_region}/zh/titles/{product}")
         for value in urls:
             url = _official_url(value)
             if not url or (platform == "PS5") != ("playstation.com" in urlsplit(url).hostname):
@@ -211,7 +215,19 @@ def _jsonld_rows(document):
             yield from _jsonld_rows(document["mainEntity"])
 
 
-def parse_description(html, url, game_name, titles=None):
+def _platform_matches(value, expected):
+    """A declared page platform cannot contradict the reviewed native version."""
+    if not expected or value is None:
+        return True  # Existing exact product-registry identity still applies.
+    names = value if isinstance(value, list) else [value]
+    normalized = {"".join(char for char in unicodedata.normalize("NFKC", name).casefold() if char.isalnum())
+                  for name in names if isinstance(name, str)}
+    allowed = {"NS": {"nintendoswitch"}, "NS2": {"nintendoswitch2"},
+               "PS5": {"playstation5", "ps5"}}.get(expected, set())
+    return bool(normalized & allowed)
+
+
+def parse_description(html, url, game_name, titles=None, *, platform=None):
     """Extract Chinese text only after exact title or Sony product-ID matching."""
     safe = _official_url(url)
     if not safe or not isinstance(html, str) or len(html.encode("utf-8")) > MAX_HTML_BYTES:
@@ -239,8 +255,11 @@ def parse_description(html, url, game_name, titles=None):
                 if not any(value in {"Product", "VideoGame"} for value in types if isinstance(value, str)):
                     continue
                 title, text = row.get("name"), _clean(row.get("description"))
-                if _normalize_title(title) in aliases and text:
-                    extracted.append((title, text))
+                if _normalize_title(title) in aliases:
+                    if not _platform_matches(row.get("gamePlatform"), platform):
+                        return None
+                    if text:
+                        extracted.append((title, text))
         elif product_id and isinstance(document, dict):
             if (not isinstance(document.get("args"), dict) or document["args"].get("productId") != product_id
                     or not isinstance(document.get("overrides"), dict)
@@ -254,6 +273,8 @@ def parse_description(html, url, game_name, titles=None):
                     or row.get("type") not in {None, "GAME"} or row.get("topCategory") not in {None, "GAME"}
                     or row.get("storeDisplayClassification") not in {None, "FULL_GAME"}):
                 continue
+            if not _platform_matches(row.get("platforms"), platform):
+                return None
             edition = row.get("edition", {})
             if not isinstance(edition, dict) or edition.get("type") not in {None, "STANDARD"} or edition.get("name") not in {None, "", "Standard Edition"}:
                 continue
@@ -345,7 +366,7 @@ class OfficialDescriptionClient:
                 continue
             html = self._fetch(url)
             if html:
-                result = parse_description(html, url, raw_game["name"], row.get("titles"))
+                result = parse_description(html, url, raw_game["name"], row.get("titles"), platform=row["platform"])
                 if result:
                     return result
             if self.stopped:
