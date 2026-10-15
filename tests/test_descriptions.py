@@ -207,3 +207,67 @@ def test_independent_official_refresh_keeps_collection_time_and_uses_actual_chec
     assert row["description_official"]["checked_at"] == checked
     assert row["description_lookup"]["checked_at"] == checked
     assert public["games"][0]["short_description_source"] == "official_zh_tw"
+
+
+def test_verified_traditional_official_copy_preserves_proper_names(monkeypatch):
+    url = "https://ec.nintendo.com/HK/zh/titles/70010000000001"
+    source = {"url": url, "platform": "NS", "titles": ["A family adventure"]}
+    monkeypatch.setattr("nintendo_backend.descriptions.candidates", lambda *_args, **_kwargs: [source])
+    text = "居住在科奇里森林的少年林克，踏上全新的冒險。"
+
+    class Official:
+        request_count = 0
+
+        def lookup(self, raw, sources):
+            self.request_count += 1
+            return {"text": text, "source_url": url, "provider": "Nintendo", "official_title": raw["name"]}
+
+    master, public, _ = documents()
+    enrich_documents(master, public, official_client=Official())
+    assert public["games"][0]["short_description"] == text
+    assert public["games"][0]["short_description_source"] == "official_zh_tw"
+    assert master["games"]["igdb:12345"]["description_official"]["text"] == text
+    assert "科奇裡" not in public["games"][0]["short_description"]
+
+
+@pytest.mark.parametrize(("language", "original", "saved", "expected", "source"), [
+    ("zh-Hant", "居住在科奇里森林的少年林克。", "居住在科奇裡森林的少年林克。", "居住在科奇里森林的少年林克。", "official_zh_tw"),
+    ("zh-Hant", "居住在科奇里森林的少年林克。", "居住在科奇里森林的少年林克。", "居住在科奇里森林的少年林克。", "official_zh_tw"),
+    ("zh-Hans", "与朋友一起探索这个岛屿。", "與朋友一起探索這個島嶼。", "與朋友一起探索這個島嶼。", "official_schinese_converted"),
+])
+def test_cached_official_script_handling_repairs_legacy_hant_and_keeps_hans_conversion(language, original, saved, expected, source):
+    url = "https://ec.nintendo.com/HK/zh/titles/70010000000001"
+    candidate = {"url": url, "platform": "NS", "titles": ["A family adventure"]}
+    state = {"igdb_id": 12345, "name_en": game()["name"], "text": saved, "original_text": original,
+             "source_url": url, "provider": "Nintendo", "official_title": game()["name"],
+             "source_language": language, "checked_at": CHECKED}
+    row = describe(game(), previous={"description_official": state}, official_candidates=[candidate])
+    assert row["short_description"] == row["description_official"]["text"] == expected
+    assert row["short_description_source"] == source
+    invalid = deepcopy(state)
+    invalid["text"] = "任意變更的其他介紹。"
+    assert "description_official" not in describe(game(), previous={"description_official": invalid}, official_candidates=[candidate])
+
+
+def test_failed_official_refresh_keeps_and_repairs_legacy_traditional_cache(monkeypatch):
+    url = "https://ec.nintendo.com/HK/zh/titles/70010000000001"
+    candidate = {"url": url, "platform": "NS", "titles": ["A family adventure"]}
+    monkeypatch.setattr("nintendo_backend.descriptions.candidates", lambda *_args, **_kwargs: [candidate])
+    monkeypatch.setattr("nintendo_backend.catalog.description_candidates", lambda *_args, **_kwargs: [candidate])
+    master, public, _ = documents()
+    state = {"igdb_id": 12345, "name_en": game()["name"], "text": "居住在科奇裡森林的少年林克。",
+             "original_text": "居住在科奇里森林的少年林克。", "source_url": url, "provider": "Nintendo",
+             "official_title": game()["name"], "source_language": "zh-Hant", "checked_at": CHECKED}
+    master["games"]["igdb:12345"]["description_official"] = state
+
+    class Unavailable:
+        request_count = 0
+
+        def lookup(self, raw, sources):
+            self.request_count += 1
+            raise RuntimeError("temporary optional-stage failure")
+
+    enrich_documents(master, public, official_client=Unavailable(), checked_at="2026-10-11T16:05:00Z")
+    assert public["games"][0]["short_description"] == state["original_text"]
+    assert public["games"][0]["short_description_source"] == "official_zh_tw"
+    assert master["games"]["igdb:12345"]["description_official"]["text"] == state["original_text"]

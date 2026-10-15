@@ -37,7 +37,7 @@ python -m nintendo_backend.exclusivity --output-dir output
 
 ## 中文簡介與後續更新
 
-公開資料提供 `short_description`、`short_description_en`、`short_description_language`、`short_description_source`、`description_source_url`。官方中文優先；沒有中文時直接顯示 IGDB 英文原文，不自動翻譯。IGDB 優先使用 `summary`，空白時改用 `storyline`；英文同時保存於 `short_description_en`，日文不冒充英文。中文簡體字透過 OpenCC `s2tw` 轉為繁體，僅進行字形轉換。這些欄位只負責介紹，不改變遊戲內支援語言、日期、平台或收錄資格。
+公開資料提供 `short_description`、`short_description_en`、`short_description_language`、`short_description_source`、`description_source_url`。官方中文優先；沒有中文時直接顯示 IGDB 英文原文，不自動翻譯。IGDB 優先使用 `summary`，空白時改用 `storyline`；英文同時保存於 `short_description_en`，日文不冒充英文。官方繁中原文保留原字與專名，不再轉字；中文簡體字透過 OpenCC `s2tw` 轉為繁體，僅進行字形轉換。這些欄位只負責介紹，不改變遊戲內支援語言、日期、平台或收錄資格。
 
 簡介階段只處理已符合公開資格的遊戲。官方中文只調查既有發售、語言與名稱登錄檔已綁定同款商品的 Nintendo／PlayStation 台港精確商品網址，不搜尋全網，不把公告清單、豪華版或另一款遊戲的描述套用進來。Nintendo 已核對的 14 位商品 ID 會先查登錄地區，再以相同商品 ID 查另一個台灣／香港中文商品頁，避免台灣頁尚未提供時漏掉既有香港中文。商品標題仍須匹配已核對名稱；頁面明列主機時也不能與 NS／NS2／PS5 版本矛盾。使用商品頁 JSON-LD 的完整介紹，不能只因搜尋結果有中文就當成已抓取成功。只有商品身分與實際中文內容都符合才可升級為官方簡介；已知對應以外的主機遊戲使用 IGDB 原文。官方商品文案出現中文與遊戲內新增中文支援是兩件事。
 
