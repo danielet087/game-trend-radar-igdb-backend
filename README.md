@@ -2,6 +2,18 @@
 
 儲存庫：`danielet087/game-trend-radar-igdb-backend`。目前處理 Nintendo Switch（NS）、Nintendo Switch 2（NS2）與 PlayStation 5（PS5）的新作候選、人氣條件及平台別發售資料。公開月曆沿用 `danielet087/game-trend-radar`，Steam 與 IGDB 的原始人氣數不混成同一種分數。
 
+## Turso 主庫模式
+
+實際執行流程位於 Twitch 後端。該儲存庫變數 `RADAR_DATABASE_PRIMARY=1` 時，
+每日回條與完整候選均從 Turso 主庫讀取；收集後先以版本檢查原子保存 master、
+upcoming 與 `persisted` 回條，再由共用發布器輸出主庫完整只讀快照。
+`persisted` 只代表主庫保存成功；Git 交付成功另有實際 commit 回條，失敗留在待發布佇列，
+不重複執行已完成的每日收集。
+主庫失敗不會改讀 Git 或以空候選重新開始。原始證據與壓縮主檔完整保存，
+人工核對的名稱／語言／商品登錄檔繼續作為 Git 版本化設定。
+`RADAR_DATABASE_MIGRATION_PAUSE=1` 可於切換期間暫停實際執行 workflow。
+下文的前端持久化與後端鏡像行為，僅適用主庫模式尚未啟用的相容路徑。
+
 ## 收錄規則
 
 - 每天重新調查未來 365 天的 NS／NS2／PS5 原生版本；使用平台別發售記錄，移植版不受遊戲全球首發日期較早影響。

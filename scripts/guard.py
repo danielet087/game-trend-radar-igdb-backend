@@ -50,7 +50,21 @@ def decide(*, now: datetime, requested: str = "", source: str = "manual",
     if receipt is not None:
         if not isinstance(receipt, dict) or receipt.get("schema_version") != 1:
             raise ValueError("invalid_publication_receipt")
-        if receipt.get("complete") is True and receipt.get("status") == "published":
+        if receipt.get("status") == "persisted":
+            # The primary collection is complete even while its separate static
+            # projection remains pending; do not recollect the same daily slot.
+            run_id = receipt.get("run_id")
+            if (receipt.get("complete") is not True or receipt.get("storage_backend") != "turso"
+                    or receipt.get("state_persisted") is not True
+                    or not isinstance(run_id, str) or not re.fullmatch(r"[0-9]+", run_id)):
+                raise ValueError("invalid_primary_collection_receipt")
+            generated = parse_utc(receipt.get("generated_at"))
+            committed = parse_utc(receipt.get("committed_at"))
+            recorded_target = parse_utc(receipt.get("target_slot"))
+            if recorded_target > generated or generated > committed or committed > now:
+                raise ValueError("invalid_primary_collection_receipt")
+            already_published = generated.astimezone(TAIPEI).date() == now.astimezone(TAIPEI).date()
+        elif receipt.get("complete") is True and receipt.get("status") == "published":
             run_id = receipt.get("published_run_id")
             if not isinstance(run_id, str) or not re.fullmatch(r"[0-9]+", run_id):
                 raise ValueError("invalid_publication_receipt")
@@ -77,8 +91,12 @@ def main(argv: list[str] | None = None) -> int:
         target_slot(now, args.target_slot, args.trigger_source)
         if args.force and args.trigger_source != "manual":
             raise ValueError("force_requires_manual")
-        client = GitHub(os.environ.get("FRONTEND_REPO_TOKEN", "").strip())
-        receipt = client.read_json(FRONTEND, "data/nintendo_refresh_status.json")
+        if os.environ.get("RADAR_DATABASE_PRIMARY") == "1":
+            from radar_core.storage.primary import read_json
+            receipt = read_json(FRONTEND, "data/nintendo_refresh_status.json")
+        else:
+            client = GitHub(os.environ.get("FRONTEND_REPO_TOKEN", "").strip())
+            receipt = client.read_json(FRONTEND, "data/nintendo_refresh_status.json")
         result = decide(now=now, requested=args.target_slot, source=args.trigger_source,
                         force=args.force, receipt=receipt)
         print(json.dumps(result, ensure_ascii=False))

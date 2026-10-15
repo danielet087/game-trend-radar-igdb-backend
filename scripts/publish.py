@@ -297,6 +297,10 @@ def publish(bundle: dict[str, dict], client: GitHub, *, now: datetime, slot: str
         raise PublishError("slot_after_collection")
     if not isinstance(run_id, str) or not re.fullmatch(r"[0-9]+", run_id):
         raise PublishError("invalid_run_id")
+    if os.environ.get("RADAR_DATABASE_PRIMARY") == "1":
+        from scripts.primary_publication import publish_primary
+        return publish_primary(bundle, client, now=now, slot=normalized_slot,
+                               trigger_source=trigger_source, run_id=run_id)
     # Frontend is the durable source of master state and must be writable first.
     client.preflight(FRONTEND)
     backend_mirror = "published"
@@ -353,7 +357,8 @@ def main(argv: list[str] | None = None) -> int:
                 handle.write("### IGDB 主機月曆資料發布\n\n")
                 handle.write(f"- 候選：{result['candidate_count']} 款\n- 月曆：{result['public_count']} 款\n")
                 handle.write(f"- IGDB 後端鏡像：{result['backend_mirror']}\n")
-                handle.write("- 續查狀態：前端 nintendo_master.json（已持久化）\n")
+                handle.write("- 續查狀態：Turso 主庫（已持久化）\n" if result.get("backend_mirror") == "database"
+                             else "- 續查狀態：前端 nintendo_master.json（已持久化）\n")
         return 0
     except PublishError as error:
         failure = {"status": "error", "reason": error.reason, "http_status": error.status}
