@@ -166,7 +166,10 @@ def _copy_to_public(row, public):
 
 
 def enrich_documents(master, catalog, *, official_client=None,
-                     language_registry=None, release_registry=None, name_registry=None):
+                     language_registry=None, release_registry=None, name_registry=None, checked_at=None):
+    # Store/product refreshes can happen independently of the last IGDB run.
+    # Keep their actual check time without rewriting the collection timestamp.
+    checked_at = checked_at or master["generated_at"]
     stats = {"official_chinese_count": 0, "official_failure_count": 0}
     # Oldest official attempts go first so a bounded optional client rotates fairly.
     pending = sorted(catalog["games"], key=lambda row: (
@@ -176,7 +179,7 @@ def enrich_documents(master, catalog, *, official_client=None,
         sources = candidates(game, language_registry=language_registry, release_registry=release_registry,
                              name_registry=name_registry)
         urls = [source["url"] for source in sources]
-        if official_client is not None and _is_due(row, urls, master["generated_at"]):
+        if official_client is not None and _is_due(row, urls, checked_at):
             before = getattr(official_client, "request_count", 0)
             try:
                 found = official_client.lookup(game, sources) if sources else None
@@ -192,14 +195,14 @@ def enrich_documents(master, catalog, *, official_client=None,
                     "text": _S2TW.convert(source_text), "original_text": source_text,
                     "source_url": found.get("source_url"), "provider": found.get("provider"),
                     "official_title": found.get("official_title"), "source_language": "zh-Hant",
-                    "checked_at": master["generated_at"]}
+                    "checked_at": checked_at}
                 if _cached_official(game, {"description_official": official}, sources):
                     row["description_official"] = official
                     valid_official = True
             # Do not mark a request-budget skip as checked; it gets priority next run.
             if not sources or after > before:
                 row["description_lookup"] = {"igdb_id": game["id"], "name_en": game["name"].strip(),
-                    "checked_at": master["generated_at"], "urls": urls,
+                    "checked_at": checked_at, "urls": urls,
                     "status": "confirmed" if valid_official else "unavailable" if sources else "no_verified_official_url"}
         # Re-evaluate official sources independently of IGDB English changes.
         row.update(describe(game, previous=row, official_candidates=sources))

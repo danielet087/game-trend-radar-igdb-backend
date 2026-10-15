@@ -184,3 +184,26 @@ def test_chinese_middle_dot_is_not_japanese_but_actual_kana_is():
     assert row["short_description_language"] == "zh-TW"
     assert row["short_description_en"] == ""
     assert describe(game(summary="《真・三國無雙》の冒険です。"))["short_description_language"] == "ja"
+
+
+def test_independent_official_refresh_keeps_collection_time_and_uses_actual_check_time(monkeypatch):
+    url = "https://ec.nintendo.com/HK/zh/titles/70010000000001"
+    source = {"url": url, "platform": "NS", "titles": ["A family adventure"]}
+    monkeypatch.setattr("nintendo_backend.descriptions.candidates", lambda *_args, **_kwargs: [source])
+    checked = "2026-10-03T20:00:00Z"
+
+    class Official:
+        request_count = 0
+
+        def lookup(self, raw, sources):
+            self.request_count += 1
+            return {"text": "與朋友一起探索未知島嶼。", "source_url": url,
+                    "provider": "Nintendo", "official_title": raw["name"]}
+
+    master, public, _ = documents()
+    enrich_documents(master, public, official_client=Official(), checked_at=checked)
+    row = master["games"]["igdb:12345"]
+    assert master["generated_at"] == public["generated_at"] == CHECKED
+    assert row["description_official"]["checked_at"] == checked
+    assert row["description_lookup"]["checked_at"] == checked
+    assert public["games"][0]["short_description_source"] == "official_zh_tw"
