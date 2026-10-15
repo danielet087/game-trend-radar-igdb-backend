@@ -17,6 +17,8 @@ from .languages import load_combined_registry as load_language_registry
 from .taiwan_releases import load_combined_registry as load_release_registry
 from .playstation import PlayStationStoreClient
 from .persistence import decode_master
+from .descriptions import enrich_documents as enrich_descriptions
+from .official_descriptions import OfficialDescriptionClient
 
 GAME_FIELDS = (
     "id,name,hypes,url,category,game_type.type,status,game_status.status,summary,storyline,"
@@ -54,7 +56,7 @@ def load_existing(path):
 
 def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
             name_registry=None, name_client=None, release_registry=None, language_registry=None,
-            playstation_client=None):
+            playstation_client=None, official_description_client=None):
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
@@ -116,6 +118,9 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
         status["playstation_investigation"] = {"review_only": True,
             **playstation_client.investigate(investigation_games)}
         master["playstation_investigation"] = deepcopy(status["playstation_investigation"])
+    status["description_enrichment"] = enrich_descriptions(
+        master, catalog, official_client=official_description_client,
+        language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)
     return master, catalog, status
 
 
@@ -152,10 +157,15 @@ def main(argv=None):
         language_registry = load_language_registry(args.nintendo_languages, args.playstation_languages)
         client = IGDBClient(os.environ.get("TWITCH_CLIENT_ID", ""), os.environ.get("TWITCH_CLIENT_SECRET", ""))
         start = args.today or datetime.now(ZoneInfo("Asia/Taipei")).date()
-        master, catalog, status = collect(client, start=start, previous=previous,
-                                         name_registry=name_registry, name_client=SteamNameClient(),
-                                         release_registry=release_registry, language_registry=language_registry,
-                                         playstation_client=PlayStationStoreClient())
+        official_descriptions = OfficialDescriptionClient()
+        try:
+            master, catalog, status = collect(client, start=start, previous=previous,
+                                             name_registry=name_registry, name_client=SteamNameClient(),
+                                             release_registry=release_registry, language_registry=language_registry,
+                                             playstation_client=PlayStationStoreClient(),
+                                             official_description_client=official_descriptions)
+        finally:
+            official_descriptions.close()
         # All API, completeness and qualification gates have passed before any data write.
         write_json_atomic(out / "nintendo_master.json", master)
         write_json_atomic(out / "nintendo_upcoming.json", catalog)
