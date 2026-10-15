@@ -112,15 +112,22 @@ def _cached_official(game, previous, sources):
         return None
     source, text = clean_text(state.get("original_text")), clean_text(state.get("text"))
     bound = next((row for row in sources if row.get("url") == state.get("source_url")), None)
+    language = state.get("source_language", "zh-Hant")
+    converted = _S2TW.convert(source)
+    valid_texts = {source, converted} if language == "zh-Hant" else {converted}
     if (not _chinese(source) or not _chinese(text) or source != state.get("original_text")
-            or text != state.get("text") or text != _S2TW.convert(source)
+            or text != state.get("text") or text not in valid_texts
             or not bound or not _stamp(state.get("checked_at"))
             or state.get("source_language", "zh-Hant") not in {"zh-Hant", "zh-Hans", "zh"}
             or state.get("provider") != ("PlayStation" if bound["platform"] == "PS5" else "Nintendo")
             or not title_matches(state.get("official_title"), bound.get("titles", []))
             or not isinstance(state.get("official_title"), str) or not state["official_title"].strip()):
         return None
-    return deepcopy(state)
+    result = deepcopy(state)
+    # Earlier collectors converted already-Traditional copy. Accept only that
+    # known conversion or the exact original, then repair it to preserve names.
+    result["text"] = source if language == "zh-Hant" else converted
+    return result
 
 
 def describe(game, *, previous=None, official_candidates=None):
@@ -192,7 +199,10 @@ def enrich_documents(master, catalog, *, official_client=None,
             if isinstance(found, dict):
                 source_text = clean_text(found.get("text"))
                 official = {"igdb_id": game["id"], "name_en": game["name"].strip(),
-                    "text": _S2TW.convert(source_text), "original_text": source_text,
+                    # These verified TW/HK/zh-hant storefronts provide
+                    # Traditional Chinese already. Preserve proper names
+                    # such as 科奇里 rather than converting 里 into 裡.
+                    "text": source_text, "original_text": source_text,
                     "source_url": found.get("source_url"), "provider": found.get("provider"),
                     "official_title": found.get("official_title"), "source_language": "zh-Hant",
                     "checked_at": checked_at}
