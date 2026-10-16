@@ -309,8 +309,82 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     return result
 
 
+def validate_retained_candidate(row, id_, checked_at):
+    """Validate an existing nonpublic ledger row without reinterpreting its raw data.
+
+    This is deliberately a persistence check, not a fresh normalization or a new
+    observation. The publisher also checks equality against its current baseline.
+    """
+    def invalid():
+        raise CollectionError("invalid_retained_candidate")
+
+    def stamp(value):
+        if not isinstance(value, str):
+            invalid()
+        try:
+            parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            if parsed.utcoffset() is None:
+                invalid()
+            return parsed
+        except (ValueError, TypeError):
+            invalid()
+
+    if (type(id_) is not int or id_ <= 0 or not isinstance(row, dict)
+            or row.get("id") != "igdb:" + str(id_)
+            or type(row.get("igdb_id")) is not int or row["igdb_id"] != id_
+            or row.get("calendar_eligible") is not False):
+        invalid()
+    raw = row.get("raw")
+    if (not isinstance(raw, dict) or type(raw.get("id")) is not int or raw["id"] != id_
+            or not isinstance(raw.get("name"), str) or not raw["name"].strip()
+            or row.get("name_en") != raw["name"].strip()):
+        invalid()
+    for field in ("display_name", "name_en", "name_source", "hypes_status", "popularity_status"):
+        if not isinstance(row.get(field), str) or not row[field].strip():
+            invalid()
+    for field in ("name_zh_tw", "name_url", "cover_image", "url", "nintendo_url", "playstation_url", "game_type"):
+        if field not in row or (row[field] is not None and not isinstance(row[field], str)):
+            invalid()
+    for field in ("platforms", "known_platforms", "game_modes", "multiplayer_modes", "releases",
+                  "release_records", "websites", "platform_history"):
+        if not isinstance(row.get(field), list) or any(not isinstance(item, dict) for item in row[field]):
+            invalid()
+    for field in ("platform_language_support", "platform_editions", "platform_urls", "exclusivity"):
+        if not isinstance(row.get(field), dict):
+            invalid()
+    for field in ("platform_data_complete", "sexual_content_screened", "possible_in_window"):
+        if type(row.get(field)) is not bool:
+            invalid()
+    hypes = row.get("hypes")
+    if "hypes" not in row or (hypes is not None and (type(hypes) is not int or hypes < 0)):
+        invalid()
+    popularity = ("qualified" if hypes is not None and hypes >= 30 else "observe" if hypes is not None
+                  and hypes >= 20 else "unknown" if hypes is None else "below_threshold")
+    if (row["hypes_status"] != ("missing" if hypes is None else "available")
+            or row["popularity_status"] != popularity or raw.get("hypes") != hypes):
+        invalid()
+    screening = row.get("content_screening")
+    if (not isinstance(screening, dict) or screening.get("status") not in {"screened", "review", "excluded"}
+            or not isinstance(screening.get("policy_version"), str)
+            or not isinstance(screening.get("reason"), str)
+            or row["sexual_content_screened"] is not (screening["status"] == "screened")):
+        invalid()
+    reasons = row.get("eligibility_reasons")
+    if not isinstance(reasons, list) or not reasons or any(not isinstance(reason, str) or not reason for reason in reasons):
+        invalid()
+    observed, first, current = stamp(row.get("checked_at")), stamp(row.get("first_observed_at")), stamp(checked_at)
+    if not first <= observed <= current or not row["platform_history"]:
+        invalid()
+    for history in row["platform_history"]:
+        if (not first <= stamp(history.get("checked_at")) <= observed
+                or not isinstance(history.get("known_platforms"), list)
+                or not isinstance(history.get("release_records"), list)):
+            invalid()
+    return row
+
+
 def build_documents(raw_games, *, start: date, checked_at: str, previous=None, source=None, name_registry=None,
-                    release_registry=None, language_registry=None):
+                    release_registry=None, language_registry=None, retained_unavailable_ids=()):
     end = start + timedelta(days=365)
     prior_games = (previous or {}).get("games") or {}
     games = {}
@@ -321,12 +395,23 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
         games[key] = normalize_game(raw, start, end, checked_at, previous=prior_games.get(key),
                                     name_registry=name_registry, release_registry=release_registry,
                                     language_registry=language_registry)
+    retained_ids = list(retained_unavailable_ids)
+    if (any(type(id_) is not int or id_ <= 0 for id_ in retained_ids)
+            or len(set(retained_ids)) != len(retained_ids)):
+        raise CollectionError("invalid_retained_candidate")
+    for id_ in sorted(retained_ids):
+        key = "igdb:" + str(id_)
+        if key in games:
+            raise CollectionError("invalid_retained_candidate")
+        games[key] = deepcopy(validate_retained_candidate(prior_games.get(key), id_, checked_at))
     missing_prior = set(prior_games) - set(games)
     if missing_prior:
         raise CollectionError("previous_game_lookup_incomplete")
     window = {"start": start.isoformat(), "end": end.isoformat(), "end_inclusive": False, "time_zone": "Asia/Taipei"}
-    provenance = {"provider": "IGDB", "complete": True, "hypes_threshold": 30, **(source or {}),
-                  "release_date_policy": "igdb_taipei_v1"}
+    complete = not retained_ids
+    provenance = {"provider": "IGDB", "hypes_threshold": 30, **(source or {}),
+                  "release_date_policy": "igdb_taipei_v1", "complete": complete,
+                  "ledger_complete": True, "lookup_complete": complete, "public_complete": True}
     master = {"schema_version": 1, "generated_at": checked_at, "window": window, "source": provenance, "games": games}
     public = []
     for row in games.values():
@@ -337,9 +422,11 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     counts = {status: sum(row["popularity_status"] == status for row in games.values())
               for status in ("qualified", "observe", "below_threshold", "unknown")}
     catalog = {"schema_version": 1, "generated_at": checked_at, "window": window, "source": provenance, "games": public}
-    refresh = {"schema_version": 1, "generated_at": checked_at, "complete": True, "status": "complete",
+    refresh = {"schema_version": 1, "generated_at": checked_at, "complete": complete,
+               "ledger_complete": True, "lookup_complete": complete, "public_complete": True,
+               "status": "complete" if complete else "partial",
                "candidate_count": len(games), "public_count": len(public), "popularity_counts": counts,
                "content_review_count": sum(row["content_screening"]["status"] == "review" for row in games.values()),
                "content_excluded_count": sum(row["content_screening"]["status"] == "excluded" for row in games.values()),
-               "pending_count": 0, "source": provenance}
+               "pending_count": len(retained_ids), "unavailable_count": len(retained_ids), "source": provenance}
     return master, catalog, refresh
