@@ -38,6 +38,80 @@ GAME_FIELDS = (
 )
 
 
+class GameLookupError(CollectionError):
+    """Safe ID-only diagnostics; never expose raw API responses or credentials."""
+
+    def __init__(self, *, requested, missing, recovery_requests, unexpected=(), duplicates=(),
+                 invalid_rows=0, reason="game_lookup_incomplete", http_status=None):
+        super().__init__(reason, http_status)
+        self.lookup_details = {
+            "requested_ids": sorted(requested), "missing_ids": sorted(missing),
+            "unexpected_ids": sorted(set(unexpected))[:100],
+            "duplicate_ids": sorted(set(duplicates))[:100],
+            "unexpected_count": len(set(unexpected)), "duplicate_count": len(set(duplicates)),
+            "invalid_rows": invalid_rows, "recovery_requests": recovery_requests,
+        }
+
+
+def lookup_games(client, ids, *, max_recovery_requests=20):
+    """Recover short HTTP-200 batches without treating missing games as deleted.
+
+    Only absent IDs are retried: first in groups of ten, then individually.
+    Recovery has one collection-wide request limit, in addition to the client's
+    existing rate limit and deadline. Invalid/foreign/duplicate rows stay fatal.
+    """
+    raw_games, recovery_requests, initial_missing_count = [], 0, 0
+    for offset in range(0, len(ids), 100):
+        batch = ids[offset:offset + 100]
+        found = {}
+
+        def request(requested):
+            joined = ",".join(str(id_) for id_ in requested)
+            try:
+                rows = client.query("games", f"fields {GAME_FIELDS}; where id = ({joined}); sort id asc; limit 100;")
+            except CollectionError as error:
+                raise GameLookupError(requested=requested, missing=set(batch) - found.keys(),
+                    recovery_requests=recovery_requests, reason=error.reason, http_status=error.http_status) from None
+            received, duplicates, invalid_rows = {}, set(), 0
+            if not isinstance(rows, list):
+                invalid_rows = 1
+            else:
+                for row in rows:
+                    if not isinstance(row, dict) or type(row.get("id")) is not int or row["id"] <= 0:
+                        invalid_rows += 1
+                        continue
+                    if row["id"] in received:
+                        duplicates.add(row["id"])
+                    received[row["id"]] = row
+            unexpected = received.keys() - set(requested)
+            if invalid_rows or unexpected or duplicates:
+                raise GameLookupError(requested=requested,
+                    missing=set(batch) - found.keys() - received.keys(),
+                    unexpected=unexpected, duplicates=duplicates, invalid_rows=invalid_rows,
+                    recovery_requests=recovery_requests)
+            found.update(received)
+
+        request(batch)
+        initial_missing_count += len(set(batch) - found.keys())
+        for size in (10, 1):
+            pending = sorted(set(batch) - found.keys())
+            for index in range(0, len(pending), size):
+                requested = pending[index:index + size]
+                if recovery_requests >= max_recovery_requests:
+                    raise GameLookupError(requested=requested, missing=set(batch) - found.keys(),
+                                          recovery_requests=recovery_requests)
+                recovery_requests += 1
+                request(requested)
+        missing = set(batch) - found.keys()
+        if missing:
+            raise GameLookupError(requested=batch, missing=missing, recovery_requests=recovery_requests)
+        raw_games.extend(found[id_] for id_ in batch)
+    return raw_games, {"initial_missing_count": initial_missing_count,
+                       "recovered_count": initial_missing_count,
+                       "recovery_requests": recovery_requests,
+                       "max_recovery_requests": max_recovery_requests}
+
+
 def load_existing(path):
     path = Path(path)
     if not path.exists():
@@ -72,17 +146,8 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     game_ids.update(row["igdb_id"] for row in (previous or {}).get("games", {}).values())
     if len(game_ids) > 50000:
         raise CollectionError("candidate_limit_exceeded")
-    raw_games = []
     ids = sorted(game_ids)
-    for offset in range(0, len(ids), 100):
-        batch = ids[offset:offset + 100]
-        joined = ",".join(str(id_) for id_ in batch)
-        rows = client.query("games", f"fields {GAME_FIELDS}; where id = ({joined}); sort id asc; limit 100;")
-        if (not isinstance(rows, list) or len(rows) != len(batch) or
-                any(not isinstance(row, dict) or type(row.get("id")) is not int for row in rows) or
-                sorted(row["id"] for row in rows) != batch):
-            raise CollectionError("game_lookup_incomplete")
-        raw_games.extend(rows)
+    raw_games, lookup_report = lookup_games(client, ids)
     if checked_at is None:
         checked_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     master, catalog, status = build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
@@ -91,6 +156,7 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                            language_registry=language_registry,
                            source={"discovery_release_count": len(releases), "request_count": client.request_count,
                                    "retry_count": client.retry_count, "platform_ids_verified": [130, 167, 508],
+                                   "game_lookup": lookup_report,
                                    "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"})
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
@@ -177,6 +243,8 @@ def main(argv=None):
                    "complete": False, "status": "failed", "reason": exc.reason if isinstance(exc, CollectionError) else "collection_error"}
         if isinstance(exc, CollectionError) and exc.http_status is not None:
             failure["http_status"] = exc.http_status
+        if isinstance(exc, GameLookupError):
+            failure["game_lookup"] = exc.lookup_details
         try:
             write_json_atomic(out / "nintendo_refresh_status.json", failure)
         except OSError:

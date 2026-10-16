@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from nintendo_backend.collect import collect, load_existing, main
+from nintendo_backend.collect import GameLookupError, collect, load_existing, lookup_games, main
 from nintendo_backend.chinese_names import SteamNameClient
 from nintendo_backend.igdb import CollectionError
 
@@ -104,9 +104,101 @@ def test_store_investigation_resumes_unattempted_future_games_before_recent_high
 
 
 def test_missing_batch_game_prevents_complete_snapshot():
-    api = Client([{"count": 1}, [{"id": 4, "game": 1, "platform": 508}], {"count": 1}, []])
-    with pytest.raises(CollectionError, match="game_lookup_incomplete"):
+    api = Client([{"count": 1}, [{"id": 4, "game": 1, "platform": 508}], {"count": 1}, [], [], []])
+    with pytest.raises(GameLookupError, match="game_lookup_incomplete") as error:
         collect(api, start=date(2026, 10, 4))
+    assert error.value.lookup_details["missing_ids"] == [1]
+    assert error.value.lookup_details["recovery_requests"] == 2
+
+
+def test_short_game_batch_recovers_only_missing_ids_with_individual_final_check():
+    one, two, three = ({"id": id_, "name": str(id_)} for id_ in (1, 2, 3))
+    api = Client([[one, three], [], [two]])
+    rows, report = lookup_games(api, [1, 2, 3])
+    assert rows == [one, two, three]
+    assert "id = (1,2,3)" in api.calls[0][1]
+    assert all("id = (2)" in query for _, query in api.calls[1:])
+    assert report["initial_missing_count"] == report["recovered_count"] == 1
+    assert report["recovery_requests"] == 2
+
+
+def test_recovery_uses_small_batches_and_has_twenty_request_collection_bound():
+    api = Client([[]] * 21)
+    with pytest.raises(GameLookupError, match="game_lookup_incomplete") as error:
+        lookup_games(api, list(range(1, 101)))
+    assert len(api.calls) == 21  # one normal batch plus twenty bounded recovery queries
+    assert "id = (1,2,3,4,5,6,7,8,9,10)" in api.calls[1][1]
+    assert "id = (1)" in api.calls[11][1]
+    assert error.value.lookup_details["missing_ids"] == list(range(1, 101))
+    assert error.value.lookup_details["recovery_requests"] == 20
+
+
+def test_recovery_budget_is_shared_by_all_original_batches():
+    api = Client([[{"id": id_} for id_ in range(1, 100)], [{"id": 100}], []])
+    with pytest.raises(GameLookupError) as error:
+        lookup_games(api, list(range(1, 102)), max_recovery_requests=1)
+    assert len(api.calls) == 3
+    assert error.value.lookup_details["missing_ids"] == [101]
+    assert error.value.lookup_details["recovery_requests"] == 1
+
+
+@pytest.mark.parametrize("rows,unexpected,duplicates,invalid", [
+    ([{"id": 1}, {"id": 99}], [99], [], 0),
+    ([{"id": 1}, {"id": 1}], [], [1], 0),
+    ([{"id": "1"}], [], [], 1),
+    ({"sensitive": "raw-response-must-not-be-exposed"}, [], [], 1),
+])
+def test_corrupt_game_batch_remains_fatal_with_safe_id_diagnostics(rows, unexpected, duplicates, invalid):
+    api = Client([rows])
+    with pytest.raises(GameLookupError) as error:
+        lookup_games(api, [1, 2])
+    assert len(api.calls) == 1
+    details = error.value.lookup_details
+    assert details["requested_ids"] == [1, 2]
+    assert details["unexpected_ids"] == unexpected
+    assert details["duplicate_ids"] == duplicates
+    assert details["invalid_rows"] == invalid
+    assert "raw-response-must-not-be-exposed" not in json.dumps(details)
+
+
+@pytest.mark.parametrize("reason,http_status", [("collection_deadline", None), ("http_error", 429)])
+def test_recovery_preserves_http_or_deadline_failure_reason(reason, http_status):
+    class FailingClient(Client):
+        def query(self, endpoint, query):
+            if self.calls:
+                raise CollectionError(reason, http_status)
+            return super().query(endpoint, query)
+
+    api = FailingClient([[]])
+    with pytest.raises(GameLookupError) as error:
+        lookup_games(api, [23])
+    assert error.value.reason == reason
+    assert error.value.http_status == http_status
+    assert error.value.lookup_details["missing_ids"] == [23]
+    assert error.value.lookup_details["recovery_requests"] == 1
+
+
+def test_game_lookup_diagnostics_are_written_without_replacing_existing_catalog(tmp_path, monkeypatch, capsys):
+    output = tmp_path / "output"
+    output.mkdir()
+    old = '{"old":"catalog"}\n'
+    (output / "nintendo_upcoming.json").write_text(old)
+    (output / "nintendo_master.json").write_text(old)
+    monkeypatch.setenv("TWITCH_CLIENT_ID", "test-client")
+    monkeypatch.setenv("TWITCH_CLIENT_SECRET", "sensitive-test-secret")
+
+    def fail(*args, **kwargs):
+        raise GameLookupError(requested=[17, 23], missing=[23], unexpected=[91], recovery_requests=2)
+
+    monkeypatch.setattr("nintendo_backend.collect.collect", fail)
+    assert main(["--output-dir", str(output), "--existing", str(tmp_path / "missing.json")]) == 1
+    assert (output / "nintendo_upcoming.json").read_text() == old
+    assert (output / "nintendo_master.json").read_text() == old
+    failure = json.loads((output / "nintendo_refresh_status.json").read_text())
+    assert failure["complete"] is False
+    assert failure["game_lookup"]["missing_ids"] == [23]
+    assert failure["game_lookup"]["unexpected_ids"] == [91]
+    assert "sensitive-test-secret" not in capsys.readouterr().out
 
 
 def test_failure_preserves_existing_output_catalog_and_never_prints_secret(tmp_path, monkeypatch, capsys):
