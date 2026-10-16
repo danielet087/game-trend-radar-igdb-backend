@@ -41,16 +41,91 @@ def target_slot(now: datetime, requested: str = "", source: str = "manual") -> s
     return utc_text(target)
 
 
+def _validate_partial_receipt(receipt: dict, *, now: datetime) -> None:
+    """Accept a durable partial ledger without claiming a successful daily lookup.
+
+    Missing historical IDs remain in the authoritative ledger and must be
+    queried on a later collection. The delivery receipt alone cannot certify
+    the contents of that ledger; publication separately verifies the bundle.
+    """
+    reason = "invalid_partial_collection_receipt"
+    provenance = receipt.get("source")
+    if (type(receipt.get("schema_version")) is not int
+            or receipt.get("complete") is not False or receipt.get("collection_status") != "partial"
+            or not isinstance(provenance, dict) or provenance.get("provider") != "IGDB"
+            or type(provenance.get("hypes_threshold")) is not int
+            or provenance["hypes_threshold"] != 30 or provenance.get("complete") is not False):
+        raise ValueError(reason)
+    for payload in (receipt, provenance):
+        if (payload.get("ledger_complete") is not True or payload.get("lookup_complete") is not False
+                or payload.get("public_complete") is not True):
+            raise ValueError(reason)
+    lookup = provenance.get("game_lookup")
+    if not isinstance(lookup, dict):
+        raise ValueError(reason)
+    ids, unavailable = lookup.get("unavailable_ids"), lookup.get("unavailable")
+    if (not isinstance(ids, list) or not ids
+            or any(type(id_) is not int or id_ <= 0 for id_ in ids)
+            or ids != sorted(set(ids)) or not isinstance(unavailable, list)
+            or len(unavailable) != len(ids)):
+        raise ValueError(reason)
+    count = len(ids)
+    for key in ("pending_count", "unavailable_count"):
+        if type(receipt.get(key)) is not int or receipt[key] != count:
+            raise ValueError(reason)
+    for key in ("initial_missing_count", "recovered_count", "recovery_requests", "max_recovery_requests"):
+        if type(lookup.get(key)) is not int or lookup[key] < 0:
+            raise ValueError(reason)
+    if (lookup["recovered_count"] + count != lookup["initial_missing_count"]
+            or not 2 <= lookup["recovery_requests"] <= lookup["max_recovery_requests"] <= 20):
+        raise ValueError(reason)
+    generated = parse_utc(receipt.get("generated_at"))
+    for id_, detail in zip(ids, unavailable):
+        if (not isinstance(detail, dict)
+                or set(detail) != {"igdb_id", "reason", "last_checked_at", "request_attempts"}
+                or type(detail.get("igdb_id")) is not int or detail["igdb_id"] != id_
+                or detail.get("reason") != "missing_after_bounded_recovery"
+                or type(detail.get("request_attempts")) is not int or detail["request_attempts"] != 3
+                or detail["request_attempts"] > 1 + lookup["recovery_requests"]):
+            raise ValueError(reason)
+        if parse_utc(detail.get("last_checked_at")) > generated:
+            raise ValueError(reason)
+    trigger = receipt.get("trigger_source")
+    recorded_target = parse_utc(receipt.get("target_slot"))
+    if (not isinstance(trigger, str) or trigger not in SOURCES or recorded_target > generated
+            or recorded_target.astimezone(TAIPEI).date() != generated.astimezone(TAIPEI).date()
+            or (trigger != "manual" and
+                (recorded_target.hour, recorded_target.minute, recorded_target.second) != (0, 30, 0))):
+        raise ValueError(reason)
+    if receipt["status"] == "persisted_partial":
+        run_id, delivered_at = receipt.get("run_id"), receipt.get("committed_at")
+        if (receipt.get("storage_backend") != "turso" or receipt.get("state_persisted") is not True
+                or receipt.get("authoritative_source") != FRONTEND + "@main"
+                or receipt.get("backend_mirror") != "not_required"):
+            raise ValueError(reason)
+    else:
+        run_id, delivered_at = receipt.get("published_run_id"), receipt.get("published_at")
+        if "run_id" in receipt and receipt["run_id"] != run_id:
+            raise ValueError(reason)
+    if (not isinstance(run_id, str) or not re.fullmatch(r"[0-9]+", run_id)
+            or not generated <= parse_utc(delivered_at) <= now):
+        raise ValueError(reason)
+
+
 def decide(*, now: datetime, requested: str = "", source: str = "manual",
            force: bool = False, receipt: dict | None = None) -> dict:
     slot = target_slot(now, requested, source)
     if force and source != "manual":
         raise ValueError("force_requires_manual")
     already_published = False
+    partial_history_lookup = False
     if receipt is not None:
         if not isinstance(receipt, dict) or receipt.get("schema_version") != 1:
             raise ValueError("invalid_publication_receipt")
-        if receipt.get("status") == "persisted":
+        if receipt.get("status") in ("persisted_partial", "published_partial"):
+            _validate_partial_receipt(receipt, now=now)
+            partial_history_lookup = True
+        elif receipt.get("status") == "persisted":
             # The primary collection is complete even while its separate static
             # projection remains pending; do not recollect the same daily slot.
             run_id = receipt.get("run_id")
@@ -76,7 +151,8 @@ def decide(*, now: datetime, requested: str = "", source: str = "manual",
             already_published = generated.astimezone(TAIPEI).date() == now.astimezone(TAIPEI).date()
     should_collect = force or not already_published
     return {"should_collect": should_collect, "target_slot": slot, "trigger_source": source,
-            "reason": "manual_force" if force else "collection_due" if should_collect else "already_published_today"}
+            "reason": "manual_force" if force else "partial_history_lookup_due" if partial_history_lookup
+            else "collection_due" if should_collect else "already_published_today"}
 
 
 def main(argv: list[str] | None = None) -> int:

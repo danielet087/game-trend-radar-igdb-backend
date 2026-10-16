@@ -10,7 +10,7 @@ from pathlib import Path
 import tempfile
 from zoneinfo import ZoneInfo
 
-from .catalog import build_documents
+from .catalog import build_documents, validate_retained_candidate
 from .chinese_names import SteamNameClient, enrich_documents, load_registry
 from .igdb import CollectionError, IGDBClient, paginated_releases
 from .languages import load_combined_registry as load_language_registry
@@ -53,19 +53,22 @@ class GameLookupError(CollectionError):
         }
 
 
-def lookup_games(client, ids, *, max_recovery_requests=20):
+def lookup_games(client, ids, *, max_recovery_requests=20, retained_candidates=None, checked_at=None):
     """Recover short HTTP-200 batches without treating missing games as deleted.
 
     Only absent IDs are retried: first in groups of ten, then individually.
     Recovery has one collection-wide request limit, in addition to the client's
     existing rate limit and deadline. Invalid/foreign/duplicate rows stay fatal.
     """
-    raw_games, recovery_requests, initial_missing_count = [], 0, 0
+    raw_games, recovery_requests, initial_missing_count, unavailable = [], 0, 0, []
     for offset in range(0, len(ids), 100):
         batch = ids[offset:offset + 100]
         found = {}
+        attempts = {id_: 0 for id_ in batch}
 
         def request(requested):
+            for id_ in requested:
+                attempts[id_] += 1
             joined = ",".join(str(id_) for id_ in requested)
             try:
                 rows = client.query("games", f"fields {GAME_FIELDS}; where id = ({joined}); sort id asc; limit 100;")
@@ -104,12 +107,25 @@ def lookup_games(client, ids, *, max_recovery_requests=20):
                 request(requested)
         missing = set(batch) - found.keys()
         if missing:
-            raise GameLookupError(requested=batch, missing=missing, recovery_requests=recovery_requests)
-        raw_games.extend(found[id_] for id_ in batch)
+            # A valid HTTP-200 absence after both recovery passes can quarantine
+            # only a fully persisted, previously nonpublic candidate. Any new or
+            # public identity, invalid row, HTTP error, or exhausted budget fails.
+            for id_ in sorted(missing):
+                prior = (retained_candidates or {}).get("igdb:" + str(id_))
+                try:
+                    validate_retained_candidate(prior, id_, checked_at)
+                except CollectionError:
+                    raise GameLookupError(requested=batch, missing=missing,
+                                          recovery_requests=recovery_requests) from None
+                unavailable.append({"igdb_id": id_, "reason": "missing_after_bounded_recovery",
+                                    "last_checked_at": prior["checked_at"], "request_attempts": attempts[id_]})
+        raw_games.extend(found[id_] for id_ in batch if id_ in found)
     return raw_games, {"initial_missing_count": initial_missing_count,
-                       "recovered_count": initial_missing_count,
+                       "recovered_count": initial_missing_count - len(unavailable),
                        "recovery_requests": recovery_requests,
-                       "max_recovery_requests": max_recovery_requests}
+                       "max_recovery_requests": max_recovery_requests,
+                       "unavailable_ids": sorted(row["igdb_id"] for row in unavailable),
+                       "unavailable": sorted(unavailable, key=lambda row: row["igdb_id"])}
 
 
 def load_existing(path):
@@ -147,10 +163,13 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     if len(game_ids) > 50000:
         raise CollectionError("candidate_limit_exceeded")
     ids = sorted(game_ids)
-    raw_games, lookup_report = lookup_games(client, ids)
     if checked_at is None:
         checked_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    raw_games, lookup_report = lookup_games(client, ids,
+        retained_candidates=(previous or {}).get("games"), checked_at=checked_at)
+    retained_ids = lookup_report["unavailable_ids"]
     master, catalog, status = build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
+                           retained_unavailable_ids=retained_ids,
                            name_registry=name_registry,
                            release_registry=release_registry,
                            language_registry=language_registry,
@@ -187,6 +206,11 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     status["description_enrichment"] = enrich_descriptions(
         master, catalog, official_client=official_description_client,
         language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)
+    # Optional enrichment must never turn old retained evidence into new data.
+    for id_ in retained_ids:
+        key = "igdb:" + str(id_)
+        if master["games"][key] != previous["games"][key]:
+            raise CollectionError("retained_candidate_changed")
     return master, catalog, status
 
 
@@ -232,7 +256,7 @@ def main(argv=None):
                                              official_description_client=official_descriptions)
         finally:
             official_descriptions.close()
-        # All API, completeness and qualification gates have passed before any data write.
+        # All public/ledger gates passed; any retained lookup gap remains explicit.
         write_json_atomic(out / "nintendo_master.json", master)
         write_json_atomic(out / "nintendo_upcoming.json", catalog)
         write_json_atomic(out / "nintendo_refresh_status.json", status)

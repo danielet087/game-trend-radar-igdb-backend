@@ -43,6 +43,19 @@ python -m nintendo_backend.exclusivity --output-dir output
 
 `--existing input/nintendo_master.json` 載入持久候選，重新查詢既有遊戲的平台與日期。`id` 使用 `igdb:<ID>`，不與 Steam app ID 衝突。
 
+HTTP 成功但缺少遊戲時，先只補查缺失 ID（小批次，再逐筆），整輪最多 20 次補查 query，
+仍受原有節流與時間上限約束。補查後仍缺少、但已有完整歷史且原本不在公開月曆的候選，
+可在主庫模式保留整筆舊資料及原 `checked_at`；不更換 ID、不補造資料，也不重新標成今天已查。
+下一輪仍會查詢該 ID。公開過的候選、全新 ID、HTTP 錯誤、重複或非預期 ID、格式錯誤不適用此例外。
+
+這類收集明示 `complete=false`、`lookup_complete=false`、`ledger_complete=true` 與
+`public_complete=true`：完整候選仍保留，這次公開的每筆遊戲都已重新驗證，但歷史候選尚有查詢缺項。
+`source.game_lookup.unavailable_ids` 與 `unavailable` 保存缺失 ID、最後成功時間與查詢次數；
+本次嘗試時間沿用回條的 `generated_at`。
+主庫發布前會再次與最新候選及公開清單比對，確認保留資料完全相同且原本未公開，
+才可交付其他正常資料；回條使用 `persisted_partial`／`published_partial`，不冒稱全部候選已更新。
+每日排程仍在隔天重試；不新增密集重試。失敗狀態檔亦保留為 workflow artifact，方便查明是哪筆資料出問題。
+
 既有每日收集流程同時處理中文名稱，不增加另一個排程。`--chinese-names` 可指定經核對的名稱登錄檔（預設 `data/chinese_names.json`）；這是人工驗證的官方名稱來源，不會自動爬取任天堂或發行商網站。每筆格式為 `igdb_id`、`name_en`、`name_zh_tw`、`source`、`url`，外層是 `schema_version: 1` 與以 `igdb:<ID>` 為鍵的 `games`。
 
 只有通過月曆資格且尚無已驗證繁中名的遊戲才會查 Steam 名稱備援。必須有 IGDB 明示 Steam 服務的 AppID 或官方 Steam 商品網址；矛盾 AppID 不採用。先查官方 `appdetails` 繁中，再查簡中轉繁；檢查回傳 AppID、正式遊戲類型與實際中文名稱，不能因請求繁中仍回英文／日文就宣告成功。每輪最多 30 次串行請求、90 秒，遇 429 停止，網路失敗保留已有中文名。候選保存名稱來源、語區、身分證據與嘗試時間，下輪優先處理未嘗試或較久未查的遊戲，避免請求額度一直卡在前幾款。這條備援只補名稱，不使用 Steam 的平台、發售日期、Followers 或內容資格。

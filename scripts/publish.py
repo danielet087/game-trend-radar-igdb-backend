@@ -180,8 +180,62 @@ def _read_json(path: Path) -> dict:
     return payload
 
 
+def retained_unavailable_ids(bundle: dict[str, dict]) -> tuple[int, ...]:
+    """Recognize only the bounded, non-public ledger retention exception."""
+    master = bundle["nintendo_master.json"]
+    status = bundle["nintendo_refresh_status.json"]
+    if not isinstance(master, dict) or not isinstance(status, dict):
+        raise PublishError("incomplete_collection")
+    source = master.get("source")
+    if not isinstance(source, dict):
+        raise PublishError("incomplete_collection")
+    if source.get("complete") is True:
+        if status.get("complete") is not True or status.get("status") != "complete" or status.get("pending_count") != 0:
+            raise PublishError("incomplete_collection")
+        for payload in (source, status):
+            if any(key in payload and payload[key] is not True for key in ("ledger_complete", "lookup_complete", "public_complete")):
+                raise PublishError("inconsistent_lookup_completeness")
+        if "unavailable_count" in status and (type(status["unavailable_count"]) is not int or status["unavailable_count"] != 0):
+            raise PublishError("inconsistent_lookup_completeness")
+        lookup = source.get("game_lookup", {})
+        if isinstance(lookup, dict) and (lookup.get("unavailable_ids") or lookup.get("unavailable")):
+            raise PublishError("inconsistent_lookup_completeness")
+        return ()
+    flags = {"ledger_complete": True, "lookup_complete": False, "public_complete": True}
+    if (source.get("complete") is not False or status.get("complete") is not False
+            or status.get("status") != "partial"
+            or any(source.get(key) is not value or status.get(key) is not value for key, value in flags.items())):
+        raise PublishError("incomplete_collection")
+    lookup = source.get("game_lookup")
+    ids = lookup.get("unavailable_ids") if isinstance(lookup, dict) else None
+    details = lookup.get("unavailable") if isinstance(lookup, dict) else None
+    if (not isinstance(ids, list) or not ids or any(type(value) is not int or value <= 0 for value in ids)
+            or ids != sorted(set(ids)) or not isinstance(details, list) or len(details) != len(ids)
+            or type(status.get("pending_count")) is not int or status["pending_count"] != len(ids)
+            or type(status.get("unavailable_count")) is not int or status["unavailable_count"] != len(ids)):
+        raise PublishError("invalid_retained_lookup_metadata")
+    rows = master.get("games")
+    if not isinstance(rows, dict):
+        raise PublishError("invalid_retained_lookup_metadata")
+    for key in ("initial_missing_count", "recovered_count", "recovery_requests", "max_recovery_requests"):
+        if type(lookup.get(key)) is not int or lookup[key] < 0:
+            raise PublishError("invalid_retained_lookup_metadata")
+    if (lookup["initial_missing_count"] != lookup["recovered_count"] + len(ids)
+            or not 2 <= lookup["recovery_requests"] <= lookup["max_recovery_requests"] <= 20):
+        raise PublishError("invalid_retained_lookup_metadata")
+    for id_, detail in zip(ids, details):
+        row = rows.get("igdb:" + str(id_))
+        if (not isinstance(detail, dict) or set(detail) != {"igdb_id", "reason", "last_checked_at", "request_attempts"}
+                or type(detail.get("igdb_id")) is not int or detail["igdb_id"] != id_
+                or detail.get("reason") != "missing_after_bounded_recovery"
+                or type(detail.get("request_attempts")) is not int or detail["request_attempts"] != 3
+                or not isinstance(row, dict) or detail.get("last_checked_at") != row.get("checked_at")):
+            raise PublishError("invalid_retained_lookup_metadata")
+    return tuple(ids)
+
+
 def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
-    from nintendo_backend.catalog import build_documents
+    from nintendo_backend.catalog import build_documents, validate_retained_candidate
     from nintendo_backend.chinese_names import NAME_FIELDS, load_registry, names
     from nintendo_backend.exclusivity import validate_enriched_game
     from nintendo_backend.igdb import CollectionError
@@ -192,14 +246,14 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
     if set(bundle) != set(FILES):
         raise PublishError("incomplete_output_bundle")
     master, public, status = (bundle[name] for name in FILES)
+    retained_ids = retained_unavailable_ids(bundle)
+    retained_keys = {"igdb:" + str(id_) for id_ in retained_ids}
     for payload in (master, public, status):
         provenance = payload.get("source") if isinstance(payload, dict) else None
         if (not isinstance(provenance, dict) or payload.get("schema_version") != 1 or
-            provenance.get("complete") is not True or provenance.get("provider") != "IGDB" or
+            provenance.get("complete") is not (not bool(retained_ids)) or provenance.get("provider") != "IGDB" or
             type(provenance.get("hypes_threshold")) is not int or provenance["hypes_threshold"] != 30):
             raise PublishError("incomplete_collection")
-    if status.get("complete") is not True or status.get("status") != "complete" or status.get("pending_count") != 0:
-        raise PublishError("incomplete_collection")
     try:
         generated = parse_utc(master.get("generated_at"))
         start = date.fromisoformat(master["window"]["start"])
@@ -208,6 +262,8 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         rows = master["games"]
         if not isinstance(rows, dict) or any(not isinstance(row, dict) for row in rows.values()):
             raise ValueError("invalid_master")
+        for id_ in retained_ids:
+            validate_retained_candidate(rows["igdb:" + str(id_)], id_, master["generated_at"])
         if any(any(platform.get("id") == 167 for platform in row.get("raw", {}).get("platforms", [])
                    if isinstance(platform, dict)) or
                any(platform.get("code") == "PS5" for platform in row.get("platforms", [])
@@ -222,7 +278,9 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
         name_registry = load_registry(CHINESE_NAME_REGISTRY)
         release_registry = load_release_registry(TAIWAN_RELEASE_REGISTRY, PLAYSTATION_RELEASE_REGISTRY)
         language_registry = load_language_registry(NINTENDO_LANGUAGE_REGISTRY, PLAYSTATION_LANGUAGE_REGISTRY)
-        for row in rows.values():
+        for key, row in rows.items():
+            if key in retained_keys:
+                continue
             evidence = row.get("name_evidence")
             if isinstance(evidence, dict) and evidence.get("provider") == "official_registry":
                 approved = names(row["raw"], registry=name_registry)
@@ -231,14 +289,17 @@ def validate_bundle(bundle: dict[str, dict], *, now: datetime) -> None:
                         or any(row.get(field) != approved.get(field) for field in NAME_FIELDS)):
                     raise ValueError("unverified_official_name")
         rebuilt_master, rebuilt_public, rebuilt_status = build_documents(
-            [row["raw"] for row in rows.values()], start=start, checked_at=master["generated_at"],
+            [row["raw"] for key, row in rows.items() if key not in retained_keys], start=start, checked_at=master["generated_at"],
             previous=master, source=master["source"], name_registry=name_registry,
-            release_registry=release_registry, language_registry=language_registry)
+            release_registry=release_registry, language_registry=language_registry,
+            retained_unavailable_ids=retained_ids)
     except (ValueError, KeyError, TypeError, CollectionError):
         raise PublishError("qualification_gate_failed") from None
     if master["window"] != rebuilt_master["window"] or public.get("window") != rebuilt_master["window"]:
         raise PublishError("invalid_calendar_window")
     for key, entry in rows.items():
+        if key in retained_keys:
+            continue
         if not validate_enriched_game(rebuilt_master["games"][key], entry):
             raise PublishError("master_qualification_gate_failed")
     for payload in (public, status):
@@ -301,6 +362,8 @@ def publish(bundle: dict[str, dict], client: GitHub, *, now: datetime, slot: str
         from scripts.primary_publication import publish_primary
         return publish_primary(bundle, client, now=now, slot=normalized_slot,
                                trigger_source=trigger_source, run_id=run_id)
+    if retained_unavailable_ids(bundle):
+        raise PublishError("partial_collection_requires_database_primary")
     # Frontend is the durable source of master state and must be writable first.
     client.preflight(FRONTEND)
     backend_mirror = "published"
@@ -356,8 +419,10 @@ def main(argv: list[str] | None = None) -> int:
             with open(summary, "a", encoding="utf-8") as handle:
                 handle.write("### IGDB 主機月曆資料發布\n\n")
                 handle.write(f"- 候選：{result['candidate_count']} 款\n- 月曆：{result['public_count']} 款\n")
+                if result.get("collection_status") == "partial":
+                    handle.write(f"- 查詢尚未完整：{result['unavailable_count']} 款舊候選保留原資料，後續排程重試\n")
                 handle.write(f"- IGDB 後端鏡像：{result['backend_mirror']}\n")
-                handle.write("- 續查狀態：Turso 主庫（已持久化）\n" if result.get("backend_mirror") == "database"
+                handle.write("- 續查狀態：Turso 主庫（已持久化）\n" if result.get("authoritative_source") == FRONTEND + "@main"
                              else "- 續查狀態：前端 nintendo_master.json（已持久化）\n")
         return 0
     except PublishError as error:
