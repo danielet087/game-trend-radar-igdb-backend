@@ -171,15 +171,19 @@ def content_policy(game):
     strong = any(text in STRONG_CONTENT or EXPLICIT.search(text) for text in normalized)
     erotic = any(name.lower().strip() in {"erotic", "erotica"} for name in themes)
     explicit_primary = bool(EXPLICIT.search(summary))
-    if strong or (erotic and explicit_primary):
+    # Rating descriptors describe scenes, not the game's primary subject.
+    # Require an erotic theme plus corroborating evidence before excluding it.
+    if erotic and (strong or explicit_primary):
         status, reason = "excluded", "explicit_sexual_evidence"
     elif erotic or explicit_primary:
         status, reason = "review", "ambiguous_sexual_evidence"
+    elif strong and not summary.strip():
+        status, reason = "review", "insufficient_content_evidence"
     elif summary.strip() or descriptions:
         status, reason = "screened", "no_explicit_sexual_evidence"
     else:
         status, reason = "review", "insufficient_content_evidence"
-    return {"policy_version": "nintendo-2026-10-04-v1", "status": status, "reason": reason,
+    return {"policy_version": "nintendo-2026-11-08-v2", "status": status, "reason": reason,
             "source": "IGDB", "themes": themes, "age_ratings": ratings, "summary_present": bool(summary.strip())}
 
 

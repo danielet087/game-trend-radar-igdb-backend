@@ -174,7 +174,10 @@ def test_elapsed_deadline_stops_requests(monkeypatch):
     assert result['games'][0]['exclusivity']['status'] == 'listed_only'
 
 
-def test_verified_fire_emblem_fallback_requires_exact_identity_and_complete_platforms():
+def test_verified_fire_emblem_fallback_requires_exact_identity_and_complete_platforms(monkeypatch):
+    fact = ex._VERIFIED_FACTS[366896]
+    monkeypatch.setitem(ex._VERIFIED_FACTS, 366896, {**fact,
+        "checked_at": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()})
     row = game(name="Fire Emblem: Fortune’s Weave", igdb_id=366896)
     original, result, session = enrich(row)
     confirmed = result['games'][0]
@@ -185,6 +188,16 @@ def test_verified_fire_emblem_fallback_requires_exact_identity_and_complete_plat
     other['nintendo_url'] = None
     _, altered, _ = enrich(other, html='')
     assert altered['games'][0]['exclusivity']['status'] == 'listed_only'
+
+
+@pytest.mark.parametrize("age,confirmed", [(timedelta(days=29), True), (timedelta(days=30), False)])
+def test_curated_exclusivity_fallback_still_expires_after_30_days(monkeypatch, age, confirmed):
+    fact = ex._VERIFIED_FACTS[366896]
+    monkeypatch.setitem(ex._VERIFIED_FACTS, 366896, {**fact,
+        "checked_at": (datetime.now(timezone.utc) - age).isoformat()})
+    row = game(name="Fire Emblem: Fortune’s Weave", igdb_id=366896)
+    _, result, _ = enrich(row, html="")
+    assert (result["games"][0]["exclusivity"]["status"] == "confirmed") is confirmed
 
 
 @pytest.mark.parametrize('mutation', [
