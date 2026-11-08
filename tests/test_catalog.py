@@ -250,13 +250,40 @@ def test_mature_rating_and_lone_sexual_theme_do_not_exclude_game():
     assert row["calendar_eligible"] is True
 
 
+@pytest.mark.parametrize("rating", [
+    {"rating_content_descriptions": [{"description": "Strong Sexual Content"}]},
+    {"rating_content_descriptions": [{"description_type": {"name": "Strong Sexual Content"}}]},
+    {"content_descriptions": [{"description": "Explicit Sexual Content"}]},
+    {"synopsis": "High impact violence, sex scenes and drug use"},
+])
+def test_mature_scene_descriptors_do_not_block_a_non_erotic_game(rating):
+    row = normalize_game(game(age_ratings=[rating]), START, END, CHECKED)
+    assert row["content_screening"]["status"] == "screened"
+    assert row["sexual_content_screened"] is True
+    assert row["calendar_eligible"] is True
+
+
 def test_combined_primary_sexual_evidence_and_explicit_descriptor_exclude():
     cases = [game(themes=[{"name": "Erotic"}], summary="An explicit sexual game."),
-             game(age_ratings=[{"rating_content_descriptions": [{"description_type": {"name": "Strong Sexual Content"}}]}])]
+             game(themes=[{"name": "Erotic"}], age_ratings=[{
+                 "rating_content_descriptions": [{"description_type": {"name": "Strong Sexual Content"}}]}])]
     for raw in cases:
         row = normalize_game(raw, START, END, CHECKED)
         assert row["content_screening"]["status"] == "excluded"
         assert row["calendar_eligible"] is False
+
+
+def test_strong_descriptor_without_game_context_remains_under_review():
+    row = normalize_game(game(summary="", age_ratings=[{
+        "synopsis": "Strong violence and sex scenes"}]), START, END, CHECKED)
+    assert row["content_screening"]["status"] == "review"
+    assert row["calendar_eligible"] is False
+
+
+def test_explicit_game_description_without_theme_remains_under_review():
+    row = normalize_game(game(summary="An explicit sexual game."), START, END, CHECKED)
+    assert row["content_screening"]["status"] == "review"
+    assert row["calendar_eligible"] is False
 
 
 def test_lone_erotic_theme_and_no_content_evidence_require_review():
