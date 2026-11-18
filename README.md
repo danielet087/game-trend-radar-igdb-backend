@@ -43,6 +43,8 @@ python -m nintendo_backend.exclusivity --output-dir output
 
 `--existing input/nintendo_master.json` 載入持久候選，重新查詢既有遊戲的平台與日期。`id` 使用 `igdb:<ID>`，不與 Steam app ID 衝突。
 
+資料庫主庫模式下，`nintendo_master.json` 搬往不投影到 Git、也不上網站的資料庫專用來源 `danielet087/game-trend-radar-igdb-backend@nintendo-state`（`scripts/state_store.py`）。前端來源還有這個檔時，它仍是權威，每輪照舊與公開檔一起發布，再把相同位元組鏡像到專用來源（鏡像失敗只警告）；backend 的 `scripts/move_nintendo_state.py retire` 確認三份（專用來源、前端資料庫、前端 Git）相同後移除前端這份，之後每輪先把候選主資料寫進專用來源（不可比已存的舊、保留列必須未變），再發布兩個公開檔。`restore` 可放回前端。Git 模式讀不到候選主資料時一律失敗，不會當成第一次執行。
+
 HTTP 成功但缺少遊戲時，先只補查缺失 ID（小批次，再逐筆），整輪最多 20 次補查 query，
 仍受原有節流與時間上限約束。補查後仍缺少、但已有完整歷史且原本不在公開月曆的候選，
 可在主庫模式保留整筆舊資料及原 `checked_at`；不更換 ID、不補造資料，也不重新標成今天已查。

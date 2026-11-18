@@ -7,6 +7,7 @@ from scripts.load_state import load
 from scripts.primary_publication import publish_primary
 from scripts.publish import FRONTEND, PublishError, _serialize
 from scripts.guard import decide
+from scripts.state_store import STATE_BRANCH, STATE_PATH, STATE_REPOSITORY, STATE_SOURCE
 from test_publish import bundle, NOW, CHECKED, RecordingClient
 
 SOURCE = FRONTEND + "@main"
@@ -46,6 +47,9 @@ def primary_git(tmp_path, monkeypatch):
     initial = {path: raw.encode() for path, raw in _serialize(bundle()).items()}
     initial["data/another-collector.json"] = b'{"authoritative":"database"}\n'
     primary_store.bootstrap_primary(database, SOURCE, initial, "a" * 40)
+    # The backend bootstrap copies the frontend ledger into its database-only source.
+    primary_store.bootstrap_primary(database, STATE_SOURCE, {STATE_PATH: initial[STATE_PATH]}, "b" * 40)
+    monkeypatch.setattr(primary, "client", lambda: database)
     def git(root, *args):
         return subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", *args],
                               cwd=root, check=True, capture_output=True, text=True).stdout.strip()
