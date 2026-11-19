@@ -65,7 +65,9 @@ def exact_releases(game: dict, start: date, end: date) -> dict[str, str]:
             continue
         platform = (row.get("platform") or {}).get("id") if isinstance(row.get("platform"), dict) else row.get("platform")
         fmt = (row.get("date_format") or {}).get("format") if isinstance(row.get("date_format"), dict) else None
-        exact = fmt == "YYYYMMMMDD" or (fmt is None and row.get("category") == 0)
+        # Same reading as the collector: IGDB spells a day either way; old rows use category 0.
+        exact = (str(fmt).upper().replace(" ", "") in {"YYYYMMMMDD", "YYYYMMDD"} if fmt
+                 else row.get("category") == 0)
         status = ((row.get("status") or {}).get("name") or "") if isinstance(row.get("status"), dict) else ""
         if (platform not in PLATFORMS or not exact or type(row.get("date")) is not int
                 or status.lower().startswith(("cancel", "rumor"))):
@@ -124,7 +126,7 @@ def collect(client, today: date, *, back_days: int = 90, ahead_days: int = 365) 
         primitives.extend(fetch_primitives(client, part))
     return {"today": today.isoformat(), "start": start.isoformat(), "end": end.isoformat(),
             "games": games, "types": types if isinstance(types, list) else [], "primitives": primitives,
-            "request_count": client.request_count}
+            "release_count": len(releases), "request_count": client.request_count}
 
 
 def percentile(values: list[float], p: int) -> float:
@@ -198,7 +200,8 @@ def report(data: dict) -> tuple[str, list[dict]]:
     value = lambda row, type_id: row["popularity"].get(str(type_id), 0.0)
     lines = [f"# IGDB PopScore trial — {data['today']} (Taipei)", "",
              f"Window: exact release days {data['start']} to {data['end']} (90 days back, one year ahead); "
-             f"{data['request_count']} IGDB requests.",
+             f"{data.get('release_count', '?')} NS/NS2/PS5 release records for {len(data['games'])} games, "
+             f"{len(data['primitives'])} popularity values, {data['request_count']} IGDB requests.",
              f"NS/NS2 standalone games: {len(focus)} ({sum(row['upcoming'] for row in focus)} still to come); "
              f"PS5-only for scale: {len(ps5)}. Hypes >= {HYPES_THRESHOLD} today: "
              f"{sum(row['hypes_qualified'] for row in focus)} NS/NS2, {sum(row['hypes_qualified'] for row in ps5)} PS5-only.", "",

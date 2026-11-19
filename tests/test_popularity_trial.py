@@ -30,11 +30,13 @@ def test_exact_days_only_inside_the_window_and_not_cancelled():
         {"platform": {"id": 508}, "date": stamp("2026-12-03"), "date_format": {"format": "YYYYMMMMDD"}},
         {"platform": {"id": 130}, "date": stamp("2026-12-01"), "date_format": {"format": "YYYYMMMM"}},
         {"platform": {"id": 167}, "date": stamp("2026-12-05"), "category": 0},
+        {"platform": {"id": 130}, "date": stamp("2026-12-06"), "date_format": {"format": "YYYYMMDD"}},
         {"platform": {"id": 167}, "date": stamp("2026-12-04"), "date_format": {"format": "YYYYMMMMDD"},
          "status": {"name": "Cancelled"}},
         {"platform": {"id": 6}, "date": stamp("2026-12-02"), "date_format": {"format": "YYYYMMMMDD"}},
         {"platform": {"id": 508}, "date": stamp("2028-01-01"), "date_format": {"format": "YYYYMMMMDD"}}])
-    assert exact_releases(raw, date(2026, 8, 21), date(2027, 11, 19)) == {"NS2": "2026-12-03", "PS5": "2026-12-05"}
+    assert exact_releases(raw, date(2026, 8, 21), date(2027, 11, 19)) == {"NS2": "2026-12-03", "PS5": "2026-12-05",
+                                                                         "NS": "2026-12-06"}
 
 
 def test_rows_keep_switch_standalone_games_with_their_popularity_and_publishers():
