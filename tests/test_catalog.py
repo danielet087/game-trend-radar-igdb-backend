@@ -243,6 +243,37 @@ def test_exact_365_day_window(day, expected):
     assert row["calendar_eligible"] is expected
 
 
+LATER, LATER_END, LATER_CHECKED = date(2026, 11, 19), date(2027, 11, 19), "2026-11-18T16:30:00Z"
+
+
+def test_released_console_game_stays_public_like_steam():
+    # Zelda: Ocarina of Time (NS2) came out on 2026-11-05 and must not leave the site the day after.
+    row = normalize_game(game(release_dates=[release("2026-11-05")]), LATER, LATER_END, LATER_CHECKED)
+    assert row["calendar_eligible"] is True
+    assert [(item["date"], item["platform"]) for item in row["releases"]] == [("2026-11-05", "NS2")]
+
+
+@pytest.mark.parametrize("day,expected", [("2026-10-03", False), ("2026-10-04", True), ("2026-11-18", True),
+                                         ("2027-11-18", True), ("2027-11-19", False)])
+def test_public_history_starts_with_the_first_console_calendar(day, expected):
+    row = normalize_game(game(release_dates=[release(day)]), LATER, LATER_END, LATER_CHECKED)
+    assert row["calendar_eligible"] is expected
+
+
+def test_released_platform_and_later_port_both_stay_on_the_calendar():
+    raw = game(platforms=[{"id": 508}, {"id": 167}],
+               release_dates=[release("2026-11-05", 508), release("2027-02-01", 167)])
+    row = normalize_game(raw, LATER, LATER_END, LATER_CHECKED)
+    assert [(item["date"], item["platform"]) for item in row["releases"]] == [("2026-11-05", "NS2"), ("2027-02-01", "PS5")]
+
+
+def test_public_catalog_keeps_released_games_in_date_order():
+    released, upcoming = game(id=7, release_dates=[release("2026-11-05")]), game(id=8, release_dates=[release("2026-12-01")])
+    _, public, status = build_documents([upcoming, released], start=LATER, checked_at=LATER_CHECKED)
+    assert [row["id"] for row in public["games"]] == ["igdb:7", "igdb:8"]
+    assert public["window"]["start"] == "2026-11-19" and status["public_count"] == 2
+
+
 def test_mature_rating_and_lone_sexual_theme_do_not_exclude_game():
     ratings = [{"rating_category": {"rating": "M"}, "rating_content_descriptions": [{"description": "Nudity"}, {"description": "Sexual Themes"}]}]
     row = normalize_game(game(themes=[{"name": "Fantasy"}], age_ratings=ratings), START, END, CHECKED)
