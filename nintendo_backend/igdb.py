@@ -89,7 +89,7 @@ class IGDBClient:
         self._token = data["access_token"]
 
     def query(self, endpoint: str, query: str):
-        if endpoint not in {"platforms", "release_dates", "release_dates/count", "games"}:
+        if endpoint not in {"platforms", "release_dates", "release_dates/count", "games", "popularity_primitives"}:
             raise ValueError("unsupported endpoint")
         if self._token is None:
             self.authenticate()

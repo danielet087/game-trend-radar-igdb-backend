@@ -19,6 +19,8 @@ upcoming 與 `persisted` 回條，再由共用發布器輸出主庫完整只讀�
 - 每天重新調查未來 365 天的 NS／NS2／PS5 原生版本；使用平台別發售記錄，移植版不受遊戲全球首發日期較早影響。
 - 發售後跟 Steam 一樣一直留在公開清單：2026-10-04（第一份公開主機月曆）以後的確切發售日都保留，未來 365 天只決定新加入哪些日期。更早的發售日從未公開，不補回。
 - `hypes ≥ 30` 通過第一版人氣条件；20～29 保留觀察，低值及未知仍留在候選狀態。缺值不當成零。
+- NS／NS2 另看 IGDB PopScore（`nintendo_backend/popularity.py`）：IGDB 頁面瀏覽（Visits）或「想玩」（Want to Play）任一項排進 NS／NS2 遊戲前 20%，也算通過人氣條件。比較範圍是 90 天前到一年後有確切 NS／NS2 發售日的正式遊戲（DLC、取消作不算）；PopScore 是 IGDB 每天重算的占比，所以看排名、不看固定數字。通過後一直保留（主資料的 `popscore_admitted_at`），之後排名下降也不會消失；只放寬 hypes 這一條，日期、內容與類型條件照舊。PS5 只看 hypes。
+- 公開資料的 `popularity_basis` 標示上榜依據（`hypes`／`igdb_popscore`），`popscore` 保存兩項數值與 `top_percent`（較好那項的排名，前 X%；不在比較範圍時為 `null`）。`source.popscore` 記錄比較範圍、門檻與上榜數，`nintendo_refresh_status.json.popscore_fetch` 記錄當天取得狀況；IGDB 當天取不到或回空時沿用前次保存的數值（`previous_values`），發布器也用保存的數值重算比對。
 - 月曆只使用確切年月日；年、季度、月份與未定日期留在候選資料，不能補造發售日。
 - 每個平台的日期與地區分開保存。同日雙平台在前端合併顯示；不同日各自出現在對應日期。
 - 依可取得的遊戲介紹、類型及分級內容排除以性愛色情為主要內容的作品；單純成人年齡分級、暴力、裸露或分級描述中的 `Strong Sexual Content`／`sex scenes` 不直接等同色情；需同時有 Erotic 題材與明確介紹或分級證據才自動排除。只有單一色情線索或缺少可判讀內容時保留待檢查。
