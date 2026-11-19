@@ -91,6 +91,11 @@ def pool_member(row: dict, start: date, end: date) -> bool:
                for record in row.get("release_records") or [])
 
 
+def top_percent(rank: int, size: int) -> int:
+    """A rank as "top X%", rounded: the last game over the bar shows 20, not 21."""
+    return max(1, math.floor(100 * rank / size + 0.5))
+
+
 def percentile(values: list[float], p: float) -> float:
     if not values:
         return 0.0
@@ -131,7 +136,7 @@ def admit(rows: dict[str, dict], values: dict[int, dict] | None, *, start: date,
         top = None
         if own and row["igdb_id"] in pool_ids:
             # "Top X%" for display: the better of the two ranks within the pool.
-            tops = [math.ceil(100 * (sum(other > own[name] for other in ranked[name]) + 1) / len(pool))
+            tops = [top_percent(sum(other > own[name] for other in ranked[name]) + 1, len(pool))
                     for name in TYPES.values() if own.get(name, 0.0) > 0]
             top = min(tops) if tops else None
         row["popscore"] = ({**{name: own.get(name, 0.0) for name in TYPES.values()}, "top_percent": top}

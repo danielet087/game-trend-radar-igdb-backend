@@ -91,6 +91,15 @@ def test_an_admitted_game_stays_when_its_values_fall_and_old_dates_stay_out_of_t
     assert master["source"]["popscore"]["pool_size"] == 10 and master["games"]["igdb:30"]["popularity_basis"] is None
 
 
+def test_the_shown_rank_is_rounded_so_every_admitted_game_reads_top_20_or_better():
+    assert [popularity.top_percent(rank, 791) for rank in (1, 8, 159, 160, 161, 791)] == [1, 1, 20, 20, 20, 100]
+    raw = [game(id_) for id_ in range(1, 792)]
+    scores = values(*[(id_, id_ / 100000, 0.0) for id_ in range(1, 792)])
+    master, _, _ = build_documents(raw, start=START, checked_at=CHECKED, popscore=scores)
+    admitted = [row for row in master["games"].values() if row["popularity_basis"] == "igdb_popscore"]
+    assert len(admitted) == 159 and max(row["popscore"]["top_percent"] for row in admitted) == 20
+
+
 def test_without_fresh_values_the_stored_ones_decide_so_the_publisher_rebuild_matches():
     raw, scores = ten_switch_games()
     master, public, status = build_documents(raw, start=START, checked_at=CHECKED, popscore=scores)
