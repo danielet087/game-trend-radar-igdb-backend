@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 from .catalog import build_documents, validate_retained_candidate
 from .chinese_names import SteamNameClient, enrich_documents, load_registry
 from .igdb import CollectionError, IGDBClient, paginated_releases
+from . import popularity
 from .languages import load_combined_registry as load_language_registry
 from .taiwan_releases import load_combined_registry as load_release_registry
 from .playstation import PlayStationStoreClient
@@ -168,8 +169,20 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     raw_games, lookup_report = lookup_games(client, ids,
         retained_candidates=(previous or {}).get("games"), checked_at=checked_at)
     retained_ids = lookup_report["unavailable_ids"]
+    # PopScore only widens NS/NS2 admission; if IGDB cannot serve it today the
+    # stored values (and every earlier admission) carry the day.
+    switch_ids = popularity.switch_game_ids(raw_games)
+    popscore_report = {"requested": len(switch_ids), "games_with_values": 0, "status": "fresh"}
+    try:
+        popscore = popularity.fetch(client, switch_ids)
+        if switch_ids and not popscore:
+            raise CollectionError("empty_popscore")
+        popscore_report["games_with_values"] = len(popscore)
+    except CollectionError as error:
+        popscore = None
+        popscore_report.update(status="previous_values", reason=error.reason)
     master, catalog, status = build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
-                           retained_unavailable_ids=retained_ids,
+                           retained_unavailable_ids=retained_ids, popscore=popscore,
                            name_registry=name_registry,
                            release_registry=release_registry,
                            language_registry=language_registry,
@@ -177,6 +190,7 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                                    "retry_count": client.retry_count, "platform_ids_verified": [130, 167, 508],
                                    "game_lookup": lookup_report,
                                    "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"})
+    status["popscore_fetch"] = popscore_report
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
     if playstation_client is not None:

@@ -40,6 +40,8 @@ def test_collect_requests_named_modes_and_platform_bound_multiplayer_evidence():
             pass
 
         def query(self, endpoint, query):
+            if endpoint == "popularity_primitives":
+                return []
             self.calls.append((endpoint, query))
             return next(self.results)
 

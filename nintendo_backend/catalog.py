@@ -13,6 +13,7 @@ from .game_modes import game_modes, multiplayer_modes
 from .descriptions import PRIVATE_FIELDS as DESCRIPTION_PRIVATE_FIELDS, describe
 from .official_descriptions import candidates as description_candidates
 from .igdb import CollectionError
+from . import popularity
 from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
 
@@ -392,7 +393,7 @@ def validate_retained_candidate(row, id_, checked_at):
 
 
 def build_documents(raw_games, *, start: date, checked_at: str, previous=None, source=None, name_registry=None,
-                    release_registry=None, language_registry=None, retained_unavailable_ids=()):
+                    release_registry=None, language_registry=None, retained_unavailable_ids=(), popscore=None):
     end = start + timedelta(days=365)
     prior_games = (previous or {}).get("games") or {}
     games = {}
@@ -415,9 +416,13 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     missing_prior = set(prior_games) - set(games)
     if missing_prior:
         raise CollectionError("previous_game_lookup_incomplete")
+    # NS/NS2 games may also qualify by IGDB PopScore; without fresh values the
+    # stored ones are used, so the publisher's rebuild reaches the same result.
+    popscore_summary = popularity.admit(games, popscore, start=start, end=end, checked_at=checked_at,
+                                        previous_rows=prior_games, skip={"igdb:" + str(id_) for id_ in retained_ids})
     window = {"start": start.isoformat(), "end": end.isoformat(), "end_inclusive": False, "time_zone": "Asia/Taipei"}
     complete = not retained_ids
-    provenance = {"provider": "IGDB", "hypes_threshold": 30, **(source or {}),
+    provenance = {"provider": "IGDB", "hypes_threshold": 30, **(source or {}), "popscore": popscore_summary,
                   "release_date_policy": "igdb_taipei_v1", "complete": complete,
                   "ledger_complete": True, "lookup_complete": complete, "public_complete": True}
     master = {"schema_version": 1, "generated_at": checked_at, "window": window, "source": provenance, "games": games}
@@ -425,7 +430,7 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     for row in games.values():
         if row["calendar_eligible"]:
             public.append({key: deepcopy(value) for key, value in row.items()
-                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup", *DESCRIPTION_PRIVATE_FIELDS}})
+                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup", "popscore_admitted_at", *DESCRIPTION_PRIVATE_FIELDS}})
     public.sort(key=lambda row: (min(r["date"] for r in row["releases"]), row["id"]))
     counts = {status: sum(row["popularity_status"] == status for row in games.values())
               for status in ("qualified", "observe", "below_threshold", "unknown")}
@@ -436,5 +441,6 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
                "candidate_count": len(games), "public_count": len(public), "popularity_counts": counts,
                "content_review_count": sum(row["content_screening"]["status"] == "review" for row in games.values()),
                "content_excluded_count": sum(row["content_screening"]["status"] == "excluded" for row in games.values()),
-               "pending_count": len(retained_ids), "unavailable_count": len(retained_ids), "source": provenance}
+               "pending_count": len(retained_ids), "unavailable_count": len(retained_ids),
+               "popscore_admitted_count": popscore_summary["admitted_count"], "source": provenance}
     return master, catalog, refresh

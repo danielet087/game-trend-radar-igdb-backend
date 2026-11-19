@@ -19,6 +19,8 @@ class Client:
         self.calls.append(("verify_platforms", ""))
 
     def query(self, endpoint, query):
+        if endpoint == "popularity_primitives":
+            return []  # No PopScore values unless a test scripts them.
         self.calls.append((endpoint, query))
         return self.results.popleft()
 
