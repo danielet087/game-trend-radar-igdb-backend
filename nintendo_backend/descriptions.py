@@ -14,12 +14,15 @@ from urllib.parse import urlsplit
 
 from opencc import OpenCC
 
+from .chinese_names import NAME_FIELDS
 from .official_descriptions import candidates, title_matches
 
 PUBLIC_FIELDS = ("short_description", "short_description_en", "short_description_language",
                  "short_description_source", "description_source_url")
 PRIVATE_FIELDS = ("description_official", "description_lookup")
 _S2TW = OpenCC("s2tw")
+_S2T = OpenCC("s2t")
+STORE_NAME_SOURCE = "PlayStation Store 台灣"
 _HAN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
 _KANA = re.compile(r"[\u3041-\u3096\u30a1-\u30fa]")
 MAX_TEXT = 20_000
@@ -154,6 +157,15 @@ def describe(game, *, previous=None, official_candidates=None):
     return result
 
 
+def simplified(text):
+    """Store copy in Simplified script: a tenth of its Han characters change in s2t."""
+    han = _HAN.findall(text or "")
+    if not han:
+        return False
+    changed = sum(1 for before, after in zip(text, _S2T.convert(text)) if before != after and _HAN.match(before))
+    return changed >= len(han) * .1
+
+
 def _is_due(row, urls, checked_at):
     lookup = row.get("description_lookup") or {}
     now, checked = _stamp(checked_at), _stamp(lookup.get("checked_at"))
@@ -162,9 +174,33 @@ def _is_due(row, urls, checked_at):
     if row.get("description_official"):
         days = 7
     else:
+        # Until the game is out, look for an official Chinese description every
+        # three days; once it is out, the one check with these pages suffices.
         releases = [date.fromisoformat(r["date"]) for r in row.get("releases", []) if isinstance(r.get("date"), str)]
-        days = 1 if any(-30 <= (day - now.date()).days <= 60 for day in releases) else 7
+        if releases and all(day < now.date() for day in releases):
+            return False
+        days = 3
     return now - checked >= timedelta(days=days)
+
+
+def _apply_store_name(row, public, game, found):
+    """The Taiwan PlayStation Store's Chinese title, where the game has no
+    Chinese name of its own yet (a converted Simplified name is replaced)."""
+    name = found.get("official_name_zh")
+    evidence = row.get("name_evidence")
+    if (found.get("provider") != "PlayStation" or not isinstance(name, str) or simplified(name)
+            or (row.get("name_zh_tw") and isinstance(evidence, dict) and evidence.get("converted") is False)):
+        return False
+    english = game["name"].strip()
+    result = {"display_name": name, "name_en": english, "name_zh_tw": name, "name_source": STORE_NAME_SOURCE,
+              "name_url": found["source_url"],
+              "name_evidence": {"provider": "playstation_store", "locale": "zh-Hant", "converted": False,
+                                "igdb_id": game["id"], "name_en": english,
+                                "official_title": found.get("official_title")}}
+    for key in NAME_FIELDS:
+        if key in result:
+            row[key], public[key] = deepcopy(result[key]), deepcopy(result[key])
+    return True
 
 
 def _copy_to_public(row, public):
@@ -177,7 +213,7 @@ def enrich_documents(master, catalog, *, official_client=None,
     # Store/product refreshes can happen independently of the last IGDB run.
     # Keep their actual check time without rewriting the collection timestamp.
     checked_at = checked_at or master["generated_at"]
-    stats = {"official_chinese_count": 0, "official_failure_count": 0}
+    stats = {"official_chinese_count": 0, "official_failure_count": 0, "store_name_count": 0}
     # Oldest official attempts go first so a bounded optional client rotates fairly.
     pending = sorted(catalog["games"], key=lambda row: (
         (master["games"][row["id"]].get("description_lookup") or {}).get("checked_at", ""), row["id"]))
@@ -198,17 +234,22 @@ def enrich_documents(master, catalog, *, official_client=None,
             valid_official = False
             if isinstance(found, dict):
                 source_text = clean_text(found.get("text"))
+                # These verified TW/HK/zh-hant storefronts normally provide
+                # Traditional Chinese. Preserve proper names such as 科奇里
+                # rather than converting 里 into 裡; only copy a publisher
+                # entered in Simplified script is converted.
+                language = "zh-Hans" if simplified(source_text) else "zh-Hant"
                 official = {"igdb_id": game["id"], "name_en": game["name"].strip(),
-                    # These verified TW/HK/zh-hant storefronts provide
-                    # Traditional Chinese already. Preserve proper names
-                    # such as 科奇里 rather than converting 里 into 裡.
-                    "text": source_text, "original_text": source_text,
+                    "text": _S2TW.convert(source_text) if language == "zh-Hans" else source_text,
+                    "original_text": source_text,
                     "source_url": found.get("source_url"), "provider": found.get("provider"),
-                    "official_title": found.get("official_title"), "source_language": "zh-Hant",
+                    "official_title": found.get("official_title"), "source_language": language,
                     "checked_at": checked_at}
                 if _cached_official(game, {"description_official": official}, sources):
                     row["description_official"] = official
                     valid_official = True
+                    if _apply_store_name(row, public, game, found):
+                        stats["store_name_count"] += 1
             # Do not mark a request-budget skip as checked; it gets priority next run.
             if not sources or after > before:
                 row["description_lookup"] = {"igdb_id": game["id"], "name_en": game["name"].strip(),
