@@ -104,19 +104,23 @@ def test_future_official_chinese_upgrades_unchanged_english_and_failed_refresh_k
     master, public, _ = documents()
     enrich_documents(master, public, official_client=client)
     assert public["games"][0]["short_description_source"] == "igdb_original"
-    # Same English, a later official-page update must still be fetched.
+    # Same English, a later official-page update must still be fetched; an
+    # unreleased game is looked at again every three days.
     client.found = True
-    resumed, new_public, _ = documents(previous=master, checked_at="2026-10-04T16:05:00Z")
+    resumed, new_public, _ = documents(previous=master, checked_at="2026-10-05T16:05:00Z")
+    enrich_documents(resumed, new_public, official_client=client)
+    assert client.request_count == 1
+    resumed, new_public, _ = documents(previous=master, checked_at="2026-10-06T16:05:00Z")
     enrich_documents(resumed, new_public, official_client=client)
     assert client.request_count == 2
     assert new_public["games"][0]["short_description_source"] == "official_zh_tw"
     assert new_public["games"][0]["short_description_en"] == game()["summary"]
     assert new_public["games"][0]["description_source_url"] == source["url"]
-    later, later_public, _ = documents(previous=resumed, checked_at="2026-10-05T16:05:00Z")
+    later, later_public, _ = documents(previous=resumed, checked_at="2026-10-08T16:05:00Z")
     enrich_documents(later, later_public, official_client=client)
     assert client.request_count == 2  # Existing official text refreshes weekly.
     client.fail = True
-    later, later_public, _ = documents(previous=later, checked_at="2026-10-11T16:05:00Z")
+    later, later_public, _ = documents(previous=later, checked_at="2026-10-13T16:05:00Z")
     report = enrich_documents(later, later_public, official_client=client)
     assert client.request_count == 3 and later_public["games"][0]["short_description_source"] == "official_zh_tw"
     assert report["official_failure_count"] == 1
@@ -271,3 +275,94 @@ def test_failed_official_refresh_keeps_and_repairs_legacy_traditional_cache(monk
     assert public["games"][0]["short_description"] == state["original_text"]
     assert public["games"][0]["short_description_source"] == "official_zh_tw"
     assert master["games"]["igdb:12345"]["description_official"]["text"] == state["original_text"]
+
+
+# A PS5 game whose IGDB-linked Taiwan PlayStation Store item has Chinese copy.
+STORE_URL = "https://store.playstation.com/zh-hant-tw/concept/10012345"
+STORE_TEXT = "在被遺忘的王國裡，年輕的騎士踏上旅程，尋找失落的龍之心。"
+
+
+def ps5_game(day=(2026, 12, 3), **changes):
+    return game(**{"platforms": [{"id": 167}],
+                   "release_dates": [{"id": 2, "platform": {"id": 167}, "category": 0,
+                                      "y": day[0], "m": day[1], "d": day[2], "region": 8}],
+                   "websites": [{"url": "https://store.playstation.com/en-us/concept/10012345"}], **changes})
+
+
+class StoreClient:
+    def __init__(self, text=STORE_TEXT, name="龍之家族冒險"):
+        self.text, self.name, self.request_count, self.urls = text, name, 0, []
+
+    def lookup(self, raw, sources):
+        self.request_count += 1
+        self.urls.append([row["url"] for row in sources])
+        result = {"text": self.text, "source_url": STORE_URL, "provider": "PlayStation",
+                  "official_title": "A Family Adventure"}
+        if self.name:
+            result["official_name_zh"] = self.name
+        return result
+
+
+def test_linked_store_copy_and_chinese_title_fill_a_ps5_game():
+    master, public, _ = documents(ps5_game())
+    client = StoreClient()
+    report = enrich_documents(master, public, official_client=client)
+    row = public["games"][0]
+    assert client.urls == [[STORE_URL]]
+    assert row["short_description"] == STORE_TEXT
+    assert row["short_description_source"] == "official_zh_tw"
+    assert row["description_source_url"] == STORE_URL
+    assert row["short_description_en"] == game()["summary"]
+    assert (row["display_name"], row["name_zh_tw"], row["name_source"], row["name_url"]) == (
+        "龍之家族冒險", "龍之家族冒險", "PlayStation Store 台灣", STORE_URL)
+    assert row["name_evidence"]["provider"] == "playstation_store"
+    assert report["store_name_count"] == 1
+    # The next collection keeps the title while IGDB still links that item.
+    later, later_public, _ = documents(ps5_game(), previous=master, checked_at="2026-10-04T16:05:00Z")
+    assert later_public["games"][0]["name_zh_tw"] == "龍之家族冒險"
+    unlinked, unlinked_public, _ = documents(ps5_game(websites=[]), previous=master, checked_at="2026-10-04T16:05:00Z")
+    assert unlinked_public["games"][0]["name_zh_tw"] is None
+
+
+def test_a_game_with_its_own_chinese_name_keeps_it():
+    raw = ps5_game(game_localizations=[{"name": "家族冒險", "region": {"identifier": "zh-TW"}}])
+    master, public, _ = documents(raw)
+    enrich_documents(master, public, official_client=StoreClient())
+    assert public["games"][0]["name_zh_tw"] == "家族冒險"
+    assert public["games"][0]["short_description"] == STORE_TEXT
+
+
+def test_simplified_store_copy_is_converted_and_labelled():
+    master, public, _ = documents(ps5_game())
+    enrich_documents(master, public, official_client=StoreClient(text="提前规划以智取敌人，并在充满黑暗生物的世界中前行。", name=None))
+    row = public["games"][0]
+    assert row["short_description"] == "提前規劃以智取敵人，並在充滿黑暗生物的世界中前行。"
+    assert row["short_description_source"] == "official_schinese_converted"
+    assert row["name_zh_tw"] is None
+
+
+def test_unreleased_games_are_looked_at_every_three_days_and_released_ones_once():
+    class Missing(StoreClient):
+        def lookup(self, raw, sources):
+            self.request_count += 1
+            return None
+
+    client = Missing()
+    master, public, _ = documents(ps5_game())
+    enrich_documents(master, public, official_client=client)
+    for checked_at, expected in (("2026-10-05T16:05:00Z", 1), ("2026-10-06T16:05:00Z", 2)):
+        master, public, _ = documents(ps5_game(), previous=master, checked_at=checked_at)
+        enrich_documents(master, public, official_client=client)
+        assert client.request_count == expected
+    # Once it is out (2026-12-03), there are no further checks.
+    for checked_at in ("2026-12-20T16:05:00Z", "2027-01-20T16:05:00Z"):
+        master, public, _ = documents(ps5_game(), previous=master, checked_at=checked_at)
+        enrich_documents(master, public, official_client=client)
+        assert client.request_count == 2
+    # A game first seen after its release is still checked once.
+    client = Missing()
+    master, public, _ = documents(ps5_game(day=(2026, 10, 10)), checked_at="2026-10-20T16:05:00Z")
+    enrich_documents(master, public, official_client=client)
+    master, public, _ = documents(ps5_game(day=(2026, 10, 10)), previous=master, checked_at="2026-10-30T16:05:00Z")
+    enrich_documents(master, public, official_client=client)
+    assert client.request_count == 1

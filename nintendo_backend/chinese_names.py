@@ -23,7 +23,8 @@ _KANA = re.compile(r"[\u3040-\u30ff]")
 _APP_ID = re.compile(r"[1-9][0-9]{0,9}\Z")
 _STEAM_URL = re.compile(r"https://store\.steampowered\.com/app/([1-9][0-9]{0,9})(?:/[^/?#]+)?/?(?:[?#].*)?\Z")
 NAME_FIELDS = ("display_name", "name_en", "name_zh_tw", "name_source", "name_url", "name_evidence", "steam_appid")
-_PROVIDERS = {"official_registry", "igdb_localization", "igdb_alternative_name", "steam_appdetails"}
+_PROVIDERS = {"official_registry", "igdb_localization", "igdb_alternative_name", "steam_appdetails",
+              "playstation_store"}
 
 
 def _https_url(value):
@@ -118,6 +119,11 @@ def _cached_name(game, previous, registry):
         if (not official or official.get("name_en", "").strip() != game["name"].strip()
                 or official.get("name_zh_tw") != previous["name_zh_tw"]
                 or official.get("source") != previous["name_source"] or official.get("url") != previous.get("name_url")):
+            return None
+    if evidence["provider"] == "playstation_store":
+        # Kept while IGDB still links the game to this exact store item.
+        from .official_descriptions import linked_playstation_urls
+        if previous.get("name_url") not in linked_playstation_urls(game):
             return None
     if evidence["provider"] == "steam_appdetails":
         appid = previous.get("steam_appid")
