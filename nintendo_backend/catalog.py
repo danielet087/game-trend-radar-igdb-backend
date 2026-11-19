@@ -29,6 +29,10 @@ EXPLICIT = re.compile(r"\b(?:hentai|pornograph(?:y|ic)|sex game|adult game|sexua
                       r"explicit sexual|uncensored sexual|sex scenes|sexual acts|lots of sex)\b", re.I)
 STRONG_CONTENT = {"strong sexual content", "explicit sexual content", "explicit sex", "sexo explicito"}
 TAIPEI = ZoneInfo("Asia/Taipei")
+# The first day of the first published console calendar. Console releases from
+# then on stay public after release, as Steam games do; the upcoming window only
+# decides which future dates are added.
+PUBLIC_HISTORY_START = date(2026, 10, 4)
 RELEASE_FIELDS = ("date", "platform", "precision", "region", "source", "date_basis",
                   "source_date", "source_timestamp", "source_region", "time_zone",
                   "timestamp_taipei_date", "timezone_status", "taiwan_release_confirmed",
@@ -246,7 +250,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if len(dates) != 1:
             continue  # Conflicting equally relevant records require review.
         selected = sorted(best, key=lambda row: (row["region"], row.get("id") or 0))[0]
-        if start <= date.fromisoformat(selected["date"]) < end:
+        if min(start, PUBLIC_HISTORY_START) <= date.fromisoformat(selected["date"]) < end:
             calendar_releases.append({key: selected[key] for key in RELEASE_FIELDS})
     reasons = []
     if not tracked:
