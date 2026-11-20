@@ -167,21 +167,27 @@ def platform_language_support(game, tracked_platforms, registry=None):
     for platform, row in official["platforms"].items():
         if platform not in result:
             continue  # Evidence for another native version never carries over.
-        codes = set(row["supported_languages"])
-        complete = row["complete"]
-        # A generic Chinese label proves Chinese, but not either written variant.
-        def supported(code):
-            return True if code in codes else None if not complete or (code.startswith("zh-") and "zh" in codes) else False
-        result[platform] = {"status": "confirmed" if complete else "partial", "region": row["region"],
-                            "languages": {"tchinese": supported("zh-Hant"), "schinese": supported("zh-Hans"),
-                                          "english": supported("en"),
-                                          "chinese": True if codes & {"zh", "zh-Hant", "zh-Hans"} else False if complete else None},
-                            "supported_languages": [{"code": code, "name": LANGUAGE_NAMES[code]} for code in row["supported_languages"]],
-                            "complete": complete, **{key: deepcopy(row[key]) for key in
-                                                      ("source", "source_url", "checked_at", "evidence_type")}}
-        if platform == "PS5" and row.get("product_id"):
-            result[platform]["product_id"] = row["product_id"]
+        result[platform] = support_entry(row, product=platform == "PS5")
     return result
+
+
+def support_entry(row, product=True):
+    """One version's published language support from an official language list."""
+    codes = set(row["supported_languages"])
+    complete = row["complete"]
+    # A generic Chinese label proves Chinese, but not either written variant.
+    def supported(code):
+        return True if code in codes else None if not complete or (code.startswith("zh-") and "zh" in codes) else False
+    entry = {"status": "confirmed" if complete else "partial", "region": row["region"],
+             "languages": {"tchinese": supported("zh-Hant"), "schinese": supported("zh-Hans"),
+                           "english": supported("en"),
+                           "chinese": True if codes & {"zh", "zh-Hant", "zh-Hans"} else False if complete else None},
+             "supported_languages": [{"code": code, "name": LANGUAGE_NAMES[code]} for code in row["supported_languages"]],
+             "complete": complete, **{key: deepcopy(row[key]) for key in
+                                       ("source", "source_url", "checked_at", "evidence_type")}}
+    if product and row.get("product_id"):
+        entry["product_id"] = row["product_id"]
+    return entry
 
 
 def platform_editions(game, tracked_platforms, registry=None):

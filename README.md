@@ -97,11 +97,11 @@ Nintendo 支援語言另由 `data/nintendo_languages.json` 保存已核對的官
 
 已核對的綑綁／Deluxe 商品另公開 `platform_editions.NS／NS2`，讓前端明示「本體＋擴充版」、「Deluxe 版」或「本體＋DLC」。登錄檔需明示 `edition_type`、`edition_label`、官方商品名稱與商品 ID，並提供 `identity_relation: base_game_included`、本體包含證據及官方證據網址；語言與版本標示分開保存。公開版本資料包含商品名稱、地區、商品網址及原核對時間，同樣由發布 gate 重新驗證。缺少已核對版本資料時不產生版本標示，不推定為普通本體版；日後原生 NS／NS2 對應改變或官方更改內容需重新核對。
 
-NS、NS2、PS5 的月曆發售日期統一採用 IGDB 的平台別發售記錄。確切日的 Unix timestamp 轉為 `Asia/Taipei` 後，使用換算出的台灣時區日期；同時保存原 IGDB 日曆日、Unix 秒、來源地區與換算結果。跨日換算也使用轉換後日期，但不宣稱這是台灣官方發售確認。只有年月日而沒有 timestamp 時保留該日期，不補造時刻；年、季、月及未定仍不能進入確切日期月曆。
+NS、NS2、PS5 的月曆發售日期採用 IGDB 的平台別發售記錄；PS5 版有台灣 PlayStation Store 目前確認的發售時間時，改用台灣商店的日期（見下方「PS5 台灣商店資料」）。IGDB 確切日的 Unix timestamp 轉為 `Asia/Taipei` 後，使用換算出的台灣時區日期；同時保存原 IGDB 日曆日、Unix 秒、來源地區與換算結果。跨日換算也使用轉換後日期，但不宣稱這是台灣官方發售確認。只有年月日而沒有 timestamp 時保留該日期，不補造時刻；年、季、月及未定仍不能進入確切日期月曆。
 
-公開資料的日期政策為 `source.release_date_policy: igdb_taipei_v1`。有 timestamp 的日精度記錄使用 `date_basis: igdb_timestamp_taipei` 與 `timezone_status: converted_to_taipei`；只有日期的記錄使用 `igdb_calendar_day` 與 `date_only`。詳細頁標示 IGDB 與台灣時區，不將資料庫預設午夜換算的 08:00 當成實際解鎖時刻。平台選日仍按來源地區優先級（台灣、亞洲、全球、日本、中國、韓國、其他），相同優先級互相矛盾的日期保留候選、等待 IGDB 更正。
+公開資料的日期政策為 `source.release_date_policy: taiwan_store_then_igdb_taipei_v1`（台灣商店的日期優先，其次是 IGDB 換算台灣時區）。有 timestamp 的日精度記錄使用 `date_basis: igdb_timestamp_taipei` 與 `timezone_status: converted_to_taipei`；只有日期的記錄使用 `igdb_calendar_day` 與 `date_only`。詳細頁標示 IGDB 與台灣時區，不將資料庫預設午夜換算的 08:00 當成實際解鎖時刻。平台選日仍按來源地區優先級（台灣、亞洲、全球、日本、中國、韓國、其他），相同優先級互相矛盾的日期保留候選、等待 IGDB 更正。
 
-`data/nintendo_release_dates.json`／`data/playstation_release_dates.json` 保留歷史官方證據和已核對商品連結；`--taiwan-releases`／`--playstation-releases` 沿用作相容與商店連結來源，**不再覆蓋 IGDB 月曆日期**。中文名稱、各平台官方支援語言與版本商品身分仍使用各自已核對的登錄檔，Steam 日期流程維持原規則。
+`data/nintendo_release_dates.json`／`data/playstation_release_dates.json` 保留歷史官方證據和已核對商品連結；`--taiwan-releases`／`--playstation-releases` 沿用作相容與商店連結來源，**不覆蓋月曆日期**：登錄檔是某一天的快照，日期改了也不會知道；會再回查的台灣商店資料才會蓋過 IGDB。中文名稱、各平台官方支援語言與版本商品身分仍使用各自已核對的登錄檔，Steam 日期流程維持原規則。
 
 來源：[IGDB API](https://api-docs.igdb.com/)、各遊戲 Nintendo 官方商品頁。
 
@@ -109,10 +109,20 @@ NS、NS2、PS5 的月曆發售日期統一採用 IGDB 的平台別發售記錄�
 
 PS5（IGDB 平台 ID `167`）沿用每日 08:30 同一收集器、hypes ≥ 30、未來 365 天與確切日／內容資格規則。保留既有 `nintendo_backend` 模組與三個 `nintendo_*.json` 傳輸檔名以相容候選歷史、收藏與跑馬燈；檔案現在涵蓋 NS、NS2、PS5，來源均是 IGDB。PS4 的向下相容不能生成 PS5 原生版本。
 
-`data/playstation_release_dates.json` 與 `data/playstation_languages.json` 保存已核對的 Sony 官方 PS5 版本證據，分別以 `--playstation-releases`、`--playstation-languages` 載入；前者只提供已核對商店連結，PS5 日期統一依上述 IGDB 台灣時區政策。語言與版本資料仍由發布 gate 核對 IGDB ID、英文完整名稱、原生平台、商品身分與官方來源，香港語言資料保留香港標示。PS5 不沿用 Steam 或 NS／NS2 的語言與版本證據。
+`data/playstation_release_dates.json` 與 `data/playstation_languages.json` 保存已核對的 Sony 官方 PS5 版本證據，分別以 `--playstation-releases`、`--playstation-languages` 載入；前者只提供已核對商店連結，不改日期。語言與版本資料仍由發布 gate 核對 IGDB ID、英文完整名稱、原生平台、商品身分與官方來源，香港語言資料保留香港標示。PS5 不沿用 Steam 或 NS／NS2 的語言與版本證據。
 
-既有流程對符合月曆資格且有 PS5 版本的遊戲進行有上限的官方 Store 調查（最多 30 頁、90 秒，台灣优先、香港備援），優先未來 PS5 版本，再查尚未嘗試或較久未查的版本；同等條件按 hypes 排序，避免低順位一直耗盡額度。調查進度保存在完整候選主資料，下一輪沿用。只使用 IGDB 明示的商品／concept URL，檢查頁面選定商品、英文完整名稱、PS5 與正式本體類型；不搜尋猜測商品，也不把 Deluxe／DLC 自動當成本體。`nintendo_refresh_status.json.playstation_investigation` 明示 `review_only: true`，供後續核對；調查報告不直接改變公開日期或語言，語言與版本的正式確認仍須更新可信登錄檔；日期只由 IGDB 更新。商品頁未公開語言、查不到或遇 429 時，保留未知與調查狀態。
+## PS5 台灣商店資料
 
-Sony 官方商品與 concept 調查報告保留為版本、連結與語言核對材料，內含的官方日期／時刻不再覆蓋月曆日期。IGDB 每日更新的平台日期直接按台灣時區顯示。
+每天的收集對已公開、有 PS5 版本、而且到期的遊戲查 PlayStation Store 台灣商店（`official_store`）：
+- 只查 IGDB 自己連到的商品或 concept，改讀台灣商店的同一個 ID；頁面選定的商品要是同一款遊戲（英文完整名稱）、PS5 原生版、正式本體與標準版，不搜尋猜測商品，也不把 Deluxe／DLC 當成本體。concept 要有頁面顯示的 UTC 發售時刻。
+- 確認到的資料直接採用，排在 IGDB 前面：
+  - 發售時間換算台灣時區當作 PS5 版的日期（`source: official_registry`、`region: taiwan`、`taiwan_release_confirmed: true`、`official_release_time_utc`）；IGDB 自己的日期與時間戳留在 `source_date`／`source_timestamp`，網站可以說明「原始 IGDB 日期為…，已依台灣官方日期修正」。`release_records` 仍是 IGDB 原始記錄。
+  - PS5 語言：台灣商店的語言表（完整清單標 confirmed，只有標題標示的標 partial）；已核對登錄檔有完整清單、商店只有部分時，保留登錄檔。
+  - PS5 沒有其他商店連結時，台灣商品頁就是 PS5 的商店連結。
+- 查詢時間表（每款各自計算）：還沒確認過的先查；上市前每 3 天一次，上市前 14 天內每天一次，上市日（或之後）再查最後一次就停。日期以網站目前顯示的 PS5 日期為準，台灣商店改日期就跟著改。IGDB 連到的商品換了就馬上重查。
+- 商店有回答（確認、或商店沒有這個商品／頁面是別款遊戲）才算查過；伺服器錯誤、逾時、額度用完或限流不算，隔天再試，原本確認的資料保留。商店不再有這個商品就移除原本的資料，改回 IGDB。
+- 確認過的資料在 14 天內有效；上市日當天或之後確認的，之後一直有效。超過 14 天沒有再確認（例如連續查不到），就改回 IGDB 的日期。
+- 每輪最多 40 頁、120 秒，遇到 429 整輪停；台灣查不到時另查香港，香港結果只當核對材料，不採用。
+- 每款的查詢狀態與確認資料存在完整主資料的 `official_store`（不公開）；發布 gate 用主資料裡的這份狀態重建，日期、語言、連結對不上就整批不發布。`nintendo_refresh_status.json.playstation_investigation` 記錄這輪到期與實際查詢的筆數、各結果數、採用台灣日期與語言的遊戲數。
 
 完整候選量較大時，發布器會將 `nintendo_master.json` 保存為 `gzip-base64` 傳輸封裝（含 SHA-256 與解壓後位元組數）。候選、原始證據、平台歷史與已查狀態全部保留；下一輪 `load_existing` 校驗及解碼後使用相同完整資料。小型舊 JSON 仍可直接載入；公開 `nintendo_upcoming.json` 與回條保持可讀 JSON。封裝不是截斷或刪除候選，也不改變日期／語言發布驗證。

@@ -17,6 +17,7 @@ from . import popularity
 from .languages import load_combined_registry as load_language_registry
 from .taiwan_releases import load_combined_registry as load_release_registry
 from .playstation import PlayStationStoreClient
+from . import official_store
 from .persistence import decode_master
 from .descriptions import enrich_documents as enrich_descriptions
 from .official_descriptions import OfficialDescriptionClient
@@ -185,42 +186,58 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     except CollectionError as error:
         popscore = None
         popscore_report.update(status="previous_values", reason=error.reason)
-    master, catalog, status = build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
-                           retained_unavailable_ids=retained_ids, popscore=popscore,
-                           name_registry=name_registry,
-                           release_registry=release_registry,
-                           language_registry=language_registry,
-                           source={"discovery_release_count": len(releases), "request_count": client.request_count,
-                                   "retry_count": client.retry_count, "platform_ids_verified": [130, 167, 508],
-                                   "game_lookup": lookup_report,
-                                   "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"})
+    def build(store_states=None):
+        return build_documents(raw_games, start=start, checked_at=checked_at, previous=previous,
+                               retained_unavailable_ids=retained_ids, popscore=popscore,
+                               name_registry=name_registry,
+                               release_registry=release_registry,
+                               language_registry=language_registry, store_states=store_states,
+                               source={"discovery_release_count": len(releases), "request_count": client.request_count,
+                                       "retry_count": client.retry_count, "platform_ids_verified": [130, 167, 508],
+                                       "game_lookup": lookup_report,
+                                       "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"})
+    master, catalog, status = build()
+    store_report = None
+    if playstation_client is not None:
+        # The Taiwan PlayStation Store is checked for the published PS5 games that
+        # are due; this run's answers then go into the documents built again below.
+        today = datetime.fromisoformat(checked_at.replace("Z", "+00:00")).astimezone(ZoneInfo("Asia/Taipei")).date()
+        raw_by_key = {"igdb:" + str(row["id"]): row for row in raw_games}
+        due = []
+        for public in catalog["games"]:
+            if not any(p["code"] == "PS5" for p in public["platforms"]):
+                continue
+            row, raw = master["games"][public["id"]], raw_by_key.get(public["id"])
+            release = next((date.fromisoformat(r["date"]) for r in public["releases"] if r["platform"] == "PS5"), None)
+            state = row.get(official_store.FIELD)
+            if raw is not None and official_store.is_due(state, raw, release, today):
+                # Upcoming games first, the soonest first; then final checks of
+                # released games, the most recent first; never-answered games
+                # before others of the same day.
+                last = ((state or {}).get("PS5") or {}).get("checked_at") or ""
+                upcoming = release is not None and release >= today
+                distance = abs((release - today).days) if release else 0
+                due.append(((release is None, not upcoming, distance, bool(last), last,
+                             -(raw.get("hypes") or 0), raw["id"]), raw))
+        due_games = [raw for _, raw in sorted(due, key=lambda item: item[0])]
+        store_report = playstation_client.investigate(due_games)
+        checked = store_report.get("games") if isinstance(store_report, dict) else None
+        checked = checked if isinstance(checked, dict) else {}
+        states = {}
+        for raw in due_games:
+            key = "igdb:" + str(raw["id"])
+            merged = official_store.merge(master["games"][key].get(official_store.FIELD), raw,
+                                          checked.get(key), checked_at)
+            if merged is not None:
+                states[key] = merged
+        if states:
+            master, catalog, status = build(states)
+        tracked = [row[official_store.FIELD] for row in master["games"].values() if row.get(official_store.FIELD)]
+        status["playstation_investigation"] = official_store.summary(tracked, {**(store_report if isinstance(store_report, dict) else {}), "games": checked},
+                                                                     catalog["games"], len(due_games), checked_at)
     status["popscore_fetch"] = popscore_report
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
-    if playstation_client is not None:
-        admitted = {row["igdb_id"]: row for row in catalog["games"] if any(p["code"] == "PS5" for p in row["platforms"])}
-        last_report = (previous or {}).get("playstation_investigation") or {}
-        prior_checks = last_report.get("games", {}) if isinstance(last_report, dict) else {}
-        def previous_attempt(raw):
-            record = prior_checks.get("igdb:" + str(raw["id"])) if isinstance(prior_checks, dict) else None
-            if not isinstance(record, dict) or not record.get("attempted_urls"):
-                return ""
-            try:
-                checked = datetime.fromisoformat(record["checked_at"].replace("Z", "+00:00"))
-                if checked.utcoffset() is not None and checked <= datetime.fromisoformat(checked_at.replace("Z", "+00:00")):
-                    return checked.astimezone(timezone.utc).isoformat()
-            except (ValueError, TypeError, KeyError, AttributeError):
-                pass
-            return ""
-        investigation_games = sorted([row for row in raw_games if row["id"] in admitted],
-            key=lambda row: (not any(r["platform"] == "PS5" for r in admitted[row["id"]]["releases"]),
-                             previous_attempt(row),
-                             -(row.get("hypes") or 0), row["id"]))
-        # Investigation reports are review material. Only reviewed repository
-        # registries affect languages/store identity; dates use IGDB only.
-        status["playstation_investigation"] = {"review_only": True,
-            **playstation_client.investigate(investigation_games)}
-        master["playstation_investigation"] = deepcopy(status["playstation_investigation"])
     status["description_enrichment"] = enrich_descriptions(
         master, catalog, official_client=official_description_client,
         language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)

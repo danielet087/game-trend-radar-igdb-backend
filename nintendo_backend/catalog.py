@@ -17,6 +17,7 @@ from .igdb import CollectionError
 from . import popularity
 from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
+from . import official_store
 
 PLATFORMS = {130: {"id": 130, "name": "Nintendo Switch", "code": "NS"},
              167: {"id": 167, "name": "PlayStation 5", "code": "PS5"},
@@ -35,6 +36,8 @@ TAIPEI = ZoneInfo("Asia/Taipei")
 # then on stay public after release, as Steam games do; the upcoming window only
 # decides which future dates are added.
 PUBLIC_HISTORY_START = date(2026, 10, 4)
+# The publisher's rebuild reads the Taiwan store state each master row keeps.
+_FROM_PREVIOUS = object()
 RELEASE_FIELDS = ("date", "platform", "precision", "region", "source", "date_basis",
                   "source_date", "source_timestamp", "source_region", "time_zone",
                   "timestamp_taipei_date", "timezone_status", "taiwan_release_confirmed",
@@ -194,7 +197,7 @@ def content_policy(game):
 
 
 def normalize_game(game, start: date, end: date, checked_at: str, *, previous=None, name_registry=None,
-                   release_registry=None, language_registry=None):
+                   release_registry=None, language_registry=None, store_state=_FROM_PREVIOUS):
     if not isinstance(game, dict) or type(game.get("id")) is not int or game["id"] <= 0:
         raise CollectionError("invalid_game_identity")
     hypes = game.get("hypes")
@@ -220,8 +223,9 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if row["id"] in PLATFORMS:
             row.update(PLATFORMS[row["id"]])
     tracked = [deepcopy(PLATFORMS[id_]) for id_ in sorted(known_ids & PLATFORMS.keys())]
-    # Release dates come exclusively from IGDB. Reviewed store registries still
-    # identify product links below, but never override this calendar policy.
+    # Release dates come from IGDB, except a PS5 day the Taiwan PlayStation
+    # Store currently confirms (official_store). Reviewed store registries only
+    # identify product links below: their dates are snapshots that can go stale.
     outside = known_ids - PLATFORMS.keys()
     exclusive_status = "multi_platform" if outside or (platform_complete and len(known_ids) > 1) else "listed_only" if platform_complete else "unknown"
     exclusive_platform = tracked[0]["code"] if len(tracked) == 1 and not outside and platform_complete else None
@@ -238,7 +242,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     popularity = "qualified" if hypes is not None and hypes >= 30 else "observe" if hypes is not None and hypes >= 20 else "unknown" if hypes is None else "below_threshold"
     possible = [r for r in releases if (not r["range_start"] or not r["range_end"] or
                 (date.fromisoformat(r["range_start"]) < end and date.fromisoformat(r["range_end"]) >= start))]
-    calendar_releases = []
+    calendar_releases, selected_records = [], {}
     # Region priority, including a more relevant known date outside the window,
     # prevents incorrectly replacing an earlier Asia date with a later US date.
     for code in ("NS", "NS2", "PS5"):
@@ -252,8 +256,20 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if len(dates) != 1:
             continue  # Conflicting equally relevant records require review.
         selected = sorted(best, key=lambda row: (row["region"], row.get("id") or 0))[0]
+        selected_records[code] = selected
         if min(start, PUBLIC_HISTORY_START) <= date.fromisoformat(selected["date"]) < end:
             calendar_releases.append({key: selected[key] for key in RELEASE_FIELDS})
+    store = official_store.validated_state(
+        game, (previous or {}).get(official_store.FIELD) if store_state is _FROM_PREVIOUS else store_state, checked_at)
+    if not any(row["code"] == "PS5" for row in tracked):
+        store = None
+    store_evidence, confirmed_at = official_store.current_evidence(store, checked_at)
+    taiwan = official_store.taiwan_release(store_evidence, confirmed_at, selected_records.get("PS5"))
+    if taiwan:
+        # The Taiwan store's day comes first, inside or outside the window.
+        calendar_releases = [row for row in calendar_releases if row["platform"] != "PS5"]
+        if min(start, PUBLIC_HISTORY_START) <= date.fromisoformat(taiwan["date"]) < end:
+            calendar_releases.append(taiwan)
     reasons = []
     if not tracked:
         reasons.append("no_tracked_native_platform")
@@ -284,14 +300,19 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     for evidence in list(platform_language_support(game, tracked, language_registry).values()) + list(platform_editions(game, tracked, language_registry).values()):
         if (link := playstation_official_url(evidence.get("source_url"))) and link not in playstation_urls:
             playstation_urls.insert(0, link)
-    for evidence in official_releases(game, release_registry):
-        if evidence["platform"] == "PS5" and (link := playstation_official_url(evidence["url"])) and link not in playstation_urls:
+    for registry_row in official_releases(game, release_registry):
+        if registry_row["platform"] == "PS5" and (link := playstation_official_url(registry_row["url"])) and link not in playstation_urls:
             playstation_urls.insert(0, link)
+    # The Taiwan store item the PS5 day or languages came from is a shop link too.
+    if store_evidence and store_evidence["source_url"] not in playstation_urls:
+        playstation_urls.append(store_evidence["source_url"])
+    languages = platform_language_support(game, tracked, language_registry)
+    official_store.apply_languages(languages, store_evidence, confirmed_at)
     result = {"id": "igdb:" + str(game["id"]), "igdb_id": game["id"],
               **names(game, registry=name_registry, previous=previous),
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
               "popularity_status": popularity, "platforms": tracked, "known_platforms": known,
-              "platform_language_support": platform_language_support(game, tracked, language_registry),
+              "platform_language_support": languages,
               "platform_editions": platform_editions(game, tracked, language_registry),
               "game_modes": game_modes(game), "multiplayer_modes": multiplayer_modes(game),
               "platform_data_complete": platform_complete,
@@ -305,6 +326,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "eligibility_reasons": reasons, "possible_in_window": bool(possible), "checked_at": checked_at,
               "first_observed_at": (previous or {}).get("first_observed_at", checked_at),
               **game_profile(game), "raw": deepcopy(stored_raw(game))}
+    if store:
+        result[official_store.FIELD] = store
     result.update(describe(game, previous=previous, official_candidates=description_candidates(
         game, language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)))
     # A store item already matched for the Chinese description is the PS5 shop without another link.
@@ -397,7 +420,9 @@ def validate_retained_candidate(row, id_, checked_at):
 
 
 def build_documents(raw_games, *, start: date, checked_at: str, previous=None, source=None, name_registry=None,
-                    release_registry=None, language_registry=None, retained_unavailable_ids=(), popscore=None):
+                    release_registry=None, language_registry=None, retained_unavailable_ids=(), popscore=None,
+                    store_states=None):
+    """store_states: this run's Taiwan store checks by game; other games keep their stored state."""
     end = start + timedelta(days=365)
     prior_games = (previous or {}).get("games") or {}
     games = {}
@@ -407,7 +432,9 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
             raise CollectionError("duplicate_game_identity")
         games[key] = normalize_game(raw, start, end, checked_at, previous=prior_games.get(key),
                                     name_registry=name_registry, release_registry=release_registry,
-                                    language_registry=language_registry)
+                                    language_registry=language_registry,
+                                    store_state=(store_states[key] if store_states and key in store_states
+                                                 else _FROM_PREVIOUS))
     retained_ids = list(retained_unavailable_ids)
     if (any(type(id_) is not int or id_ <= 0 for id_ in retained_ids)
             or len(set(retained_ids)) != len(retained_ids)):
@@ -427,14 +454,14 @@ def build_documents(raw_games, *, start: date, checked_at: str, previous=None, s
     window = {"start": start.isoformat(), "end": end.isoformat(), "end_inclusive": False, "time_zone": "Asia/Taipei"}
     complete = not retained_ids
     provenance = {"provider": "IGDB", "hypes_threshold": 30, **(source or {}), "popscore": popscore_summary,
-                  "release_date_policy": "igdb_taipei_v1", "complete": complete,
+                  "release_date_policy": official_store.RELEASE_DATE_POLICY, "complete": complete,
                   "ledger_complete": True, "lookup_complete": complete, "public_complete": True}
     master = {"schema_version": 1, "generated_at": checked_at, "window": window, "source": provenance, "games": games}
     public = []
     for row in games.values():
         if row["calendar_eligible"]:
             public.append({key: deepcopy(value) for key, value in row.items()
-                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup", "popscore_admitted_at", *DESCRIPTION_PRIVATE_FIELDS}})
+                           if key not in {"raw", "content_screening", "eligibility_reasons", "release_records", "possible_in_window", "platform_history", "steam_name_lookup", "popscore_admitted_at", official_store.FIELD, *DESCRIPTION_PRIVATE_FIELDS}})
     public.sort(key=lambda row: (min(r["date"] for r in row["releases"]), row["id"]))
     counts = {status: sum(row["popularity_status"] == status for row in games.values())
               for status in ("qualified", "observe", "below_threshold", "unknown")}
