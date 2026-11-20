@@ -229,6 +229,62 @@ def test_ps5_matching_public_master_and_investigation_cannot_self_authorize_proo
     assert client.calls == []
 
 
+STORE_PRODUCT = "JP0005-PPSA23593_00-APPLICATION00000"
+
+
+def store_state(raw, **changes):
+    found = {"product_id": STORE_PRODUCT, "concept_id": None, "official_title": raw["name"], "region": "taiwan",
+             "source_url": "https://store.playstation.com/zh-hant-tw/product/" + STORE_PRODUCT,
+             "supported_languages": ["zh-Hant", "en"], "complete": True,
+             "evidence_type": "official_product_languages", "release_time_utc": "2026-10-15T16:00:00Z",
+             "date": "2026-10-16"}
+    request = "https://store.playstation.com/en-tw/product/" + STORE_PRODUCT
+    entry = {"outcome": "confirmed", "urls": [request], "checked_at": CHECKED, "attempted_at": CHECKED,
+             "request_url": request, "evidence": found, "confirmed_at": CHECKED}
+    entry.update(changes)
+    return {"igdb_id": raw["id"], "name_en": raw["name"], "PS5": entry}
+
+
+@pytest.fixture
+def ps5_store_bundle():
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    raw["platforms"] = [{"id": 167, "name": "PlayStation 5"}]
+    raw["release_dates"][0]["platform"] = {"id": 167}
+    raw["websites"] = [{"url": "https://store.playstation.com/en-us/product/" + STORE_PRODUCT}]
+    return dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+        store_states={"igdb:12345": store_state(raw)}, source={"platform_ids_verified": [130, 167, 508]})))
+
+
+def test_ps5_taiwan_store_day_rebuilds_from_the_master_state(ps5_store_bundle):
+    validate_bundle(ps5_store_bundle, now=NOW)
+    row = ps5_store_bundle["nintendo_upcoming.json"]["games"][0]
+    assert row["releases"][0]["date"] == "2026-10-16" and row["releases"][0]["source"] == "official_registry"
+    assert row["releases"][0]["source_date"] == "2026-10-15"
+    assert row["platform_language_support"]["PS5"]["languages"]["tchinese"] is True
+    assert "official_store" not in row
+    assert ps5_store_bundle["nintendo_master.json"]["source"]["release_date_policy"] == "taiwan_store_then_igdb_taipei_v1"
+
+
+@pytest.mark.parametrize("forge", [
+    # A public Taiwan day the master's state does not support.
+    lambda master, public: [row["releases"][0].update(date="2026-10-17", official_release_time_utc="2026-10-16T16:00:00Z")
+                            for row in (master, public)],
+    # Evidence for an item IGDB does not link, or that names another item than its URL.
+    lambda master, public: master["official_store"]["PS5"].update(request_url="https://store.playstation.com/en-tw/product/JP0005-PPSA99999_00-APPLICATION00000"),
+    lambda master, public: master["official_store"]["PS5"]["evidence"].update(product_id="JP0005-PPSA99999_00-APPLICATION00000"),
+    # A confirmation dated after the collection.
+    lambda master, public: master["official_store"]["PS5"].update(confirmed_at="2026-10-03T16:10:00Z"),
+    # Removing the state cannot keep its Taiwan day either.
+    lambda master, public: master.pop("official_store"),
+])
+def test_ps5_taiwan_store_rows_cannot_be_forged(ps5_store_bundle, forge):
+    forge(ps5_store_bundle["nintendo_master.json"]["games"]["igdb:12345"], ps5_store_bundle["nintendo_upcoming.json"]["games"][0])
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(ps5_store_bundle, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
 @pytest.fixture
 def language_bundle(tmp_path, monkeypatch):
     assert P.NINTENDO_LANGUAGE_REGISTRY.is_absolute()

@@ -2,7 +2,8 @@
 
 Only official Taiwan/Hong Kong metadata for the same English game identity and
 native PS5 version is usable. A store listing does not establish exclusivity.
-The client returns evidence for review; it never writes trusted registries.
+The client never writes trusted registries; Taiwan evidence is adopted by
+official_store, which keeps it current. Hong Kong evidence stays review material.
 """
 from __future__ import annotations
 
@@ -22,10 +23,14 @@ import requests
 PRODUCT_ID = r"[A-Z]{2}[0-9]{4}-[A-Z0-9]{9}_[A-Z0-9]{2}-[A-Z0-9]{16}"
 _STORE_PATH = re.compile(r"/([a-z-]+)/(?:(product)/(" + PRODUCT_ID + r")|(concept)/([0-9]{1,12}))/?")
 _LOCALES = {"taiwan": {"zh-hant-tw", "en-tw"}, "hong_kong": {"zh-hant-hk", "en-hk"}}
-MAX_PAGES = 30
+# Only games due for a check are requested (official_store.is_due), about 25 a
+# day: every 3 days until release, daily in the last 14 days, once after it.
+MAX_PAGES = 40
 MAX_HTML_BYTES = 2_000_000
 TIMEOUT_SECONDS = 5
-DEADLINE_SECONDS = 90
+DEADLINE_SECONDS = 120
+# The storefront does not have this item: a conclusive answer, unlike an error.
+_MISSING = {301, 302, 303, 307, 308, 404, 410}
 
 
 def official_url(value, *, region=None):
@@ -386,6 +391,16 @@ def _discovery_store_url(value, region):
         return None
 
 
+def taiwan_store_urls(game):
+    """The Taiwan storefront pages of the store items IGDB links to this game."""
+    urls = []
+    for website in game.get("websites") if isinstance(game, dict) and isinstance(game.get("websites"), list) else []:
+        url = _discovery_store_url(website.get("url") if isinstance(website, dict) else None, "taiwan")
+        if url and url not in urls:
+            urls.append(url)
+    return urls
+
+
 class PlayStationStoreClient:
     """Investigate linked products without unauthenticated search or retries."""
     def __init__(self, session=None):
@@ -404,9 +419,15 @@ class PlayStationStoreClient:
                     continue
                 found, attempted, last_status = None, [], "rate_limited" if rate_limited else "no_exact_store_url"
                 websites = game.get("websites") if isinstance(game.get("websites"), list) else []
+                # What the Taiwan storefront said: an answer (confirmed, or every
+                # Taiwan item fetched without a match), or why there was none.
+                taiwan_urls = taiwan_store_urls(game)
+                taiwan_results, taiwan_stop, taiwan_url = [], None, None
                 for region in ("taiwan", "hong_kong"):
                     for website in websites:
                         if rate_limited:
+                            if region == "taiwan":
+                                taiwan_stop = taiwan_stop or "rate_limited"
                             break
                         url = _discovery_store_url(website.get("url") if isinstance(website, dict) else None, region)
                         if not url or url in attempted:
@@ -414,6 +435,8 @@ class PlayStationStoreClient:
                         remaining = DEADLINE_SECONDS - (time.monotonic() - started)
                         if remaining <= 0 or pages >= MAX_PAGES:
                             last_status = "budget_exhausted"
+                            if region == "taiwan":
+                                taiwan_stop = "budget_exhausted"
                             break
                         attempted.append(url)
                         if url not in cache:
@@ -421,32 +444,49 @@ class PlayStationStoreClient:
                             try:
                                 response = self.session.get(url, timeout=min(TIMEOUT_SECONDS, remaining), allow_redirects=False)
                                 if response.status_code == 429:
-                                    cache[url] = None
+                                    cache[url] = ("error", None)
                                     rate_limited, last_status = True, "rate_limited"
+                                    if region == "taiwan":
+                                        taiwan_stop = "rate_limited"
                                     break
-                                if response.status_code != 200 or len(response.content) > MAX_HTML_BYTES or official_url(response.url) != url:
-                                    cache[url] = None
+                                if response.status_code in _MISSING:
+                                    cache[url] = ("missing", None)
+                                elif response.status_code != 200 or len(response.content) > MAX_HTML_BYTES or official_url(response.url) != url:
+                                    cache[url] = ("error", None)
                                 else:
-                                    cache[url] = response.text
+                                    cache[url] = ("page", response.text)
                             except (requests.RequestException, ValueError, UnicodeError):
-                                cache[url] = None
-                        if cache[url] is None:
+                                cache[url] = ("error", None)
+                        kind, page = cache[url]
+                        if page is None:
                             last_status = "unavailable"
+                            if region == "taiwan":
+                                taiwan_results.append("unconfirmed" if kind == "missing" else "unavailable")
                             continue
                         try:
-                            found = parse_store_metadata(cache[url], url, game["name"])
+                            found = parse_store_metadata(page, url, game["name"])
                         except (ValueError, TypeError, AttributeError, RecursionError):
                             found = None
                         if found:
+                            if region == "taiwan":
+                                taiwan_results.append("confirmed")
+                                taiwan_url = url
                             break
                         last_status = "identity_or_metadata_unconfirmed"
+                        if region == "taiwan":
+                            taiwan_results.append("unconfirmed")
                     if found or rate_limited:
                         break
+                outcome = ("confirmed" if "confirmed" in taiwan_results else taiwan_stop if taiwan_stop
+                           else "no_url" if not taiwan_urls else "unavailable" if "unavailable" in taiwan_results
+                           else "unconfirmed")
                 result["igdb:" + str(game["id"])] = {"igdb_id": game["id"], "name_en": game["name"],
                     "status": ("confirmed_concept" if found.get("concept_id") else "confirmed_product") if found else last_status,
                     "attempted_urls": attempted,
                     "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-                    "evidence": found}
+                    "evidence": found,
+                    "taiwan": {"outcome": outcome, "urls": taiwan_urls, "url": taiwan_url,
+                               "evidence": deepcopy(found) if outcome == "confirmed" else None}}
         finally:
             if self._owns_session:
                 self.session.close()

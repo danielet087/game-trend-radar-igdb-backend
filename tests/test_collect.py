@@ -66,7 +66,32 @@ def test_discovery_window_includes_previous_utc_year_that_is_new_year_in_taipei(
     assert public["games"][0]["releases"][0]["date"] == "2027-01-01"
 
 
-def test_store_investigation_prioritizes_future_ps5_and_cannot_supply_public_proof():
+TW_PRODUCT = "HP0001-PPSA12345_00-BASEGAME00000000"
+TW_URL = "https://store.playstation.com/en-tw/product/" + TW_PRODUCT
+
+
+def ps5_game(id_, hypes=30, year=2027, **changes):
+    row = {"id": id_, "name": "Game " + str(id_), "hypes": hypes, "platforms": [{"id": 167}],
+           "category": 0, "summary": "An adventure.",
+           "websites": [{"url": TW_URL.replace("en-tw", "en-us")}],
+           "release_dates": [{"platform": {"id": 167}, "category": 0, "y": year, "m": 3, "d": 1, "region": 8}]}
+    row.update(changes)
+    return row
+
+
+def taiwan_result(game, outcome="confirmed", **evidence):
+    url = "https://store.playstation.com/en-tw/product/" + TW_PRODUCT
+    found = {"product_id": TW_PRODUCT, "official_title": game["name"], "region": "taiwan",
+             "source_url": url.replace("en-tw", "zh-hant-tw"), "supported_languages": ["zh-Hant", "en"],
+             "complete": True, "evidence_type": "official_product_languages",
+             "release_time_utc": "2027-03-01T16:00:00Z", "date": "2027-03-02", **evidence}
+    return {"igdb_id": game["id"], "name_en": game["name"], "status": "confirmed_product",
+            "attempted_urls": [url], "checked_at": "2026-10-04T03:01:00Z", "evidence": found,
+            "taiwan": {"outcome": outcome, "urls": [url], "url": url if outcome == "confirmed" else None,
+                       "evidence": found if outcome == "confirmed" else None}}
+
+
+def test_store_checks_go_to_due_future_ps5_games_first_and_unverified_reports_change_nothing():
     def release(platform, year):
         return {"platform": {"id": platform}, "category": 0, "y": year, "m": 3, "d": 1, "region": 8}
     raw1 = {"id": 1, "name": "Existing PS5 port", "hypes": 100, "platforms": [{"id": 167}, {"id": 508}],
@@ -78,31 +103,75 @@ def test_store_investigation_prioritizes_future_ps5_and_cannot_supply_public_pro
     class Store:
         def investigate(self, games):
             assert [row["id"] for row in games] == [2, 1]
+            # Not a Taiwan answer: nothing is adopted.
             return {"evidence": {"date": "2027-09-01", "supported_languages": ["zh-Hant"]}}
     master, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", playstation_client=Store())
     future = next(row for row in public["games"] if row["igdb_id"] == 2)
-    assert future["releases"][0]["date"] == "2027-03-01"
+    assert future["releases"][0]["date"] == "2027-03-01" and future["releases"][0]["source"] == "IGDB"
     assert future["platform_language_support"]["PS5"]["languages"]["tchinese"] is None
-    assert status["playstation_investigation"]["review_only"] is True
-    assert master["playstation_investigation"] == status["playstation_investigation"]
+    assert status["playstation_investigation"]["due_count"] == 2
+    assert status["playstation_investigation"]["adopted_date_count"] == 0
+    assert "playstation_investigation" not in master
+    assert all("official_store" not in row for row in master["games"].values())
 
 
-def test_store_investigation_resumes_unattempted_future_games_before_recent_high_hypes():
-    def raw(id_, hypes):
-        return {"id": id_, "name": "Game " + str(id_), "hypes": hypes, "platforms": [{"id": 167}],
-            "category": 0, "summary": "An adventure.", "release_dates": [
-                {"platform": {"id": 167}, "category": 0, "y": 2027, "m": 3, "d": 1, "region": 8}]}
-    games = [raw(1, 100), raw(2, 30)]
-    api = Client([{"count": 2}, [{"id": 4, "game": 1, "platform": 167}, {"id": 5, "game": 2, "platform": 167}], {"count": 2}, games])
+def test_a_confirmed_taiwan_store_item_comes_before_igdb_and_is_kept_in_the_master():
+    raw = ps5_game(2)
+    api = Client([{"count": 1}, [{"id": 5, "game": 2, "platform": 167}], {"count": 1}, [raw]])
+    class Store:
+        def investigate(self, games):
+            return {"request_count": 1, "games": {"igdb:2": taiwan_result(games[0])}}
+    master, public, status = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z",
+                                     playstation_client=Store())
+    [row] = public["games"]
+    release = row["releases"][0]
+    assert release["date"] == "2027-03-02" and release["region"] == "taiwan"
+    assert release["source"] == "official_registry" and release["taiwan_release_confirmed"] is True
+    assert release["official_release_time_utc"] == "2027-03-01T16:00:00Z"
+    assert release["source_date"] == "2027-03-01"  # IGDB's own day, which the Taiwan one corrected.
+    assert row["platform_language_support"]["PS5"]["languages"]["tchinese"] is True
+    assert row["playstation_url"] == "https://store.playstation.com/zh-hant-tw/product/" + TW_PRODUCT
+    assert "official_store" not in row
+    state = master["games"]["igdb:2"]["official_store"]["PS5"]
+    assert state["confirmed_at"] == state["checked_at"] == "2026-10-04T03:00:00Z"
+    summary = status["playstation_investigation"]
+    assert (summary["adopted_date_count"], summary["adopted_language_count"], summary["request_count"]) == (1, 1, 1)
+
+
+def test_upcoming_games_are_checked_before_released_ones():
+    games = [ps5_game(1, year=2026, release_dates=[{"platform": {"id": 167}, "category": 0, "y": 2026, "m": 10, "d": 10, "region": 8}]),
+             ps5_game(2, year=2027), ps5_game(3, release_dates=[{"platform": {"id": 167}, "category": 0, "y": 2026, "m": 11, "d": 1, "region": 8}])]
+    api = Client([{"count": 3}, [{"id": n, "game": n, "platform": 167} for n in (1, 2, 3)], {"count": 3}, games])
+    requested = []
     class Store:
         def investigate(self, rows):
-            assert [row["id"] for row in rows] == [2, 1]
+            requested.extend(row["id"] for row in rows)
             return {"games": {}}
-    previous = {"games": {}, "playstation_investigation": {"games": {
-        "igdb:1": {"attempted_urls": ["https://store.playstation.com/en-tw/concept/10000001"],
-                   "checked_at": "2026-10-04T02:00:00Z"},
-        "igdb:2": {"attempted_urls": [], "checked_at": "2026-10-04T02:00:00Z", "status": "budget_exhausted"}}}}
-    collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", previous=previous, playstation_client=Store())
+    collect(api, start=date(2026, 10, 20), checked_at="2026-10-20T03:00:00Z", playstation_client=Store())
+    assert requested == [3, 2, 1]
+
+
+def test_store_checks_follow_the_cadence_and_resume_from_the_master():
+    games = [ps5_game(1, 100), ps5_game(2)]
+    api = Client([{"count": 2}, [{"id": 4, "game": 1, "platform": 167}, {"id": 5, "game": 2, "platform": 167}], {"count": 2}, games])
+    requested = []
+    class Store:
+        def investigate(self, rows):
+            requested.extend(row["id"] for row in rows)
+            return {"games": {}}
+    from nintendo_backend.playstation import taiwan_store_urls
+    # Game 1 was answered an hour ago; game 2 only hit the request budget.
+    previous = {"games": {
+        "igdb:1": {"igdb_id": 1, "official_store": {"igdb_id": 1, "name_en": "Game 1", "PS5": {
+            "outcome": "unconfirmed", "urls": taiwan_store_urls(games[0]), "checked_at": "2026-10-04T02:00:00Z",
+            "attempted_at": "2026-10-04T02:00:00Z", "request_url": None, "evidence": None, "confirmed_at": None}}},
+        "igdb:2": {"igdb_id": 2, "official_store": {"igdb_id": 2, "name_en": "Game 2", "PS5": {
+            "outcome": "budget_exhausted", "urls": taiwan_store_urls(games[1]), "checked_at": None,
+            "attempted_at": "2026-10-04T02:00:00Z", "request_url": None, "evidence": None, "confirmed_at": None}}}}}
+    master, _, _ = collect(api, start=date(2026, 10, 4), checked_at="2026-10-04T03:00:00Z", previous=previous,
+                           playstation_client=Store())
+    assert requested == [2]
+    assert master["games"]["igdb:1"]["official_store"] == previous["games"]["igdb:1"]["official_store"]
 
 
 def test_missing_batch_game_prevents_complete_snapshot():

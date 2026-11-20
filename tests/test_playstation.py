@@ -175,10 +175,40 @@ def test_bounded_request_and_elapsed_time_stop_investigation(monkeypatch):
     session = Session([Response()])
     report = ps.PlayStationStoreClient(session).investigate(rows)
     assert report["request_count"] == 1 and report["games"]["igdb:124"]["status"] == "budget_exhausted"
-    ticks = iter([0, 91, 92])
+    ticks = iter([0, ps.DEADLINE_SECONDS + 1, ps.DEADLINE_SECONDS + 2])
     monkeypatch.setattr(ps.time, "monotonic", lambda: next(ticks))
     session = Session([])
     assert ps.PlayStationStoreClient(session).investigate([game()])["request_count"] == 0
+
+
+def test_taiwan_outcome_tells_an_answer_from_an_error():
+    report = ps.PlayStationStoreClient(Session([Response()])).investigate([game()])
+    taiwan = report["games"]["igdb:123"]["taiwan"]
+    assert taiwan["outcome"] == "confirmed" and taiwan["url"] == URL and taiwan["urls"] == [URL]
+    assert taiwan["evidence"]["release_time_utc"] == "2027-03-01T16:00:00Z"
+    hk_url = URL.replace("en-tw", "en-hk")
+    # The Taiwan store does not have the item (404 or a redirect): an answer, even when Hong Kong does.
+    for status in (404, 302):
+        session = Session([Response(status=status), Response(html(locale="en-hk"), url=hk_url)])
+        row = ps.PlayStationStoreClient(session).investigate([game()])["games"]["igdb:123"]
+        assert row["taiwan"] == {"outcome": "unconfirmed", "urls": [URL], "url": None, "evidence": None}
+        assert row["evidence"]["region"] == "hong_kong"
+    # A page that names another game is an answer too.
+    other = ps.PlayStationStoreClient(Session([Response(html(metadata(name="Other game", invariantName="Other game"))),
+                                               Response(status=404)])).investigate([game()])
+    assert other["games"]["igdb:123"]["taiwan"]["outcome"] == "unconfirmed"
+    # A server error, a timeout, the request budget or a rate limit is not.
+    for response, outcome in ((Response(status=500), "unavailable"), (requests.Timeout("slow"), "unavailable"),
+                              (Response(status=429), "rate_limited")):
+        row = ps.PlayStationStoreClient(Session([response, Response(status=404)])).investigate([game()])["games"]["igdb:123"]
+        assert row["taiwan"]["outcome"] == outcome and row["taiwan"]["evidence"] is None
+    assert ps.PlayStationStoreClient(Session([])).investigate([game(websites=[])])["games"]["igdb:123"]["taiwan"]["outcome"] == "no_url"
+
+
+def test_taiwan_outcome_records_a_stopped_round():
+    session = Session([Response(status=429)])
+    report = ps.PlayStationStoreClient(session).investigate([game(), game(id=124)])
+    assert [row["taiwan"]["outcome"] for row in report["games"].values()] == ["rate_limited", "rate_limited"]
 
 
 def test_no_store_link_or_non_ps5_game_requires_no_request():
