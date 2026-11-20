@@ -203,6 +203,29 @@ def _apply_store_name(row, public, game, found):
     return True
 
 
+def store_link(row):
+    """The Taiwan PlayStation Store item a PS5 game's Chinese description came
+    from: it was matched to this same game, so with no other PS5 shop it is
+    the shop link too. None otherwise."""
+    from .playstation import official_url as playstation_url
+    official = row.get("description_official")
+    if (row.get("playstation_url") or not isinstance(official, dict) or official.get("provider") != "PlayStation"
+            or not any(isinstance(item, dict) and item.get("code") == "PS5" for item in row.get("platforms") or [])):
+        return None
+    return playstation_url(official.get("source_url"), region="taiwan")
+
+
+def apply_store_link(*rows):
+    """Give each row the PS5 shop link of the first row's matched store item."""
+    link = store_link(rows[0])
+    if not link:
+        return False
+    for row in rows:
+        row["playstation_url"] = link
+        row["platform_urls"] = {**(row.get("platform_urls") or {}), "PS5": link}
+    return True
+
+
 def _copy_to_public(row, public):
     for field in PUBLIC_FIELDS:
         public[field] = deepcopy(row.get(field))
@@ -213,7 +236,7 @@ def enrich_documents(master, catalog, *, official_client=None,
     # Store/product refreshes can happen independently of the last IGDB run.
     # Keep their actual check time without rewriting the collection timestamp.
     checked_at = checked_at or master["generated_at"]
-    stats = {"official_chinese_count": 0, "official_failure_count": 0, "store_name_count": 0}
+    stats = {"official_chinese_count": 0, "official_failure_count": 0, "store_name_count": 0, "store_link_count": 0}
     # Oldest official attempts go first so a bounded optional client rotates fairly.
     pending = sorted(catalog["games"], key=lambda row: (
         (master["games"][row["id"]].get("description_lookup") or {}).get("checked_at", ""), row["id"]))
@@ -259,6 +282,8 @@ def enrich_documents(master, catalog, *, official_client=None,
         row.update(describe(game, previous=row, official_candidates=sources))
         if row.get("description_official"):
             stats["official_chinese_count"] += 1
+            if apply_store_link(row, public):
+                stats["store_link_count"] += 1
         _copy_to_public(row, public)
     stats["english_fallback_count"] = sum(row.get("short_description_language") == "en" for row in catalog["games"])
     stats["missing_count"] = sum(not row.get("short_description") for row in catalog["games"])

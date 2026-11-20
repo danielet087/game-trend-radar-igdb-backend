@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 
 from .chinese_names import names, previous_lookup
 from .game_modes import game_modes, multiplayer_modes
-from .descriptions import PRIVATE_FIELDS as DESCRIPTION_PRIVATE_FIELDS, describe
+from .descriptions import PRIVATE_FIELDS as DESCRIPTION_PRIVATE_FIELDS, apply_store_link, describe
 from .official_descriptions import candidates as description_candidates
 from .igdb import CollectionError
 from . import popularity
@@ -305,6 +305,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "first_observed_at": (previous or {}).get("first_observed_at", checked_at), "raw": deepcopy(game)}
     result.update(describe(game, previous=previous, official_candidates=description_candidates(
         game, language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)))
+    # A store item already matched for the Chinese description is the PS5 shop without another link.
+    apply_store_link(result)
     history = deepcopy((previous or {}).get("platform_history") or [])
     if not isinstance(history, list):
         raise CollectionError("invalid_previous_history")
