@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 from .chinese_names import names, previous_lookup
 from .game_modes import game_modes, multiplayer_modes
 from .descriptions import PRIVATE_FIELDS as DESCRIPTION_PRIVATE_FIELDS, apply_store_link, describe
+from .profile import game_profile, stored_raw
 from .official_descriptions import candidates as description_candidates
 from .igdb import CollectionError
 from . import popularity
@@ -302,7 +303,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "game_type": game_type, "content_screening": screening,
               "sexual_content_screened": screening["status"] == "screened", "calendar_eligible": not reasons,
               "eligibility_reasons": reasons, "possible_in_window": bool(possible), "checked_at": checked_at,
-              "first_observed_at": (previous or {}).get("first_observed_at", checked_at), "raw": deepcopy(game)}
+              "first_observed_at": (previous or {}).get("first_observed_at", checked_at),
+              **game_profile(game), "raw": deepcopy(stored_raw(game))}
     result.update(describe(game, previous=previous, official_candidates=description_candidates(
         game, language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)))
     # A store item already matched for the Chinese description is the PS5 shop without another link.
