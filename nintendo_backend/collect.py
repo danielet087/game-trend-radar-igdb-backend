@@ -35,7 +35,11 @@ GAME_FIELDS = (
     "age_ratings.rating_content_descriptions.description,age_ratings.rating_content_descriptions.description_type.name,"
     "age_ratings.content_descriptions.description,game_localizations.name,game_localizations.region.identifier,"
     "alternative_names.name,alternative_names.comment,external_games.uid,external_games.game,"
-    "external_games.external_game_source.name,cover.url,websites.url"
+    "external_games.external_game_source.name,cover.url,websites.url,"
+    # The game page's profile: genres, companies, series and official media.
+    "genres.name,franchises.name,involved_companies.company.name,involved_companies.developer,"
+    "involved_companies.publisher,screenshots.image_id,screenshots.width,screenshots.height,"
+    "artworks.image_id,artworks.width,artworks.height,videos.video_id,videos.name"
 )
 
 
