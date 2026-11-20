@@ -285,6 +285,42 @@ def test_ps5_taiwan_store_rows_cannot_be_forged(ps5_store_bundle, forge):
     assert client.calls == []
 
 
+def switch_state(raw, **changes):
+    from nintendo_backend.nintendo_taiwan import LIST_URL
+    entry = {"outcome": "confirmed", "checked_at": CHECKED, "attempted_at": CHECKED, "confirmed_at": CHECKED,
+             "evidence": {"region": "taiwan", "source_url": LIST_URL, "title": raw["name"], "date": "2026-10-14",
+                          "nsuid": "70010000136811", "chinese": True, "section": "upcoming"}}
+    entry.update(changes)
+    return {"igdb_id": raw["id"], "name_en": raw["name"], "NS": entry}
+
+
+@pytest.fixture
+def switch_store_bundle():
+    raw = deepcopy(bundle()["nintendo_master.json"]["games"]["igdb:12345"]["raw"])
+    return dict(zip(FILES, build_documents([raw], start=date(2026, 10, 4), checked_at=CHECKED,
+        store_states={"igdb:12345": switch_state(raw)}, source={"platform_ids_verified": [130, 167, 508]})))
+
+
+def test_taiwan_switch_day_rebuilds_from_the_master_state(switch_store_bundle):
+    validate_bundle(switch_store_bundle, now=NOW)
+    row = switch_store_bundle["nintendo_upcoming.json"]["games"][0]
+    assert row["releases"][0]["date"] == "2026-10-14" and row["releases"][0]["official_source_name"] == "任天堂台灣官網"
+    assert row["platform_language_support"]["NS"]["languages"]["chinese"] is True
+
+
+@pytest.mark.parametrize("forge", [
+    lambda master, public: [row["releases"][0].update(date="2026-10-13") for row in (master, public)],
+    lambda master, public: master["official_store"]["NS"]["evidence"].update(source_url="https://www.nintendo.com/hk/software/switch"),
+    lambda master, public: master.pop("official_store"),
+])
+def test_taiwan_switch_rows_cannot_be_forged(switch_store_bundle, forge):
+    forge(switch_store_bundle["nintendo_master.json"]["games"]["igdb:12345"], switch_store_bundle["nintendo_upcoming.json"]["games"][0])
+    client = RecordingClient()
+    with pytest.raises(PublishError):
+        publish(switch_store_bundle, client, now=NOW, slot=CHECKED, trigger_source="manual", run_id="1234")
+    assert client.calls == []
+
+
 @pytest.fixture
 def language_bundle(tmp_path, monkeypatch):
     assert P.NINTENDO_LANGUAGE_REGISTRY.is_absolute()

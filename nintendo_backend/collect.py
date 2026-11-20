@@ -18,6 +18,7 @@ from .languages import load_combined_registry as load_language_registry
 from .taiwan_releases import load_combined_registry as load_release_registry
 from .playstation import PlayStationStoreClient
 from . import official_store
+from .nintendo_taiwan import NintendoTaiwanClient, match as match_switch_entries
 from .persistence import decode_master
 from .descriptions import enrich_documents as enrich_descriptions
 from .official_descriptions import OfficialDescriptionClient
@@ -152,7 +153,7 @@ def load_existing(path):
 
 def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
             name_registry=None, name_client=None, release_registry=None, language_registry=None,
-            playstation_client=None, official_description_client=None):
+            playstation_client=None, official_description_client=None, nintendo_taiwan_client=None):
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
@@ -197,12 +198,12 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                                        "game_lookup": lookup_report,
                                        "candidate_scope": "NS/NS2/PS5 native platform release records: window/overlapping year/undated, plus previous ledger"})
     master, catalog, status = build()
-    store_report = None
+    # Taiwan store checks; this run's answers go into the documents built again below.
+    today = datetime.fromisoformat(checked_at.replace("Z", "+00:00")).astimezone(ZoneInfo("Asia/Taipei")).date()
+    raw_by_key = {"igdb:" + str(row["id"]): row for row in raw_games}
+    states, checked, due_games, switch = {}, {}, [], None
     if playstation_client is not None:
-        # The Taiwan PlayStation Store is checked for the published PS5 games that
-        # are due; this run's answers then go into the documents built again below.
-        today = datetime.fromisoformat(checked_at.replace("Z", "+00:00")).astimezone(ZoneInfo("Asia/Taipei")).date()
-        raw_by_key = {"igdb:" + str(row["id"]): row for row in raw_games}
+        # The Taiwan PlayStation Store, for the published PS5 games that are due.
         due = []
         for public in catalog["games"]:
             if not any(p["code"] == "PS5" for p in public["platforms"]):
@@ -223,18 +224,42 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
         store_report = playstation_client.investigate(due_games)
         checked = store_report.get("games") if isinstance(store_report, dict) else None
         checked = checked if isinstance(checked, dict) else {}
-        states = {}
         for raw in due_games:
             key = "igdb:" + str(raw["id"])
             merged = official_store.merge(master["games"][key].get(official_store.FIELD), raw,
                                           checked.get(key), checked_at)
             if merged is not None:
                 states[key] = merged
-        if states:
-            master, catalog, status = build(states)
+    if nintendo_taiwan_client is not None:
+        # Nintendo Taiwan's software list, read once for every published Switch game.
+        fetched = nintendo_taiwan_client.fetch()
+        games = {}
+        for public in catalog["games"]:
+            raw = raw_by_key.get(public["id"])
+            if raw is None or not any(p["code"] == "NS" for p in public["platforms"]):
+                continue
+            release = next((r for r in public["releases"] if r["platform"] == "NS"), None)
+            igdb_day = None
+            if release:
+                # IGDB's own day, also when the calendar already shows the Taiwan one.
+                official = release["source"] == "official_registry" and release.get("source_date")
+                igdb_day = date.fromisoformat(release["source_date"] if official else release["date"])
+            games[public["id"]] = (raw, master["games"][public["id"]], igdb_day)
+        matched = match_switch_entries(fetched["entries"], games) if fetched["status"] == "ok" else {}
+        for key, (raw, row, _) in games.items():
+            base = states.get(key, row.get(official_store.FIELD))
+            merged = official_store.merge_switch(base, raw, fetched["status"], matched.get(key), checked_at)
+            if merged is not None and merged != base:
+                states[key] = merged
+        switch = (fetched, len(games), len(matched))
+    if states:
+        master, catalog, status = build(states)
+    if playstation_client is not None:
         tracked = [row[official_store.FIELD] for row in master["games"].values() if row.get(official_store.FIELD)]
         status["playstation_investigation"] = official_store.summary(tracked, {**(store_report if isinstance(store_report, dict) else {}), "games": checked},
                                                                      catalog["games"], len(due_games), checked_at)
+    if switch is not None:
+        status["nintendo_taiwan"] = official_store.switch_summary(*switch, catalog["games"], checked_at)
     status["popscore_fetch"] = popscore_report
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
@@ -288,7 +313,8 @@ def main(argv=None):
                                              name_registry=name_registry, name_client=SteamNameClient(),
                                              release_registry=release_registry, language_registry=language_registry,
                                              playstation_client=PlayStationStoreClient(),
-                                             official_description_client=official_descriptions)
+                                             official_description_client=official_descriptions,
+                                             nintendo_taiwan_client=NintendoTaiwanClient())
         finally:
             official_descriptions.close()
         # All public/ledger gates passed; any retained lookup gap remains explicit.
