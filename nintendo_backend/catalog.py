@@ -260,16 +260,18 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         if min(start, PUBLIC_HISTORY_START) <= date.fromisoformat(selected["date"]) < end:
             calendar_releases.append({key: selected[key] for key in RELEASE_FIELDS})
     store = official_store.validated_state(
-        game, (previous or {}).get(official_store.FIELD) if store_state is _FROM_PREVIOUS else store_state, checked_at)
-    if not any(row["code"] == "PS5" for row in tracked):
-        store = None
+        game, (previous or {}).get(official_store.FIELD) if store_state is _FROM_PREVIOUS else store_state, checked_at,
+        tracked=tuple(row["code"] for row in tracked))
     store_evidence, confirmed_at = official_store.current_evidence(store, checked_at)
-    taiwan = official_store.taiwan_release(store_evidence, confirmed_at, selected_records.get("PS5"))
-    if taiwan:
-        # The Taiwan store's day comes first, inside or outside the window.
-        calendar_releases = [row for row in calendar_releases if row["platform"] != "PS5"]
-        if min(start, PUBLIC_HISTORY_START) <= date.fromisoformat(taiwan["date"]) < end:
-            calendar_releases.append(taiwan)
+    switch_evidence, switch_confirmed_at = official_store.current_evidence(store, checked_at, "NS")
+    for code, evidence, confirmed in (("NS", switch_evidence, switch_confirmed_at), ("PS5", store_evidence, confirmed_at)):
+        taiwan = official_store.taiwan_release(evidence, confirmed, selected_records.get(code), code)
+        if taiwan:
+            # The Taiwan store's day comes first, inside or outside the window.
+            calendar_releases = [row for row in calendar_releases if row["platform"] != code]
+            if min(start, PUBLIC_HISTORY_START) <= date.fromisoformat(taiwan["date"]) < end:
+                calendar_releases.append(taiwan)
+    calendar_releases.sort(key=lambda row: ("NS", "NS2", "PS5").index(row["platform"]))
     reasons = []
     if not tracked:
         reasons.append("no_tracked_native_platform")
@@ -308,6 +310,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         playstation_urls.append(store_evidence["source_url"])
     languages = platform_language_support(game, tracked, language_registry)
     official_store.apply_languages(languages, store_evidence, confirmed_at)
+    official_store.apply_switch_languages(languages, switch_evidence, switch_confirmed_at)
     result = {"id": "igdb:" + str(game["id"]), "igdb_id": game["id"],
               **names(game, registry=name_registry, previous=previous),
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
