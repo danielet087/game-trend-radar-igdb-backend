@@ -17,7 +17,7 @@ from .igdb import CollectionError
 from . import popularity
 from .languages import platform_editions, platform_language_support
 from .taiwan_releases import official_releases
-from . import official_store
+from . import nintendo_eshop, nintendo_official, official_store
 
 PLATFORMS = {130: {"id": 130, "name": "Nintendo Switch", "code": "NS"},
              167: {"id": 167, "name": "PlayStation 5", "code": "PS5"},
@@ -264,7 +264,10 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         tracked=tuple(row["code"] for row in tracked))
     store_evidence, confirmed_at = official_store.current_evidence(store, checked_at)
     switch_evidence, switch_confirmed_at = official_store.current_evidence(store, checked_at, "NS")
-    for code, evidence, confirmed in (("NS", switch_evidence, switch_confirmed_at), ("PS5", store_evidence, confirmed_at)):
+    switch2_evidence, switch2_confirmed_at = official_store.current_evidence(store, checked_at, "NS2")
+    for code, evidence, confirmed in (("NS", switch_evidence, switch_confirmed_at),
+                                      ("NS2", switch2_evidence, switch2_confirmed_at),
+                                      ("PS5", store_evidence, confirmed_at)):
         taiwan = official_store.taiwan_release(evidence, confirmed, selected_records.get(code), code)
         if taiwan:
             # The Taiwan store's day comes first, inside or outside the window.
@@ -311,8 +314,16 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     languages = platform_language_support(game, tracked, language_registry)
     official_store.apply_languages(languages, store_evidence, confirmed_at)
     official_store.apply_switch_languages(languages, switch_evidence, switch_confirmed_at)
+    # Nintendo's own listings matched an eShop product: its Hong Kong eShop page
+    # is the shop, and its official title a Chinese name the game may lack.
+    products = official_store.nintendo_products(store)
+    platform_urls = {"PS5": playstation_urls[0]} if playstation_urls else {}
+    for code, product in products:
+        platform_urls[code] = nintendo_eshop.title_url(product["nsuid"])
+    naming = names(game, registry=name_registry, previous=previous)
+    naming = nintendo_official.official_name(game, products, naming) or naming
     result = {"id": "igdb:" + str(game["id"]), "igdb_id": game["id"],
-              **names(game, registry=name_registry, previous=previous),
+              **naming,
               "hypes": hypes, "hypes_status": "missing" if hypes is None else "available",
               "popularity_status": popularity, "platforms": tracked, "known_platforms": known,
               "platform_language_support": languages,
@@ -323,7 +334,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
               "releases": calendar_releases, "release_records": releases, "cover_image": cover_url, "url": url,
               "websites": websites, "nintendo_url": nintendo_urls[0] if nintendo_urls else None,
               "playstation_url": playstation_urls[0] if playstation_urls else None,
-              "platform_urls": {"PS5": playstation_urls[0]} if playstation_urls else {},
+              "platform_urls": dict(sorted(platform_urls.items(), key=lambda item: ("NS", "NS2", "PS5").index(item[0]))),
+              "platform_prices": official_store.platform_prices(store, checked_at),
               "game_type": game_type, "content_screening": screening,
               "sexual_content_screened": screening["status"] == "screened", "calendar_eligible": not reasons,
               "eligibility_reasons": reasons, "possible_in_window": bool(possible), "checked_at": checked_at,
@@ -332,7 +344,8 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
     if store:
         result[official_store.FIELD] = store
     result.update(describe(game, previous=previous, official_candidates=description_candidates(
-        game, language_registry=language_registry, release_registry=release_registry, name_registry=name_registry)))
+        game, language_registry=language_registry, release_registry=release_registry, name_registry=name_registry,
+        nintendo=nintendo_official.description_candidates(game, products))))
     # A store item already matched for the Chinese description is the PS5 shop without another link.
     apply_store_link(result)
     history = deepcopy((previous or {}).get("platform_history") or [])

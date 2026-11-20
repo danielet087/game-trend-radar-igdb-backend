@@ -2,10 +2,8 @@
 
 https://www.nintendo.com/tw/software/switch lists the Switch games on sale and
 coming, about three months ahead, each with its Taiwan day. One request a day.
-An entry belongs to a game only by an exact title (the game's IGDB name or an
-alias, or its Chinese name; an entry "中文 (English)" matches either part), on
-the Switch hardware, unclaimed by another game and within 60 days of IGDB's
-Switch day. Nintendo Taiwan has no Switch 2 list, so NS2 days stay IGDB's.
+Its entries are matched to games with the release schedules'
+(nintendo_official); Nintendo Taiwan has no Switch 2 software list.
 """
 from __future__ import annotations
 
@@ -20,7 +18,6 @@ LIST_URL = "https://www.nintendo.com/tw/software/switch"
 SOURCE_NAME = "任天堂台灣官網"
 MAX_BYTES = 2_000_000
 TIMEOUT_SECONDS = 10
-MAX_DAYS_FROM_IGDB = 60
 SECTIONS = {"section-now-on-sale": "on_sale", "section-will-be-released": "upcoming"}
 _DAY = re.compile(r"(\d{4})\.(\d{1,2})\.(\d{1,2})(?!\d)")
 _NSUID = re.compile(r"/o5v89n4kg6h4/(7001\d{10})")
@@ -131,25 +128,6 @@ def parse_list(html):
                        "date": day.isoformat() if day else None, "publisher": " ".join(unit["publisher"].split())[:240],
                        "nsuid": unit["nsuid"], "chinese": unit["chinese"]})
     return result
-
-
-def match(entries, games):
-    """Each game's single Switch entry: {key: entry}. Ambiguity on either side matches nothing.
-
-    games: {key: (raw, row, igdb_switch_day or None)}
-    """
-    switch = [entry for entry in entries if entry["hardware"] == "Nintendo Switch" and entry["date"]]
-    claims = {}
-    for key, (raw, row, igdb_day) in games.items():
-        names = game_keys(raw, row)
-        found = [entry for entry in switch if title_keys(entry["title"]) & names]
-        if len(found) != 1:
-            continue
-        day = date.fromisoformat(found[0]["date"])
-        if igdb_day is not None and abs((day - igdb_day).days) > MAX_DAYS_FROM_IGDB:
-            continue
-        claims.setdefault(id(found[0]), []).append((key, found[0]))
-    return {key: entry for rows in claims.values() if len(rows) == 1 for key, entry in rows}
 
 
 class NintendoTaiwanClient:

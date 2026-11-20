@@ -243,6 +243,72 @@ def _concept_release(parser, documents, match, name_en, region):
             "date": utc.astimezone(ZoneInfo("Asia/Taipei")).date().isoformat()}
 
 
+_PRICE_CTAS = {"ADD_TO_CART", "PREORDER", "PURCHASE"}
+
+
+def _cta_rows(documents):
+    """Every GameCTA cache row's type, price and pre-order mark, merged by key
+    across the page's documents; a key whose values disagree maps to None."""
+    rows = {}
+    for document in documents:
+        for key, row in document["cache"].items():
+            if not key.startswith("GameCTA:") or not isinstance(row, dict):
+                continue
+            merged = rows.setdefault(key, {})
+            if merged is None:
+                continue
+            meta = row.get("meta")
+            values = {"type": row.get("type"), "price": row.get("price"),
+                      "preorder": meta.get("preOrder") if isinstance(meta, dict) else None}
+            for field, value in values.items():
+                if value is None:
+                    continue
+                if field in merged and merged[field] != value:
+                    rows[key] = None
+                    break
+                merged[field] = deepcopy(value)
+    return rows
+
+
+def _price(product, ctas):
+    """The product's own Taiwan price from its purchase buttons, in cents, or None.
+
+    Only buttons the product itself lists count; a member-only (PS Plus) price
+    is not the price, and two different prices are no price.
+    """
+    found = set()
+    for ref in product.get("webctas") or []:
+        key = ref.get("__ref") if isinstance(ref, dict) else None
+        row = ctas.get(key) if isinstance(key, str) else None
+        if row is None or row.get("type") not in _PRICE_CTAS:
+            continue
+        price = row.get("price")
+        if (not isinstance(price, dict) or price.get("currencyCode") != "TWD" or price.get("isTiedToSubscription")
+                or price.get("serviceBranding") not in (None, [], ["NONE"])):
+            continue
+        base, final = price.get("basePriceValue"), price.get("discountedValue")
+        if price.get("isFree") is True:
+            base = final = 0
+        if type(base) is not int or type(final) is not int or not 0 <= final <= base:
+            continue
+        ends = price.get("endTime") if final < base else None
+        if ends is not None:
+            try:
+                stamp = datetime.fromtimestamp(int(ends) / 1000, timezone.utc) if str(ends).isdigit() else \
+                    datetime.fromisoformat(str(ends).replace("Z", "+00:00"))
+                if stamp.utcoffset() is None:
+                    continue
+                ends = stamp.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+            except (ValueError, OverflowError, OSError):
+                continue
+        preorder = row.get("type") == "PREORDER" or row.get("preorder") is True
+        found.add(("preorder" if preorder else "onsale", base, final, ends))
+    if len(found) != 1:
+        return None
+    status, base, final, ends = found.pop()
+    return {"currency": "TWD", "status": status, "regular_cents": base, "final_cents": final, "discount_ends_at": ends}
+
+
 def parse_store_metadata(html, url, name_en):
     """Read only the page's exact product caches; reject conflicts and editions."""
     safe = official_url(url)
@@ -292,6 +358,11 @@ def parse_store_metadata(html, url, name_en):
                     return None
                 product["concept_ref"] = concept["__ref"]
             for key, value in row.items():
+                if key == "webctas" and isinstance(value, list):
+                    # The purchase buttons are listed in several documents; keep each once.
+                    refs = product.setdefault("webctas", [])
+                    refs.extend(item for item in value if isinstance(item, dict) and "__ref" in item and item not in refs)
+                    continue
                 if key not in {"id", "name", "invariantName", "releaseDate", "platforms", "edition", "screenLanguagesByPlatform", "topCategory", "storeDisplayClassification", "type"}:
                     continue
                 if key == "edition":
@@ -331,6 +402,8 @@ def parse_store_metadata(html, url, name_en):
     public_url = "https://store.playstation.com/" + ("zh-hant-tw" if region == "taiwan" else "zh-hant-hk") + "/product/" + product["id"]
     result = {"product_id": product["id"], "official_title": product["name"],
               "region": region, "source_url": public_url, "supported_languages": [], "complete": False}
+    if region == "taiwan" and (price := _price(product, _cta_rows(documents))):
+        result["price"] = price
     release = product.get("releaseDate")
     if isinstance(release, str):
         try:

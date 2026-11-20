@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 import requests
 
+from nintendo_backend import nintendo_official as O
 from nintendo_backend import nintendo_taiwan as N
 from nintendo_backend import official_store as S
 from nintendo_backend.catalog import normalize_game
@@ -76,19 +77,26 @@ def test_titles_match_exactly_in_either_language_of_a_paired_title():
     assert N.normalize("GRIME II™") == N.normalize("Grime II")
 
 
+def listed(*entries):
+    return O.products({N.LIST_URL: O.list_entries(list(entries))})
+
+
 def test_match_requires_one_switch_entry_one_game_and_a_nearby_day():
-    games = {"igdb:236665": (raw_game(), {}, date(2026, 12, 10))}
-    assert N.match([entry()], games)["igdb:236665"]["date"] == "2026-12-09"
+    games = {"igdb:236665": (raw_game(), {}, {"NS": date(2026, 12, 10)})}
+    found = O.match(listed(entry()), games)["igdb:236665"]["NS"]
+    assert found["taiwan"]["date"] == "2026-12-09" and found["nsuid"] == "70010000136811"
     # The English name, an alias or a Chinese name are all the same game's.
-    english = {"igdb:1": ({"id": 1, "name": "Cat Me If You Can"}, {}, None)}
-    assert N.match([entry("Cat Me If You Can", "2026-12-10")], english)
-    # Ambiguity, another platform, a month-only day or a far day match nothing.
-    assert N.match([entry(), entry(nsuid="70010000136812")], games) == {}
-    assert N.match([entry(hardware="Nintendo Switch 2")], games) == {}
-    assert N.match([entry(day=None)], games) == {}
-    assert N.match([entry(day="2027-03-01")], games) == {}
-    twins = {**games, "igdb:9": (raw_game(id=9, name="Professor Layton Remake"), {}, None)}
-    assert N.match([entry()], twins) == {}
+    english = {"igdb:1": ({"id": 1, "name": "Cat Me If You Can"}, {}, {"NS": None})}
+    assert O.match(listed(entry("Cat Me If You Can", "2026-12-10", nsuid="70010000000001")), english)
+    # Ambiguity, another platform or a far day match nothing.
+    assert O.match(listed(entry(), entry(nsuid="70010000136812")), games) == {}
+    assert O.match(listed(entry(hardware="Nintendo Switch 2")), games) == {}
+    assert O.match(listed(entry(day="2027-03-01")), games) == {}
+    twins = {**games, "igdb:9": (raw_game(id=9, name="Professor Layton Remake"), {}, {"NS": None})}
+    assert O.match(listed(entry()), twins) == {}
+    # A month-only day still names the product, without a Taiwan day.
+    undated = O.match(listed(entry(day=None)), games)["igdb:236665"]["NS"]
+    assert undated["nsuid"] == "70010000136811" and undated["taiwan"] is None
 
 
 class Response:
@@ -120,30 +128,42 @@ def test_one_request_without_redirects(response, status):
     assert (result["entries"] is not None) is (status == "ok")
 
 
+LIST_READ = {"status": "ok", "taiwan": {N.LIST_URL}}
+
+
+def merge(previous, read, found, checked):
+    return S.merge_nintendo(previous, raw_game(), "NS", read, found, checked)
+
+
 def test_merge_confirms_drops_or_keeps_by_the_answer():
-    game = raw_game()
-    confirmed = S.merge_switch(None, game, "ok", entry(), CHECKED)["NS"]
+    [product] = listed(entry())
+    confirmed = merge(None, LIST_READ, product, CHECKED)["NS"]
     assert confirmed["evidence"]["date"] == "2026-12-09" and confirmed["confirmed_at"] == CHECKED
+    assert confirmed["product"]["nsuid"] == "70010000136811" and confirmed["outcome"] == "confirmed"
     # Gone from the list before the release day: the day no longer stands.
-    gone = S.merge_switch(state(), game, "ok", None, "2026-11-21T00:30:00Z")["NS"]
+    gone = merge(state(), LIST_READ, None, "2026-11-21T00:30:00Z")["NS"]
     assert gone["evidence"] is None and gone["outcome"] == "unconfirmed"
     # Confirmed on the release day: kept after the list leaves the game out.
     final = state(confirmed="2026-12-09T00:30:00Z")
-    kept = S.merge_switch(final, game, "ok", None, "2027-02-01T00:30:00Z")["NS"]
+    kept = merge(final, LIST_READ, None, "2027-02-01T00:30:00Z")["NS"]
     assert kept["evidence"]["date"] == "2026-12-09" and kept["confirmed_at"] == "2026-12-09T00:30:00Z"
-    # A list that could not be read keeps the earlier day.
-    unread = S.merge_switch(state(), game, "unavailable", None, "2026-11-21T00:30:00Z")["NS"]
+    # Pages that could not be read keep the earlier day.
+    unread = merge(state(), {"status": "unavailable", "taiwan": set()}, None, "2026-11-21T00:30:00Z")["NS"]
     assert unread["evidence"]["date"] == "2026-12-09" and unread["checked_at"] == CHECKED
     assert unread["attempted_at"] == "2026-11-21T00:30:00Z"
+    # Only Hong Kong's page read: the Taiwan day stays.
+    hong_kong = merge(state(), {"status": "ok", "taiwan": set()}, None, "2026-11-21T00:30:00Z")["NS"]
+    assert hong_kong["evidence"]["date"] == "2026-12-09" and hong_kong["checked_at"] == CHECKED
     # Nothing known and nothing found: nothing to keep.
-    assert S.merge_switch(None, game, "ok", None, CHECKED) is None
+    assert merge(None, LIST_READ, None, CHECKED) is None
     # A PS5 entry beside it is kept.
     both = {**state(), "PS5": {"outcome": "no_url"}}
-    assert S.merge_switch(both, game, "ok", entry(), CHECKED)["PS5"] == {"outcome": "no_url"}
+    assert S.merge_nintendo(both, raw_game(), "NS", LIST_READ, product, CHECKED)["PS5"] == {"outcome": "no_url"}
 
 
 @pytest.mark.parametrize("changes", [
     {"source_url": "https://www.nintendo.com/hk/software/switch"}, {"region": "hong_kong"},
+    {"source_url": "https://www.nintendo.com/hk/schedule"}, {"section": "schedule"},
     {"date": "2026-12-9"}, {"nsuid": "7001"}, {"chinese": "yes"}, {"section": "later"}, {"title": ""},
 ])
 def test_invalid_switch_evidence_is_refused(changes):

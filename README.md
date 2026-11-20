@@ -97,7 +97,7 @@ Nintendo 支援語言另由 `data/nintendo_languages.json` 保存已核對的官
 
 已核對的綑綁／Deluxe 商品另公開 `platform_editions.NS／NS2`，讓前端明示「本體＋擴充版」、「Deluxe 版」或「本體＋DLC」。登錄檔需明示 `edition_type`、`edition_label`、官方商品名稱與商品 ID，並提供 `identity_relation: base_game_included`、本體包含證據及官方證據網址；語言與版本標示分開保存。公開版本資料包含商品名稱、地區、商品網址及原核對時間，同樣由發布 gate 重新驗證。缺少已核對版本資料時不產生版本標示，不推定為普通本體版；日後原生 NS／NS2 對應改變或官方更改內容需重新核對。
 
-NS、NS2、PS5 的月曆發售日期採用 IGDB 的平台別發售記錄；PS5 版有台灣 PlayStation Store 目前確認的發售時間、NS 版在任天堂台灣官網的軟體一覽上有台灣發售日時，改用台灣的日期（見下方「PS5 台灣商店資料」「NS 任天堂台灣官網」）。IGDB 確切日的 Unix timestamp 轉為 `Asia/Taipei` 後，使用換算出的台灣時區日期；同時保存原 IGDB 日曆日、Unix 秒、來源地區與換算結果。跨日換算也使用轉換後日期，但不宣稱這是台灣官方發售確認。只有年月日而沒有 timestamp 時保留該日期，不補造時刻；年、季、月及未定仍不能進入確切日期月曆。
+NS、NS2、PS5 的月曆發售日期採用 IGDB 的平台別發售記錄；PS5 版有台灣 PlayStation Store 目前確認的發售時間、NS／NS2 版在任天堂台灣官網的軟體一覽或發售日程上有台灣發售日時，改用台灣的日期（見下方「PS5 台灣商店資料」「NS、NS2 任天堂台灣與香港官網」）。IGDB 確切日的 Unix timestamp 轉為 `Asia/Taipei` 後，使用換算出的台灣時區日期；同時保存原 IGDB 日曆日、Unix 秒、來源地區與換算結果。跨日換算也使用轉換後日期，但不宣稱這是台灣官方發售確認。只有年月日而沒有 timestamp 時保留該日期，不補造時刻；年、季、月及未定仍不能進入確切日期月曆。
 
 公開資料的日期政策為 `source.release_date_policy: taiwan_store_then_igdb_taipei_v1`（台灣官方商店／官網的日期優先，其次是 IGDB 換算台灣時區）。有 timestamp 的日精度記錄使用 `date_basis: igdb_timestamp_taipei` 與 `timezone_status: converted_to_taipei`；只有日期的記錄使用 `igdb_calendar_day` 與 `date_only`。詳細頁標示 IGDB 與台灣時區，不將資料庫預設午夜換算的 08:00 當成實際解鎖時刻。平台選日仍按來源地區優先級（台灣、亞洲、全球、日本、中國、韓國、其他），相同優先級互相矛盾的日期保留候選、等待 IGDB 更正。
 
@@ -119,19 +119,34 @@ PS5（IGDB 平台 ID `167`）沿用每日 08:30 同一收集器、hypes ≥ 30�
   - 發售時間換算台灣時區當作 PS5 版的日期（`source: official_registry`、`region: taiwan`、`taiwan_release_confirmed: true`、`official_release_time_utc`）；IGDB 自己的日期與時間戳留在 `source_date`／`source_timestamp`，網站可以說明「原始 IGDB 日期為…，已依台灣官方日期修正」。`release_records` 仍是 IGDB 原始記錄。
   - PS5 語言：台灣商店的語言表（完整清單標 confirmed，只有標題標示的標 partial）；已核對登錄檔有完整清單、商店只有部分時，保留登錄檔。
   - PS5 沒有其他商店連結時，台灣商品頁就是 PS5 的商店連結。
-- 查詢時間表（每款各自計算）：還沒確認過的先查；上市前每 3 天一次，上市前 14 天內每天一次，上市日（或之後）再查最後一次就停。日期以網站目前顯示的 PS5 日期為準，台灣商店改日期就跟著改。IGDB 連到的商品換了就馬上重查。
-- 商店有回答（確認、或商店沒有這個商品／頁面是別款遊戲）才算查過；伺服器錯誤、逾時、額度用完或限流不算，隔天再試，原本確認的資料保留。商店不再有這個商品就移除原本的資料，改回 IGDB。
+- 查詢時間表（每款各自計算）：還沒確認過的先查；上市前每 3 天一次，上市前 14 天內每天一次，上市日（或之後）再查最後一次（確認到商品的，之後為了價格再每 3 天讀 30 天，見「主機價格」）。日期以網站目前顯示的 PS5 日期為準，台灣商店改日期就跟著改。IGDB 連到的商品換了就馬上重查。
+- 商店有回答（確認、或商店沒有這個商品／頁面是別款遊戲）才算查過；伺服器錯誤、逾時、額度用完或限流不算，隔天再試，原本確認的資料保留。商店不再有這個商品就移除原本的資料，改回 IGDB（上市日當天或之後確認過的日期保留，只拿掉價格）。
 - 確認過的資料在 14 天內有效；上市日當天或之後確認的，之後一直有效。超過 14 天沒有再確認（例如連續查不到），就改回 IGDB 的日期。
 - 每輪最多 40 頁、120 秒，遇到 429 整輪停；台灣查不到時另查香港，香港結果只當核對材料，不採用。
 - 每款的查詢狀態與確認資料存在完整主資料的 `official_store`（不公開，PS5 與 NS 各一份）；發布 gate 用主資料裡的這份狀態重建，日期、語言、連結對不上就整批不發布。`nintendo_refresh_status.json.playstation_investigation` 記錄這輪到期與實際查詢的筆數、各結果數、採用台灣日期與語言的遊戲數。
 
-## NS 任天堂台灣官網
+## NS、NS2 任天堂台灣與香港官網
 
-每天的收集讀一次任天堂台灣官網的 Switch 軟體一覽（`https://www.nintendo.com/tw/software/switch`，一個請求、不跟轉址、不重試；`nintendo_taiwan`）：
-- 一覽列出發售中與今後發售（約三個月內）的 Switch 遊戲，每款有台灣發售日。沒有 Switch 2 的一覽，所以 NS2 日期仍是 IGDB 的。
-- 只用確切的名稱比對：IGDB 名稱或別名、或遊戲的中文名稱，等於一覽上的名稱（「中文 (English)」兩邊都算）；硬體要是 Nintendo Switch；一個名稱只能對到一款遊戲、一款遊戲只能對到一筆；跟 IGDB 的 Switch 日期差超過 60 天就不用；只有年月（例如 2027.5）的不算日期；盒裝版、下載版日期不同時用較早的那天。
-- 對到的直接採用：NS 版日期改成台灣日期（`official_source_name: 任天堂台灣官網`，只有日期、沒有時間；IGDB 原本的日期留在 `source_date`）。有「對應中文」標示、而且沒有已核對的語言清單時，NS 語言記為「有中文、字體待確認」。
-- 每天整份重比：一覽上沒有了就移除，改回 IGDB；上市日當天或之後確認過的保留（發售一段時間後一覽就不列了）。讀不到一覽（錯誤、限流、頁面不是一覽）時保留原本的資料，隔天再讀。確認後 14 天沒有再確認就改回 IGDB（同 PS5）。
-- `nintendo_refresh_status.json.nintendo_taiwan` 記錄讀取結果、一覽筆數、Switch 遊戲數、對到與採用的筆數。
+每天的收集讀三頁任天堂官網（各一個請求、不跟轉址、不重試）：
+- 任天堂台灣官網的 Switch 軟體一覽（`https://www.nintendo.com/tw/software/switch`，`nintendo_taiwan`）：發售中與今後發售（約三個月內）的 Switch 遊戲，每款有台灣發售日與「對應中文」標示。
+- 任天堂台灣與香港官網的發售日程（`https://www.nintendo.com/tw/schedule`、`https://www.nintendo.com/hk/schedule`，`nintendo_schedule`）：本月起的 Switch 與 Switch 2 遊戲，依日期排列，未定的放在「發售日未定」。台灣頁的日期就是台灣發售日；香港頁的日期只當核對，不採用。
+
+比對（`nintendo_official`）：
+- 同一個 eShop 商品編號（從縮圖路徑取得）的各筆是同一個商品；一覽上沒有編號的，併入同名的那一個商品。
+- 只用確切的名稱比對：IGDB 名稱或別名、或遊戲的中文名稱，等於官網上的名稱（「中文 (English)」「中文／English」兩邊都算）；硬體要相同（Switch 對 NS、Switch 2 對 NS2）；一個商品只能對到一款遊戲、一款遊戲的一個平台只能對到一個商品；兩邊都有日期時，差超過 60 天就不用。
+
+對到的採用：
+- 台灣日期：NS、NS2 版日期改成台灣頁上的日期（`official_source_name: 任天堂台灣官網`，只有日期；一覽與日程都有時用較早的那天；IGDB 原本的日期留在 `source_date`）。有「對應中文」標示（只有一覽有）、又沒有已核對的語言清單時，NS 語言記為「有中文、字體待確認」。每天整份重比：讀到的台灣頁上沒有了就移除、改回 IGDB；上市日當天或之後確認過的保留（之後官網就不列了）；讀不到的頁面保留它給的資料。確認後 14 天沒有再確認就改回 IGDB（同 PS5）。
+- 商品：對到的 eShop 商品編號存在 `official_store` 的 `product`。日程只列本月起的遊戲，所以之後沒再列出時保留原本的商品；對到別的商品就換掉。由商品得到：
+  - 商店連結：香港 eShop 商品頁（`https://ec.nintendo.com/HK/zh/titles/<編號>`）是該平台的商店（`platform_urls.NS`／`NS2`）。台灣沒有自己的 eShop，任天堂台灣官網的建議售價也是標港幣。
+  - 中文名稱：遊戲沒有自己的繁中名稱時（簡中轉繁的會被換掉），用官網名稱的中文部分，台灣頁優先、Switch 2 優先（`name_source: 任天堂台灣官網`／`任天堂香港官網`，`name_evidence.provider: nintendo_official`）。英文、日文、簡體的名稱不用。
+  - 中文簡介：香港 eShop 商品頁加入官方簡介的候選（排在已核對商品與 PS5 商店之後），沿用既有的頁面核對、每輪 60 頁與回查週期。
+- `nintendo_refresh_status.json.nintendo_taiwan` 記錄軟體一覽的讀取結果；`nintendo_official` 記錄三頁的讀取結果、各平台遊戲數、對到、採用台灣日期、商店連結與價格的筆數、補上的中文名稱數，以及價格讀取。
+
+## 主機價格
+
+- NS、NS2：每天用香港 eShop 的價格服務（`https://api.ec.nintendo.com/v1/price?country=HK`，一次 50 個商品、每輪最多 6 個請求、遇到 429 就停；`nintendo_eshop`）讀所有對到的商品，港幣：原價、正在進行的特價與結束時間、預購。沒有販售（例如還沒開放）就不顯示；讀不到時保留上次的價格。
+- PS5：台灣 PlayStation Store 商品頁上這個商品自己的購買按鈕價格（新台幣，含特價與結束時間、預購）；只有 PS Plus 會員價、兩個不同價格，或是 concept 頁（還沒有商品）時不採用。跟日期同一次讀取；上市後再每 3 天讀一次、讀 30 天，只更新價格，上市日確認過的日期不受影響。
+- 公開資料：`platform_prices.<平台>`（`currency`、`final_cents`、特價時另有 `original_cents`、`discount_pct`、`discount_ends_at`，加上 `status`、`source`、`source_url`、`checked_at`）。價格只在確認後 7 天內顯示；特價結束後顯示原價。價格與商店、名稱一樣由主資料裡的 `official_store` 重建，發布 gate 會比對。
 
 完整候選量較大時，發布器會將 `nintendo_master.json` 保存為 `gzip-base64` 傳輸封裝（含 SHA-256 與解壓後位元組數）。候選、原始證據、平台歷史與已查狀態全部保留；下一輪 `load_existing` 校驗及解碼後使用相同完整資料。小型舊 JSON 仍可直接載入；公開 `nintendo_upcoming.json` 與回條保持可讀 JSON。封裝不是截斷或刪除候選，也不改變日期／語言發布驗證。
