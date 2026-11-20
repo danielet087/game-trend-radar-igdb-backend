@@ -4,7 +4,7 @@ from datetime import date
 import pytest
 
 from nintendo_backend.catalog import build_documents
-from nintendo_backend.descriptions import PUBLIC_FIELDS, clean_text, describe, enrich_documents
+from nintendo_backend.descriptions import PUBLIC_FIELDS, apply_store_link, clean_text, describe, enrich_documents
 from scripts.publish import FILES, PublishError, validate_bundle
 
 CHECKED = "2026-10-03T16:05:00Z"
@@ -317,11 +317,30 @@ def test_linked_store_copy_and_chinese_title_fill_a_ps5_game():
         "龍之家族冒險", "龍之家族冒險", "PlayStation Store 台灣", STORE_URL)
     assert row["name_evidence"]["provider"] == "playstation_store"
     assert report["store_name_count"] == 1
+    # The same matched store item is the PS5 shop: IGDB only links its US page.
+    assert (row["playstation_url"], row["platform_urls"]) == (STORE_URL, {"PS5": STORE_URL})
+    assert master["games"][row["id"]]["playstation_url"] == STORE_URL
+    assert report["store_link_count"] == 1
     # The next collection keeps the title while IGDB still links that item.
     later, later_public, _ = documents(ps5_game(), previous=master, checked_at="2026-10-04T16:05:00Z")
     assert later_public["games"][0]["name_zh_tw"] == "龍之家族冒險"
+    assert later_public["games"][0]["playstation_url"] == STORE_URL
     unlinked, unlinked_public, _ = documents(ps5_game(websites=[]), previous=master, checked_at="2026-10-04T16:05:00Z")
     assert unlinked_public["games"][0]["name_zh_tw"] is None
+    assert unlinked_public["games"][0]["playstation_url"] is None
+
+
+def test_a_store_link_of_its_own_is_kept_and_other_providers_give_none():
+    taiwan = "https://store.playstation.com/zh-hant-tw/product/UP0001-PPSA00001_00-GAME000000000000"
+    master, public, _ = documents(ps5_game(websites=[{"url": "https://store.playstation.com/en-us/concept/10012345"},
+                                                     {"url": taiwan}]))
+    enrich_documents(master, public, official_client=StoreClient())
+    assert public["games"][0]["playstation_url"] == taiwan
+    nintendo = {"platforms": [{"code": "NS2"}], "description_official": {"provider": "Nintendo", "source_url": STORE_URL}}
+    assert apply_store_link(nintendo) is False and "playstation_url" not in nintendo
+    other = {"platforms": [{"code": "PS5"}], "description_official": {"provider": "PlayStation",
+             "source_url": "https://store.playstation.com/en-us/concept/10012345"}}
+    assert apply_store_link(other) is False
 
 
 def test_a_game_with_its_own_chinese_name_keeps_it():
