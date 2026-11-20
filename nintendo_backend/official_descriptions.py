@@ -131,12 +131,14 @@ def linked_playstation_urls(raw_game):
     return urls
 
 
-def candidates(raw_game, *, language_registry=None, release_registry=None, name_registry=None):
+def candidates(raw_game, *, language_registry=None, release_registry=None, name_registry=None, nintendo=None):
     """Reuse exact regional products, bound to the same IGDB ID and English name.
 
     A reviewed Nintendo product ID also permits its precise regional eShop page;
     a language registry's generic lineup URL itself is never requested. After
-    the reviewed products, a PS5 game's IGDB-linked store item is tried.
+    the reviewed products, a PS5 game's IGDB-linked store item is tried, then
+    the Hong Kong eShop pages of the products Nintendo's own listings matched
+    (nintendo: nintendo_official.description_candidates rows).
     """
     language = _bound(raw_game, language_registry)
     release = _bound(raw_game, release_registry)
@@ -144,8 +146,11 @@ def candidates(raw_game, *, language_registry=None, release_registry=None, name_
     valid = (isinstance(raw_game, dict) and type(raw_game.get("id")) is int and raw_game["id"] > 0
              and isinstance(raw_game.get("name"), str) and bool(raw_game["name"].strip()))
     linked = linked_playstation_urls(raw_game) if valid else []
+    listed = [row for row in nintendo or [] if valid and isinstance(row, dict) and row.get("platform") in {"NS", "NS2"}
+              and _official_url(row.get("url")) == row.get("url")
+              and urlsplit(row["url"]).hostname == "ec.nintendo.com"]
     if not any((language, release, name)) and not linked:
-        return []
+        return [{"url": row["url"], "platform": row["platform"], "titles": list(row["titles"])} for row in listed]
     titles = [raw_game["name"].strip()]
     if name and isinstance(name.get("name_zh_tw"), str) and not _EDITION.search(name["name_zh_tw"]):
         titles.append(name["name_zh_tw"])
@@ -195,6 +200,9 @@ def candidates(raw_game, *, language_registry=None, release_registry=None, name_
     for url in linked:
         if not any(product in url for product in excluded_products):
             found.setdefault(url, {"url": url, "platform": "PS5", "titles": aliases})
+    for row in listed:
+        if not any(product in row["url"] for product in excluded_products):
+            found.setdefault(row["url"], {"url": row["url"], "platform": row["platform"], "titles": list(row["titles"])})
     return list(found.values())
 
 

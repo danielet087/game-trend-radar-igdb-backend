@@ -343,3 +343,54 @@ def test_concept_release_does_not_bypass_ambiguous_existing_product_identity():
     doc["cache"]["Product:" + PRODUCT] = metadata()
     doc["cache"]["Product:" + other_id] = metadata(id=other_id)
     assert ps.parse_store_metadata(concept_html(doc), CONCEPT_URL, "A game") is None
+
+
+CTA = "GameCTA:ADD_TO_CART:ADD_TO_CART:" + PRODUCT + "-H001:OUTRIGHT"
+
+
+def cta(base=179000, discounted=179000, **changes):
+    price = {"__typename": "Price", "basePriceValue": base, "discountedValue": discounted, "currencyCode": "TWD",
+             "serviceBranding": ["NONE"], "isTiedToSubscription": False, "isFree": False, "endTime": None}
+    price.update(changes)
+    return {"type": "ADD_TO_CART", "price": price}
+
+
+def priced_html(*ctas, refs=None, product=None):
+    keys = refs if refs is not None else [CTA if index == 0 else CTA.replace("H001", f"H00{index + 1}") for index in range(len(ctas))]
+    product = product or metadata(webctas=[{"__ref": key} for key in keys])
+    cache = {key: row for key, row in zip(keys, ctas)}
+    # The buttons sit in another document of the same page, as on Sony's pages.
+    return html(product, extra={"args": {}, "overrides": {"locale": "en-tw"}, "cache": cache})
+
+
+def test_a_taiwan_product_page_gives_its_own_purchase_price_in_cents():
+    assert ps.parse_store_metadata(priced_html(cta()), URL, "A game")["price"] == {
+        "currency": "TWD", "status": "onsale", "regular_cents": 179000, "final_cents": 179000, "discount_ends_at": None}
+    sale = ps.parse_store_metadata(priced_html(cta(discounted=125300, endTime="1764604740000")), URL, "A game")["price"]
+    assert (sale["final_cents"], sale["discount_ends_at"]) == (125300, "2025-12-01T15:59:00Z")
+    preorder = {**cta(), "type": "PREORDER"}
+    assert ps.parse_store_metadata(priced_html(preorder), URL, "A game")["price"]["status"] == "preorder"
+    free = cta(base=0, discounted=0, isFree=True)
+    assert ps.parse_store_metadata(priced_html(free), URL, "A game")["price"]["final_cents"] == 0
+
+
+@pytest.mark.parametrize("ctas", [
+    (cta(serviceBranding=["PS_PLUS"], discounted=99000),),     # a member price only
+    (cta(isTiedToSubscription=True),),
+    (cta(currencyCode="HKD"),),
+    (cta(), cta(base=209000, discounted=209000)),               # two prices: no price
+    ({**cta(), "type": "UPSELL_PS_PLUS_DISCOUNT"},),
+])
+def test_member_other_currency_or_conflicting_prices_are_no_price(ctas):
+    result = ps.parse_store_metadata(priced_html(*ctas), URL, "A game")
+    assert result["product_id"] == PRODUCT and "price" not in result
+
+
+def test_only_the_buttons_the_product_lists_count():
+    other = "GameCTA:ADD_TO_CART:ADD_TO_CART:HP0001-PPSA12345_00-DELUXEEDITION000-H001:OUTRIGHT"
+    page = priced_html(cta(base=209000, discounted=209000), refs=[other],
+                       product=metadata(webctas=[{"__ref": CTA}]))
+    assert "price" not in ps.parse_store_metadata(page, URL, "A game")
+    # A Hong Kong page's price is not a Taiwan price.
+    hong_kong = priced_html(cta()).replace("en-tw", "en-hk")
+    assert "price" not in ps.parse_store_metadata(hong_kong, URL.replace("en-tw", "en-hk"), "A game")

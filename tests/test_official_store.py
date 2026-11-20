@@ -124,13 +124,21 @@ def test_store_languages_fill_ps5_unless_a_reviewed_complete_list_says_more():
     ("2027-02-20T03:00:00Z", date(2027, 3, 2), date(2027, 2, 20), False),  # last 14 days: daily
     ("2027-02-20T03:00:00Z", date(2027, 3, 2), date(2027, 2, 21), True),
     ("2027-03-01T03:00:00Z", date(2027, 3, 2), date(2027, 3, 5), True),    # released since: one final check
-    ("2027-03-02T03:00:00Z", date(2027, 3, 2), date(2027, 3, 5), False),   # checked on the day: done
+    ("2027-03-02T03:00:00Z", date(2027, 3, 2), date(2027, 3, 4), False),   # checked on the day: its price
+    ("2027-03-02T03:00:00Z", date(2027, 3, 2), date(2027, 3, 5), True),    # every 3 days for a month,
+    ("2027-03-30T03:00:00Z", date(2027, 3, 2), date(2027, 4, 2), False),   # then done
     ("2026-10-02T03:00:00Z", None, date(2026, 10, 4), False),              # no day: every 3 days
     ("2026-10-01T03:00:00Z", None, date(2026, 10, 4), True),
 ])
 def test_cadence(checked, release, today, due):
     assert S.is_due(state(checked=checked or CHECKED, **({"checked_at": None} if checked is None else {})),
                     game(), release, today) is due
+
+
+def test_a_released_concept_has_no_price_to_read_again():
+    concept = state(checked="2027-03-02T03:00:00Z", evidence=evidence(product_id=None, concept_id="10000001"))
+    assert not S.is_due(concept, game(), date(2027, 3, 2), date(2027, 3, 5))
+    assert not S.is_due(state(checked="2027-03-02T03:00:00Z", evidence=None), game(), date(2027, 3, 2), date(2027, 3, 5))
 
 
 def test_a_changed_igdb_link_is_checked_at_once():
@@ -188,3 +196,52 @@ def test_a_conflict_igdb_cannot_settle_is_settled_by_the_taiwan_store():
     assert normalize_game(conflicting, START, END, CHECKED)["releases"] == []
     row = normalize_game(conflicting, START, END, CHECKED, store_state=state())
     assert row["releases"][0]["date"] == "2027-03-02" and row["releases"][0]["source_date"] == "2027-03-02"
+
+
+PRICE = {"currency": "TWD", "status": "onsale", "regular_cents": 179000, "final_cents": 179000, "discount_ends_at": None}
+
+
+@pytest.mark.parametrize("price,valid", [
+    (PRICE, True),
+    ({**PRICE, "status": "preorder"}, True),
+    ({**PRICE, "final_cents": 143200, "discount_ends_at": "2026-10-10T15:59:00Z"}, True),
+    ({**PRICE, "final_cents": 143200}, True),  # an open-ended sale
+    ({**PRICE, "currency": "HKD"}, False),
+    ({**PRICE, "final_cents": 200000}, False),
+    ({**PRICE, "discount_ends_at": "2026-10-10T15:59:00Z"}, False),  # an end without a sale
+    ({**PRICE, "regular_cents": "1790"}, False),
+    ({**PRICE, "status": "free"}, False),
+])
+def test_a_taiwan_product_price_is_kept_only_when_it_holds_up(price, valid):
+    assert (S.valid_evidence(evidence(price=price)) is not None) is valid
+    # A concept has no price.
+    concept = evidence(product_id=None, concept_id="10000001",
+                       source_url="https://store.playstation.com/zh-hant-tw/concept/10000001",
+                       evidence_type="official_concept_release_time", supported_languages=[], complete=False)
+    assert S.valid_evidence({**concept, "price": PRICE}) is None and S.valid_evidence(concept)["price"] is None
+
+
+def test_the_ps5_price_is_shown_for_a_week_and_a_finished_sale_shows_the_regular_price():
+    priced = state(evidence=evidence(price=PRICE))
+    row = normalize_game(game(), START, END, CHECKED, store_state=priced)
+    assert row["platform_prices"] == {"PS5": {"currency": "TWD", "free": False, "final_cents": 179000, "status": "onsale",
+                                              "source": "PlayStation Store 台灣", "source_url": PUBLIC, "checked_at": CHECKED}}
+    week = normalize_game(game(), START, END, "2026-10-11T03:00:00Z", store_state=priced)
+    assert week["platform_prices"]["PS5"]["final_cents"] == 179000
+    assert normalize_game(game(), START, END, "2026-10-11T03:00:01Z", store_state=priced)["platform_prices"] == {}
+    sale = state(evidence=evidence(price={**PRICE, "final_cents": 125300, "discount_ends_at": "2026-10-05T15:59:00Z"}))
+    during = normalize_game(game(), START, END, CHECKED, store_state=sale)["platform_prices"]["PS5"]
+    assert (during["final_cents"], during["original_cents"], during["discount_pct"], during["discount_ends_at"]) == (
+        125300, 179000, 30, "2026-10-05T15:59:00Z")
+    after = normalize_game(game(), START, END, "2026-10-06T03:00:00Z", store_state=sale)["platform_prices"]["PS5"]
+    assert after["final_cents"] == 179000 and "original_cents" not in after
+
+
+def test_a_released_games_day_stays_when_a_price_check_finds_no_item():
+    final = S.validated_state(game(), state(evidence=evidence(price=PRICE), confirmed="2027-03-02T03:00:00Z",
+                                            checked="2027-03-02T03:00:00Z"), "2027-03-05T03:00:00Z")
+    gone = S.merge(final, game(), report("unconfirmed"), "2027-03-05T03:00:00Z")["PS5"]
+    assert gone["evidence"]["date"] == "2027-03-02" and gone["evidence"]["price"] is None
+    assert gone["confirmed_at"] == "2027-03-02T03:00:00Z" and gone["checked_at"] == "2027-03-05T03:00:00Z"
+    again = S.merge(final, game(), report(found=evidence(price={**PRICE, "final_cents": 99000})), "2027-03-05T03:00:00Z")["PS5"]
+    assert again["evidence"]["price"]["final_cents"] == 99000 and again["confirmed_at"] == "2027-03-05T03:00:00Z"

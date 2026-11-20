@@ -17,8 +17,10 @@ from . import popularity
 from .languages import load_combined_registry as load_language_registry
 from .taiwan_releases import load_combined_registry as load_release_registry
 from .playstation import PlayStationStoreClient
-from . import official_store
-from .nintendo_taiwan import NintendoTaiwanClient, match as match_switch_entries
+from . import nintendo_official, official_store
+from .nintendo_eshop import NintendoPriceClient
+from .nintendo_schedule import HK_URL as HK_SCHEDULE_URL, NintendoScheduleClient, TW_URL as TW_SCHEDULE_URL
+from .nintendo_taiwan import LIST_URL as TW_LIST_URL, NintendoTaiwanClient
 from .persistence import decode_master
 from .descriptions import enrich_documents as enrich_descriptions
 from .official_descriptions import OfficialDescriptionClient
@@ -151,9 +153,20 @@ def load_existing(path):
     return existing
 
 
+def nintendo_reads(taiwan_client, schedule_client):
+    """Today's Nintendo pages: {page URL: {"status", "entries"}} (entries in the schedules' shape)."""
+    unread = {"status": "unavailable", "entries": None}
+    listing = taiwan_client.fetch() if taiwan_client is not None else unread
+    schedules = schedule_client.fetch() if schedule_client is not None else {}
+    return {TW_LIST_URL: {"status": listing.get("status"), "entries": nintendo_official.list_entries(listing.get("entries"))
+                          if listing.get("status") == "ok" else None},
+            TW_SCHEDULE_URL: schedules.get("taiwan") or unread, HK_SCHEDULE_URL: schedules.get("hong_kong") or unread}
+
+
 def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
             name_registry=None, name_client=None, release_registry=None, language_registry=None,
-            playstation_client=None, official_description_client=None, nintendo_taiwan_client=None):
+            playstation_client=None, official_description_client=None, nintendo_taiwan_client=None,
+            nintendo_schedule_client=None, nintendo_price_client=None):
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
@@ -201,7 +214,7 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     # Taiwan store checks; this run's answers go into the documents built again below.
     today = datetime.fromisoformat(checked_at.replace("Z", "+00:00")).astimezone(ZoneInfo("Asia/Taipei")).date()
     raw_by_key = {"igdb:" + str(row["id"]): row for row in raw_games}
-    states, checked, due_games, switch = {}, {}, [], None
+    states, checked, due_games, switch, nintendo = {}, {}, [], None, None
     if playstation_client is not None:
         # The Taiwan PlayStation Store, for the published PS5 games that are due.
         due = []
@@ -230,28 +243,56 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                                           checked.get(key), checked_at)
             if merged is not None:
                 states[key] = merged
-    if nintendo_taiwan_client is not None:
-        # Nintendo Taiwan's software list, read once for every published Switch game.
-        fetched = nintendo_taiwan_client.fetch()
-        games = {}
+    if nintendo_taiwan_client is not None or nintendo_schedule_client is not None:
+        # Nintendo's Taiwan and Hong Kong pages, read once for every published NS/NS2 game.
+        reads = nintendo_reads(nintendo_taiwan_client, nintendo_schedule_client)
+        listed = {url: read["entries"] for url, read in reads.items() if read.get("status") == "ok"}
+        statuses = {read.get("status") for read in reads.values()}
+        read = {"status": "ok" if listed else "rate_limited" if "rate_limited" in statuses else "unavailable",
+                "taiwan": {url for url in nintendo_official.TAIWAN_SOURCES if url in listed}}
+        games, days_by_game = {}, {}
         for public in catalog["games"]:
             raw = raw_by_key.get(public["id"])
-            if raw is None or not any(p["code"] == "NS" for p in public["platforms"]):
+            codes = [code for code in official_store.NINTENDO_PLATFORMS if any(p["code"] == code for p in public["platforms"])]
+            if raw is None or not codes:
                 continue
-            release = next((r for r in public["releases"] if r["platform"] == "NS"), None)
-            igdb_day = None
-            if release:
-                # IGDB's own day, also when the calendar already shows the Taiwan one.
-                official = release["source"] == "official_registry" and release.get("source_date")
-                igdb_day = date.fromisoformat(release["source_date"] if official else release["date"])
-            games[public["id"]] = (raw, master["games"][public["id"]], igdb_day)
-        matched = match_switch_entries(fetched["entries"], games) if fetched["status"] == "ok" else {}
+            days = {}
+            for code in codes:
+                release = next((r for r in public["releases"] if r["platform"] == code), None)
+                days[code] = None
+                if release:
+                    # IGDB's own day, also when the calendar already shows the Taiwan one.
+                    official = release["source"] == "official_registry" and release.get("source_date")
+                    days[code] = date.fromisoformat(release["source_date"] if official else release["date"])
+            games[public["id"]] = (raw, master["games"][public["id"]], days)
+            days_by_game[public["id"]] = days
+        matched = nintendo_official.match(nintendo_official.products(listed), games) if listed else {}
+        merged_states = {}
+        for key, (raw, row, days) in games.items():
+            current = states.get(key, row.get(official_store.FIELD))
+            for code in days:
+                current = official_store.merge_nintendo(current, raw, code, read, matched.get(key, {}).get(code),
+                                                        checked_at) or current
+            merged_states[key] = current
+        # The Hong Kong eShop's prices for every matched product, a few requests in all.
+        price_read = None
+        if nintendo_price_client is not None:
+            nsuids = {product["nsuid"] for state in merged_states.values() for _, product in official_store.nintendo_products(state)}
+            price_read = nintendo_price_client.fetch(sorted(nsuids)) if nsuids else {"status": "ok", "prices": {}}
+            price_read["request_count"] = nintendo_price_client.request_count
+            for key, state in merged_states.items():
+                for code, _ in official_store.nintendo_products(state):
+                    state = official_store.merge_price(state, code, price_read, checked_at)
+                merged_states[key] = state
         for key, (raw, row, _) in games.items():
             base = states.get(key, row.get(official_store.FIELD))
-            merged = official_store.merge_switch(base, raw, fetched["status"], matched.get(key), checked_at)
-            if merged is not None and merged != base:
-                states[key] = merged
-        switch = (fetched, len(games), len(matched))
+            if merged_states[key] is not None and merged_states[key] != base:
+                states[key] = merged_states[key]
+        listing = reads[TW_LIST_URL]
+        listed_ns = sum(1 for found in matched.values() if TW_LIST_URL in (found.get("NS") or {}).get("sources", []))
+        switch = ({"status": listing.get("status"), "entries": listing.get("entries")},
+                  sum(1 for days in days_by_game.values() if "NS" in days), listed_ns)
+        nintendo = (reads, days_by_game, matched, price_read)
     if states:
         master, catalog, status = build(states)
     if playstation_client is not None:
@@ -260,6 +301,8 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                                                                      catalog["games"], len(due_games), checked_at)
     if switch is not None:
         status["nintendo_taiwan"] = official_store.switch_summary(*switch, catalog["games"], checked_at)
+    if nintendo is not None:
+        status["nintendo_official"] = official_store.nintendo_summary(*nintendo, catalog["games"], checked_at)
     status["popscore_fetch"] = popscore_report
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
@@ -314,7 +357,9 @@ def main(argv=None):
                                              release_registry=release_registry, language_registry=language_registry,
                                              playstation_client=PlayStationStoreClient(),
                                              official_description_client=official_descriptions,
-                                             nintendo_taiwan_client=NintendoTaiwanClient())
+                                             nintendo_taiwan_client=NintendoTaiwanClient(),
+                                             nintendo_schedule_client=NintendoScheduleClient(),
+                                             nintendo_price_client=NintendoPriceClient())
         finally:
             official_descriptions.close()
         # All public/ledger gates passed; any retained lookup gap remains explicit.

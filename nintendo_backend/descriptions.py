@@ -15,6 +15,7 @@ from urllib.parse import urlsplit
 from opencc import OpenCC
 
 from .chinese_names import NAME_FIELDS
+from . import nintendo_official, official_store
 from .official_descriptions import candidates, title_matches
 
 PUBLIC_FIELDS = ("short_description", "short_description_en", "short_description_language",
@@ -242,8 +243,10 @@ def enrich_documents(master, catalog, *, official_client=None,
         (master["games"][row["id"]].get("description_lookup") or {}).get("checked_at", ""), row["id"]))
     for public in pending:
         row, game = master["games"][public["id"]], master["games"][public["id"]]["raw"]
+        products = official_store.nintendo_products(row.get(official_store.FIELD))
         sources = candidates(game, language_registry=language_registry, release_registry=release_registry,
-                             name_registry=name_registry)
+                             name_registry=name_registry,
+                             nintendo=nintendo_official.description_candidates(game, products))
         urls = [source["url"] for source in sources]
         if official_client is not None and _is_due(row, urls, checked_at):
             before = getattr(official_client, "request_count", 0)
