@@ -4,7 +4,8 @@ from datetime import date
 import pytest
 
 from nintendo_backend.catalog import build_documents
-from nintendo_backend.descriptions import PUBLIC_FIELDS, apply_store_link, clean_text, describe, enrich_documents
+from nintendo_backend.descriptions import (LOOKUP_RULES, PUBLIC_FIELDS, apply_store_link, clean_text, describe,
+                                           enrich_documents)
 from scripts.publish import FILES, PublishError, validate_bundle
 
 CHECKED = "2026-10-03T16:05:00Z"
@@ -188,6 +189,12 @@ def test_chinese_middle_dot_is_not_japanese_but_actual_kana_is():
     assert row["short_description_language"] == "zh-TW"
     assert row["short_description_en"] == ""
     assert describe(game(summary="《真・三國無雙》の冒険です。"))["short_description_language"] == "ja"
+
+
+def test_japanese_voice_cast_names_do_not_make_a_chinese_summary_japanese():
+    row = describe(game(summary="瘋帽客（CV：小鹿なお）帶來全新的戰場冒險。"))
+    assert row["short_description_language"] == "zh-TW"
+    assert describe(game(summary="瘋帽客（CV：小鹿なお）の冒険です。"))["short_description_language"] == "ja"
 
 
 def test_independent_official_refresh_keeps_collection_time_and_uses_actual_check_time(monkeypatch):
@@ -385,3 +392,23 @@ def test_unreleased_games_are_looked_at_every_three_days_and_released_ones_once(
     master, public, _ = documents(ps5_game(day=(2026, 10, 10)), previous=master, checked_at="2026-10-30T16:05:00Z")
     enrich_documents(master, public, official_client=client)
     assert client.request_count == 1
+
+
+def test_pages_read_under_older_text_rules_are_read_once_more():
+    class Missing(StoreClient):
+        def lookup(self, raw, sources):
+            self.request_count += 1
+            return None
+
+    client = Missing()
+    master, public, _ = documents(ps5_game(day=(2026, 10, 10)), checked_at="2026-10-20T16:05:00Z")
+    enrich_documents(master, public, official_client=client)
+    lookup = master["games"]["igdb:12345"]["description_lookup"]
+    assert lookup["status"] == "unavailable" and lookup["rules"] == LOOKUP_RULES
+    # Released, so not read again under the same rules; a lookup made under
+    # older rules (no "rules" recorded) is read once more, then not again.
+    del lookup["rules"]
+    for checked_at in ("2026-10-30T16:05:00Z", "2026-11-30T16:05:00Z"):
+        master, public, _ = documents(ps5_game(day=(2026, 10, 10)), previous=master, checked_at=checked_at)
+        enrich_documents(master, public, official_client=client)
+    assert client.request_count == 2
