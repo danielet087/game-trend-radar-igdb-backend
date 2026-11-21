@@ -22,7 +22,8 @@ PUBLIC_FIELDS = ("short_description", "short_description_en", "short_description
                  "short_description_source", "description_source_url")
 PRIVATE_FIELDS = ("description_official", "description_lookup")
 # Raise when the text rules change: pages read under older rules that gave no
-# usable Chinese description are read once more (2: Japanese voice credits).
+# usable Chinese description are read once more (2: a few kana, quoted Japanese
+# titles and voice credits no longer make Chinese copy Japanese).
 LOOKUP_RULES = 2
 _S2TW = OpenCC("s2tw")
 _S2T = OpenCC("s2t")

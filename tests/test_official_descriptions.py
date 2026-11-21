@@ -293,15 +293,21 @@ def test_chinese_middle_dot_does_not_invalidate_official_chinese_description():
     assert descriptions.parse_description(ld(text="《真・三國無雙》の冒険です。"), NINTENDO, "A Game") is None
 
 
-def test_japanese_voice_cast_names_do_not_make_a_chinese_description_japanese():
-    text = "愛麗絲與夥伴們踏上旅程，瘋帽客（CV：小鹿なお）、三月兔（CV：花澤かな）也一起登場。"
-    assert descriptions.parse_description(ld(text=text), NINTENDO, "A Game")["text"] == text
-    listed = "主要角色：瘋帽客 CV：小鹿 なお／三月兔 CV:花澤かな\n聲優：早見さおり、悠木碧\n" + TEXT
-    assert descriptions.parse_description(ld(text=listed), NINTENDO, "A Game")["text"] == listed
-    # Kana outside the cast credits still make the text Japanese.
-    for japanese in (text + "新しい冒険が始まる。", "CV：小鹿なお。新しい冒険の世界を探索しましょう",
-                     "支援日文配音あり，" + TEXT, "CVS はとても良い。" + TEXT):
-        assert descriptions.parse_description(ld(text=japanese), NINTENDO, "A Game") is None
+def test_a_few_kana_quoted_titles_and_voice_credits_do_not_make_chinese_copy_japanese():
+    chinese = (
+        "愛麗絲與夥伴們踏上旅程，瘋帽客（CV：小鹿なお）、三月兔（CV：花澤かな）也一起登場。",
+        "《ゼルダの伝説》系列最新作，與林克一起冒險！",
+        "主要角色：瘋帽客 CV：小鹿 なお／三月兔 CV:花澤かな\n聲優：早見さおり、悠木碧\n" + TEXT,
+        "由小鹿なお配音的瘋帽客帶領玩家展開全新的冒險旅程。",
+        "愛麗絲與夥伴們踏上旅程，瘋帽客也一起登場。新しい冒険が始まる。",
+    )
+    for text in chinese:
+        assert descriptions.parse_description(ld(text=text), NINTENDO, "A Game")["text"] == text
+    # Japanese prose is a third or more kana, quoted Chinese titles or not.
+    japanese = ("CV：小鹿なお。新しい冒険の世界を探索しましょう", "《魔物獵人》の新作が登場します。",
+                TEXT + "新しい冒険の世界を探索しましょう。仲間と一緒に強大な敵に立ち向かえ！")
+    for text in japanese:
+        assert descriptions.parse_description(ld(text=text), NINTENDO, "A Game") is None
 
 
 # The Taiwan PlayStation Store item IGDB links to a PS5 game.
@@ -405,7 +411,8 @@ def test_store_copy_keeps_a_chinese_description_that_credits_japanese_voices():
     long = STORY + "<br/><br/>由瘋帽客（CV：小鹿なお）帶領玩家展開冒險。"
     text = descriptions.parse_description(concept_html(long=long), CONCEPT, "Dragon Tale II", platform="PS5")["text"]
     assert text == STORY + "\n\n由瘋帽客（CV：小鹿なお）帶領玩家展開冒險。"
-    japanese = STORY + "<br/><br/>瘋帽客（CV：小鹿なお）と一緒に冒険しよう。"
+    japanese = (STORY + "<br/><br/>瘋帽客と一緒に冒険しよう。新しい冒険の世界を探索しましょう。"
+                "仲間と一緒に強大な敵に立ち向かえ！")
     assert descriptions.parse_description(concept_html(long=japanese), CONCEPT, "Dragon Tale II", platform="PS5") is None
 
 

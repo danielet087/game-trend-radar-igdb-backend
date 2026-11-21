@@ -30,16 +30,21 @@ TIMEOUT_SECONDS = 5
 DEADLINE_SECONDS = 150
 _HAN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
 _KANA = re.compile(r"[\u3041-\u3096\u30a1-\u30fa]")
-# Chinese copy credits the Japanese cast in their own script ("\u760b\u5e3d\u5ba2\uff08CV\uff1a\u5c0f\u9e7f\u306a\u304a\uff09"):
-# kana in those names do not make the description Japanese. A name is a short
-# run without spaces or punctuation (a family and a given name may be split by
-# one space); a list joins names with \u3001 or \uff0f. Kana anywhere else still count.
-_CAST_LABEL = r"(?:(?<![A-Za-z])[Cc][Vv](?![A-Za-z])\s*[:\uff1a.\uff0e]?|\uff23\uff36\s*[:\uff1a]?|(?:\u8072\u512a|\u58f0\u512a|\u914d\u97f3)\s*[:\uff1a])"
-_CAST_CHARS = r"[^\s\u3001\uff0c,\u3002\uff01\uff1f!?()\uff08\uff09\[\]\u3010\u3011\u300c\u300d\u300e\u300f/\uff0f&\uff06:\uff1a]"
-_CAST_NAME = _CAST_CHARS + r"{1,12}(?:[ \u3000](?!" + _CAST_LABEL + r")" + _CAST_CHARS + r"{1,8})?"
+# Chinese copy quotes Japanese titles and names in their own script: 《ゼルダの伝説》,
+# 「…」, 瘋帽客（CV：小鹿なお）. Kana inside quotes and brackets or in voice credits
+# do not count; elsewhere Chinese copy may still carry a few (a name, a short
+# line). Only when kana are a fifth or more of the rest is the text Japanese:
+# Japanese prose is a third or more kana. A voice credit names short runs
+# without spaces or punctuation (family and given name may be split by one
+# space), listed with 、 or ／.
+_QUOTED = re.compile(r"[《〈「『【（(\[][^《〈「『【（(\[》〉」』】）)\]\n]{0,40}[》〉」』】）)\]]")
+_CAST_LABEL = r"(?:(?<![A-Za-z])[Cc][Vv](?![A-Za-z])\s*[:：.．]?|ＣＶ\s*[:：]?|(?:聲優|声優|配音)\s*[:：])"
+_CAST_CHARS = r"[^\s、，,。！？!?()（）\[\]【】「」『』/／&＆:：]"
+_CAST_NAME = _CAST_CHARS + r"{1,12}(?:[ 　](?!" + _CAST_LABEL + r")" + _CAST_CHARS + r"{1,8})?"
 _VOICE_CREDIT = re.compile(_CAST_LABEL + r"\s*" + _CAST_NAME
-                           + r"(?:\s*[\u3001\uff0c,/\uff0f&\uff06]\s*(?!" + _CAST_LABEL + r")" + _CAST_NAME + r"){0,9}")
-_EDITION =re.compile(r"\b(?:deluxe(?:\s+edition)?|ultimate\s+edition|season\s+pass|dlc|bundle)\b|豪華版|豪华版|終極版|终极版|擴充票|扩充票", re.I)
+                           + r"(?:\s*[、，,/／&＆]\s*(?!" + _CAST_LABEL + r")" + _CAST_NAME + r"){0,9}")
+KANA_SHARE = 0.2
+_EDITION = re.compile(r"\b(?:deluxe(?:\s+edition)?|ultimate\s+edition|season\s+pass|dlc|bundle)\b|豪華版|豪华版|終極版|终极版|擴充票|扩充票", re.I)
 _LANGUAGE_SUFFIX = re.compile(r"\s*[（(](?:[英中日韓泰西法德義葡俄文語语版简簡繁體体/、,，\s]|English|Chinese|Traditional|Simplified|Japanese|Korean|Ver\.?|Version)+[）)]\s*$", re.I)
 # Roman and Arabic sequel numbers name the same game (Dragon's Dogma II/2).
 _ROMAN = {"II": "2", "III": "3", "IV": "4", "V": "5", "VI": "6", "VII": "7", "VIII": "8", "IX": "9", "X": "10"}
@@ -254,8 +259,11 @@ class _Text(HTMLParser):
 
 
 def japanese(text):
-    """A description is Japanese when it has kana outside the voice cast credits."""
-    return bool(_KANA.search(_VOICE_CREDIT.sub("", text)))
+    """Japanese when kana are a fifth or more of the Chinese and Japanese
+    characters outside quotes, brackets and voice credits."""
+    rest = _VOICE_CREDIT.sub("", _QUOTED.sub("", text))
+    kana = len(_KANA.findall(rest))
+    return kana > 0 and kana >= (len(_HAN.findall(rest)) + kana) * KANA_SHARE
 
 
 def _clean(value):
