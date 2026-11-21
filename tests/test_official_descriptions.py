@@ -293,6 +293,17 @@ def test_chinese_middle_dot_does_not_invalidate_official_chinese_description():
     assert descriptions.parse_description(ld(text="《真・三國無雙》の冒険です。"), NINTENDO, "A Game") is None
 
 
+def test_japanese_voice_cast_names_do_not_make_a_chinese_description_japanese():
+    text = "愛麗絲與夥伴們踏上旅程，瘋帽客（CV：小鹿なお）、三月兔（CV：花澤かな）也一起登場。"
+    assert descriptions.parse_description(ld(text=text), NINTENDO, "A Game")["text"] == text
+    listed = "主要角色：瘋帽客 CV：小鹿 なお／三月兔 CV:花澤かな\n聲優：早見さおり、悠木碧\n" + TEXT
+    assert descriptions.parse_description(ld(text=listed), NINTENDO, "A Game")["text"] == listed
+    # Kana outside the cast credits still make the text Japanese.
+    for japanese in (text + "新しい冒険が始まる。", "CV：小鹿なお。新しい冒険の世界を探索しましょう",
+                     "支援日文配音あり，" + TEXT, "CVS はとても良い。" + TEXT):
+        assert descriptions.parse_description(ld(text=japanese), NINTENDO, "A Game") is None
+
+
 # The Taiwan PlayStation Store item IGDB links to a PS5 game.
 CONCEPT_ID = "10012345"
 CONCEPT = "https://store.playstation.com/zh-hant-tw/concept/" + CONCEPT_ID
@@ -388,6 +399,14 @@ def test_storefront_notes_are_removed_from_the_store_copy():
     assert text == STORY + "\n\n挑戰強大的古龍\n在廣闊的大陸上與夥伴並肩作戰，擊敗沉睡的古龍。"
     copyright = STORY + " Copyright： © 2026 Dragon Studio. All rights reserved."
     assert descriptions.parse_description(concept_html(long=copyright), CONCEPT, "Dragon Tale II", platform="PS5")["text"] == STORY
+
+
+def test_store_copy_keeps_a_chinese_description_that_credits_japanese_voices():
+    long = STORY + "<br/><br/>由瘋帽客（CV：小鹿なお）帶領玩家展開冒險。"
+    text = descriptions.parse_description(concept_html(long=long), CONCEPT, "Dragon Tale II", platform="PS5")["text"]
+    assert text == STORY + "\n\n由瘋帽客（CV：小鹿なお）帶領玩家展開冒險。"
+    japanese = STORY + "<br/><br/>瘋帽客（CV：小鹿なお）と一緒に冒険しよう。"
+    assert descriptions.parse_description(concept_html(long=japanese), CONCEPT, "Dragon Tale II", platform="PS5") is None
 
 
 @pytest.mark.parametrize("name,invariant,expected", [

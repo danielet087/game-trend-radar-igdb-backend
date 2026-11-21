@@ -16,16 +16,18 @@ from opencc import OpenCC
 
 from .chinese_names import NAME_FIELDS
 from . import nintendo_official, official_store
-from .official_descriptions import candidates, title_matches
+from .official_descriptions import candidates, japanese, title_matches
 
 PUBLIC_FIELDS = ("short_description", "short_description_en", "short_description_language",
                  "short_description_source", "description_source_url")
 PRIVATE_FIELDS = ("description_official", "description_lookup")
+# Raise when the text rules change: pages read under older rules that gave no
+# usable Chinese description are read once more (2: Japanese voice credits).
+LOOKUP_RULES = 2
 _S2TW = OpenCC("s2tw")
 _S2T = OpenCC("s2t")
 STORE_NAME_SOURCE = "PlayStation Store 台灣"
 _HAN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
-_KANA = re.compile(r"[\u3041-\u3096\u30a1-\u30fa]")
 MAX_TEXT = 20_000
 
 
@@ -70,7 +72,7 @@ def clean_text(value):
 
 
 def _chinese(value):
-    return bool(value and _HAN.search(value) and not _KANA.search(value)
+    return bool(value and _HAN.search(value) and not japanese(value)
                 and len(_HAN.findall(value)) >= max(2, len(re.sub(r"\s", "", value)) * .1))
 
 
@@ -78,7 +80,7 @@ def original(game):
     """IGDB summary is preferred; an absent/empty summary falls back to storyline."""
     for field in ("summary", "storyline"):
         if text := clean_text(game.get(field)):
-            language = "ja" if _KANA.search(text) else "zh-TW" if _chinese(text) else "en"
+            language = "ja" if japanese(text) else "zh-TW" if _chinese(text) else "en"
             return text, language, field
     return "", None, None
 
@@ -171,6 +173,9 @@ def _is_due(row, urls, checked_at):
     lookup = row.get("description_lookup") or {}
     now, checked = _stamp(checked_at), _stamp(lookup.get("checked_at"))
     if now is None or checked is None or checked > now or lookup.get("urls") != urls:
+        return True
+    rules = lookup.get("rules") if isinstance(lookup.get("rules"), int) else 1
+    if not row.get("description_official") and lookup.get("status") == "unavailable" and rules < LOOKUP_RULES:
         return True
     if row.get("description_official"):
         days = 7
@@ -279,7 +284,7 @@ def enrich_documents(master, catalog, *, official_client=None,
             # Do not mark a request-budget skip as checked; it gets priority next run.
             if not sources or after > before:
                 row["description_lookup"] = {"igdb_id": game["id"], "name_en": game["name"].strip(),
-                    "checked_at": checked_at, "urls": urls,
+                    "checked_at": checked_at, "urls": urls, "rules": LOOKUP_RULES,
                     "status": "confirmed" if valid_official else "unavailable" if sources else "no_verified_official_url"}
         # Re-evaluate official sources independently of IGDB English changes.
         row.update(describe(game, previous=row, official_candidates=sources))
