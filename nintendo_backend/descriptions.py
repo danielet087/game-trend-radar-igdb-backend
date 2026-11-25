@@ -283,7 +283,9 @@ def enrich_documents(master, catalog, *, official_client=None,
                     if _apply_store_name(row, public, game, found):
                         stats["store_name_count"] += 1
             # Do not mark a request-budget skip as checked; it gets priority next run.
-            if not sources or after > before:
+            # A page another client already read this run (its languages) counts as read.
+            attempted = getattr(official_client, "attempted", None)
+            if not sources or after > before or (attempted is not None and attempted(urls)):
                 row["description_lookup"] = {"igdb_id": game["id"], "name_en": game["name"].strip(),
                     "checked_at": checked_at, "urls": urls, "rules": LOOKUP_RULES,
                     "status": "confirmed" if valid_official else "unavailable" if sources else "no_verified_official_url"}

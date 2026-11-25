@@ -3,7 +3,8 @@
 PS5: the Taiwan PlayStation Store, checked per game on a cadence. NS and NS2:
 Nintendo's Taiwan and Hong Kong listings (nintendo_official), read once a day
 for every game; the Taiwan pages give the Taiwan day, the matched eShop title
-ID the Hong Kong eShop link and price (nintendo_eshop).
+ID the Hong Kong eShop link and price (nintendo_eshop), and that eShop page,
+read on a cadence (languages_due), the product's languages.
 
 The store items IGDB itself links to a PS5 game are read on the Taiwan
 storefront (playstation.PlayStationStoreClient); an item must name the same
@@ -49,6 +50,13 @@ OUTCOMES = ANSWERS | {"unavailable", "rate_limited", "budget_exhausted"}
 EVIDENCE_TYPES = {"official_product_languages", "official_chinese_unspecified", "official_concept_release_time"}
 NINTENDO_PLATFORMS = ("NS", "NS2")
 NINTENDO_OUTCOMES = {"confirmed", "unconfirmed", "unavailable", "rate_limited"}
+# A matched product's Hong Kong eShop page is read for its languages every 3
+# days until the platform's release day, weekly after it; the list is shown
+# while its last read is this recent.
+LANGUAGE_UPCOMING_DAYS, LANGUAGE_RELEASED_DAYS = 3, 7
+LANGUAGE_MAX_AGE = timedelta(days=30)
+LANGUAGE_FIELDS = ("nsuid", "checked_at", "supported_languages", "complete", "evidence_type", "official_title")
+_CHINESE = {"zh", "zh-Hant", "zh-Hans"}
 # The Taiwan pages that give a Switch or Switch 2 game's Taiwan day.
 SWITCH_SOURCES = {nintendo_taiwan.LIST_URL: {"on_sale", "upcoming"}, nintendo_schedule.TW_URL: {"schedule"}}
 
@@ -223,12 +231,32 @@ def valid_product(value):
             "hk_title": value.get("hk_title"), "matched_at": value["matched_at"]}
 
 
+def valid_switch_languages(value):
+    """A product page's language read (official_descriptions.parse_languages),
+    normalized; None when anything is off. Without an evidence type the page
+    was read and gave no usable list."""
+    if not isinstance(value, dict) or not _nsuid(value.get("nsuid")) or _stamp(value.get("checked_at")) is None:
+        return None
+    codes, complete, kind, title = (value.get(key) for key in ("supported_languages", "complete", "evidence_type", "official_title"))
+    if (not isinstance(codes, list) or len(codes) > 40 or any(not isinstance(code, str) or code not in LANGUAGE_NAMES for code in codes)
+            or len(codes) != len(set(codes)) or type(complete) is not bool):
+        return None
+    if kind is None:
+        valid = not codes and not complete and title is None
+    else:
+        chinese = set(codes) & _CHINESE
+        valid = (isinstance(title, str) and 0 < len(title.strip()) <= 240 and bool(codes)
+                 and (kind == "official_chinese_unspecified" and not complete and codes == ["zh"]
+                      or kind == "official_product_languages" and "zh" not in codes and (complete or bool(chinese))))
+    return {key: deepcopy(value[key]) for key in LANGUAGE_FIELDS} if valid else None
+
+
 def _validated_switch(entry, now, platform="NS"):
     if not isinstance(entry, dict) or entry.get("outcome") not in NINTENDO_OUTCOMES or not _times(entry, now):
         return None
     result = {"outcome": entry["outcome"], "checked_at": entry.get("checked_at"),
               "attempted_at": entry["attempted_at"], "evidence": None, "confirmed_at": None,
-              "product": None, "price": None, "price_checked_at": None}
+              "product": None, "price": None, "price_checked_at": None, "languages": None}
     evidence, confirmed = valid_switch_evidence(entry.get("evidence")), _stamp(entry.get("confirmed_at"))
     # The Taiwan software list covers only Switch games.
     if (evidence and confirmed and confirmed <= now
@@ -240,6 +268,10 @@ def _validated_switch(entry, now, platform="NS"):
         price, priced = valid_price(entry.get("price"), nintendo_eshop.CURRENCY), _stamp(entry.get("price_checked_at"))
         if price and priced and priced <= now:
             result.update(price=price, price_checked_at=entry["price_checked_at"])
+        # A language read belongs to the product it read.
+        languages = valid_switch_languages(entry.get("languages"))
+        if languages and languages["nsuid"] == product["nsuid"] and _stamp(languages["checked_at"]) <= now:
+            result["languages"] = languages
     return result
 
 
@@ -280,15 +312,90 @@ def taiwan_release(evidence, confirmed_at, igdb_record=None, platform="PS5"):
             "official_release_time_utc": evidence["release_time_utc"] if sony else None}
 
 
-def apply_switch_languages(languages, evidence, confirmed_at):
-    """The Taiwan list's 對應中文 mark proves Chinese, not which script; reviewed lists come first."""
-    if ("NS" not in languages or not evidence or not evidence["chinese"]
-            or languages["NS"].get("status") != "unknown"):
+def current_languages(state, platform, checked_at):
+    """A platform's product page language list while its read is at most
+    LANGUAGE_MAX_AGE old; None otherwise (also for a read without a list)."""
+    entry = (state or {}).get(platform) or {}
+    read, product, now = entry.get("languages"), entry.get("product"), _stamp(checked_at)
+    if not read or not read.get("evidence_type") or not product or read.get("nsuid") != product["nsuid"] or not now:
+        return None
+    checked = _stamp(read["checked_at"])
+    return read if checked and timedelta(0) <= now - checked <= LANGUAGE_MAX_AGE else None
+
+
+def _page_entry(read):
+    return support_entry({"supported_languages": read["supported_languages"], "complete": read["complete"],
+        "region": "hong_kong", "source": nintendo_eshop.SOURCE_NAME, "source_url": nintendo_eshop.title_url(read["nsuid"]),
+        "checked_at": read["checked_at"], "evidence_type": read["evidence_type"]}, product=False)
+
+
+def apply_switch_languages(languages, state, checked_at):
+    """NS/NS2 languages from Nintendo's own pages, after the reviewed lists.
+
+    The matched product's Hong Kong eShop page lists its languages (current_languages):
+    complete, with each Chinese script, from its 「對應語言」 row; only "Chinese"
+    from its JSON-LD alone. Nintendo Taiwan's 對應中文 mark proves Chinese for a
+    Switch game, not which script. A reviewed complete list stays; a reviewed
+    partial one gives way only to a complete page list. Where the mark says
+    Chinese and the page lists none, only the mark's Chinese stands; where both
+    prove only Chinese, Taiwan's comes first. Returns the platforms changed.
+    """
+    taiwan, confirmed_at = current_evidence(state, checked_at, "NS")
+    changed = []
+    for code in NINTENDO_PLATFORMS:
+        existing = languages.get(code)
+        if existing is None or existing.get("complete"):
+            continue
+        page = current_languages(state, code, checked_at)
+        codes = set(page["supported_languages"]) if page else set()
+        marked = code == "NS" and bool(taiwan) and taiwan["chinese"]
+        if page and page["complete"] and (codes & _CHINESE or not marked):
+            entry = _page_entry(page)
+        elif existing.get("status") != "unknown":
+            continue
+        elif page and (codes & {"zh-Hant", "zh-Hans"} or not marked):
+            entry = _page_entry(page)
+        elif marked:
+            entry = support_entry({"supported_languages": ["zh"], "complete": False, "region": "taiwan",
+                "source": nintendo_taiwan.SOURCE_NAME, "source_url": nintendo_taiwan.LIST_URL, "checked_at": confirmed_at,
+                "evidence_type": "official_chinese_unspecified"}, product=False)
+        else:
+            continue
+        languages[code] = entry
+        changed.append(code)
+    return changed
+
+
+def languages_due(entry, release_day, today):
+    """Whether a platform's matched product page is due for its languages:
+    at once for a product not read yet, every LANGUAGE_UPCOMING_DAYS until the
+    platform's release day (or while it has none), every LANGUAGE_RELEASED_DAYS
+    from it. entry: the platform's state; release_day: the day the calendar shows."""
+    product = (entry or {}).get("product")
+    if not product:
         return False
-    languages["NS"] = support_entry({"supported_languages": ["zh"], "complete": False, "region": "taiwan",
-        "source": nintendo_taiwan.SOURCE_NAME, "source_url": nintendo_taiwan.LIST_URL, "checked_at": confirmed_at,
-        "evidence_type": "official_chinese_unspecified"}, product=False)
-    return True
+    read = entry.get("languages") or {}
+    last = _day(read.get("checked_at"))
+    if read.get("nsuid") != product["nsuid"] or last is None or last > today:
+        return True
+    released = release_day is not None and release_day <= today
+    return (today - last).days >= (LANGUAGE_RELEASED_DAYS if released else LANGUAGE_UPCOMING_DAYS)
+
+
+def merge_languages(state, platform, page, checked_at):
+    """A platform's languages from today's read of its product page
+    (OfficialDescriptionClient.read_languages): replaced when the page answered,
+    also by no list; kept when it did not."""
+    entry = (state or {}).get(platform)
+    product = (entry or {}).get("product")
+    if not product or not isinstance(page, dict) or page.get("status") != "ok":
+        return state
+    read = {"nsuid": product["nsuid"], "checked_at": checked_at, "supported_languages": [], "complete": False,
+            "evidence_type": None, "official_title": None}
+    found = page.get("languages")
+    if isinstance(found, dict):
+        read = valid_switch_languages({**read, **{key: found.get(key) for key in LANGUAGE_FIELDS[2:]}}) or read
+    return {**state, platform: {**entry, "languages": read}}
 
 
 def apply_languages(languages, evidence, confirmed_at):
@@ -410,7 +517,8 @@ def merge_nintendo(state, game, platform, read, product, checked_at):
                   "checked_at": checked_at if read["taiwan"] else previous.get("checked_at"),
                   "attempted_at": checked_at, "evidence": kept, "confirmed_at": confirmed, "product": bound,
                   "price": deepcopy(previous.get("price")) if same else None,
-                  "price_checked_at": previous.get("price_checked_at") if same else None}
+                  "price_checked_at": previous.get("price_checked_at") if same else None,
+                  "languages": deepcopy(previous.get("languages")) if same else None}
     return {**(deepcopy(state) if state else {}), "igdb_id": game["id"], "name_en": game["name"].strip(), platform: result}
 
 
@@ -474,14 +582,15 @@ def summary(states, report, catalog_rows, due_count, checked_at):
             "games": deepcopy(report.get("games") or {})}
 
 
-def nintendo_summary(reads, games, matched, price_read, catalog_rows, checked_at):
-    """Nintendo's pages and the Hong Kong eShop prices, for the refresh receipt.
+def nintendo_summary(reads, games, matched, price_read, catalog_rows, checked_at, language_read=None):
+    """Nintendo's pages, the Hong Kong eShop prices and product pages, for the refresh receipt.
 
     reads: {page URL: read}; games: {key: {platform: IGDB day}} of the
-    published NS/NS2 games; matched: {key: {platform: product}}.
+    published NS/NS2 games; matched: {key: {platform: product}};
+    language_read: this run's product page reads for languages.
     """
     platforms = {code: {"game_count": 0, "matched_count": 0, "taiwan_date_count": 0, "eshop_link_count": 0,
-                        "price_count": 0} for code in NINTENDO_PLATFORMS}
+                        "price_count": 0, "eshop_language_count": 0} for code in NINTENDO_PLATFORMS}
     for days in games.values():
         for code in days:
             platforms[code]["game_count"] += 1
@@ -501,12 +610,17 @@ def nintendo_summary(reads, games, matched, price_read, catalog_rows, checked_at
                 platforms[code]["eshop_link_count"] += 1
             if (row.get("platform_prices") or {}).get(code):
                 platforms[code]["price_count"] += 1
+            if ((row.get("platform_language_support") or {}).get(code) or {}).get("source") == nintendo_eshop.SOURCE_NAME:
+                platforms[code]["eshop_language_count"] += 1
     return {"schema_version": 1, "provider": "Nintendo", "checked_at": checked_at,
             "pages": {url: {"status": read.get("status"), "entry_count": len(read.get("entries") or [])}
                       for url, read in reads.items()},
             "price": {"url": nintendo_eshop.PRICE_URL, "status": (price_read or {}).get("status"),
                       "request_count": (price_read or {}).get("request_count", 0),
                       "product_count": len((price_read or {}).get("prices") or {})},
+            "languages": {"due_count": (language_read or {}).get("due_count", 0),
+                          "request_count": (language_read or {}).get("request_count", 0),
+                          "outcomes": dict(sorted(((language_read or {}).get("outcomes") or {}).items()))},
             "platforms": platforms, "official_name_count": names}
 
 

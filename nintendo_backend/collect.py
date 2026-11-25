@@ -25,6 +25,10 @@ from .persistence import decode_master
 from .descriptions import enrich_documents as enrich_descriptions
 from .official_descriptions import OfficialDescriptionClient
 
+# Hong Kong eShop product pages read for their languages in one run: about 15
+# a day on the cadence; the first run reads all 44 products matched on 11-25.
+PRODUCT_PAGE_REQUESTS = 50
+
 GAME_FIELDS = (
     "id,name,hypes,url,category,game_type.type,status,game_status.status,summary,storyline,"
     "game_modes.id,game_modes.name,multiplayer_modes.platform.id,"
@@ -166,7 +170,10 @@ def nintendo_reads(taiwan_client, schedule_client):
 def collect(client, *, start: date, previous=None, checked_at=None, page_size=500, max_pages=100,
             name_registry=None, name_client=None, release_registry=None, language_registry=None,
             playstation_client=None, official_description_client=None, nintendo_taiwan_client=None,
-            nintendo_schedule_client=None, nintendo_price_client=None):
+            nintendo_schedule_client=None, nintendo_price_client=None, nintendo_page_client=None):
+    """nintendo_page_client: an OfficialDescriptionClient for the matched products'
+    Hong Kong eShop pages (their languages); sharing its page cache with
+    official_description_client lets the descriptions reuse those pages."""
     client.verify_platforms()
     end = start + timedelta(days=365)
     # The year branch also retains month/quarter/year dates overlapping the window.
@@ -214,7 +221,7 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     # Taiwan store checks; this run's answers go into the documents built again below.
     today = datetime.fromisoformat(checked_at.replace("Z", "+00:00")).astimezone(ZoneInfo("Asia/Taipei")).date()
     raw_by_key = {"igdb:" + str(row["id"]): row for row in raw_games}
-    states, checked, due_games, switch, nintendo = {}, {}, [], None, None
+    states, checked, due_games, switch, nintendo, language_read = {}, {}, [], None, None, None
     if playstation_client is not None:
         # The Taiwan PlayStation Store, for the published PS5 games that are due.
         due = []
@@ -284,6 +291,25 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
                 for code, _ in official_store.nintendo_products(state):
                     state = official_store.merge_price(state, code, price_read, checked_at)
                 merged_states[key] = state
+        # Each matched product's Hong Kong eShop page, for its languages when due:
+        # products never read first, then upcoming games, the oldest read first.
+        if nintendo_page_client is not None:
+            shown = {row["id"]: row["releases"] for row in catalog["games"]}
+            due = []
+            for key, state in merged_states.items():
+                for code, product in official_store.nintendo_products(state):
+                    day = next((date.fromisoformat(r["date"]) for r in shown[key] if r["platform"] == code), None)
+                    if official_store.languages_due(state[code], day, today):
+                        last = (state[code].get("languages") or {}).get("checked_at") or ""
+                        due.append(((bool(last), day is not None and day < today, last, key, code), key, code, product))
+            outcomes = {}
+            for _, key, code, product in sorted(due, key=lambda item: item[0]):
+                for page in nintendo_official.description_candidates(games[key][0], [(code, product)]):
+                    found = nintendo_page_client.read_languages(page["url"], page["titles"], code)
+                    outcomes[found["status"]] = outcomes.get(found["status"], 0) + 1
+                    merged_states[key] = official_store.merge_languages(merged_states[key], code, found, checked_at)
+            language_read = {"due_count": len(due), "request_count": nintendo_page_client.request_count,
+                             "outcomes": outcomes}
         for key, (raw, row, _) in games.items():
             base = states.get(key, row.get(official_store.FIELD))
             if merged_states[key] is not None and merged_states[key] != base:
@@ -302,7 +328,8 @@ def collect(client, *, start: date, previous=None, checked_at=None, page_size=50
     if switch is not None:
         status["nintendo_taiwan"] = official_store.switch_summary(*switch, catalog["games"], checked_at)
     if nintendo is not None:
-        status["nintendo_official"] = official_store.nintendo_summary(*nintendo, catalog["games"], checked_at)
+        status["nintendo_official"] = official_store.nintendo_summary(*nintendo, catalog["games"], checked_at,
+                                                                      language_read=language_read)
     status["popscore_fetch"] = popscore_report
     if name_client is not None:
         status["name_enrichment"] = enrich_documents(master, catalog, name_client)
@@ -350,7 +377,10 @@ def main(argv=None):
         language_registry = load_language_registry(args.nintendo_languages, args.playstation_languages)
         client = IGDBClient(os.environ.get("TWITCH_CLIENT_ID", ""), os.environ.get("TWITCH_CLIENT_SECRET", ""))
         start = args.today or datetime.now(ZoneInfo("Asia/Taipei")).date()
-        official_descriptions = OfficialDescriptionClient()
+        # One page cache: a product page read for its languages is not requested again for its description.
+        pages = {}
+        official_descriptions = OfficialDescriptionClient(cache=pages)
+        product_pages = OfficialDescriptionClient(max_requests=PRODUCT_PAGE_REQUESTS, cache=pages)
         try:
             master, catalog, status = collect(client, start=start, previous=previous,
                                              name_registry=name_registry, name_client=SteamNameClient(),
@@ -359,9 +389,11 @@ def main(argv=None):
                                              official_description_client=official_descriptions,
                                              nintendo_taiwan_client=NintendoTaiwanClient(),
                                              nintendo_schedule_client=NintendoScheduleClient(),
-                                             nintendo_price_client=NintendoPriceClient())
+                                             nintendo_price_client=NintendoPriceClient(),
+                                             nintendo_page_client=product_pages)
         finally:
             official_descriptions.close()
+            product_pages.close()
         # All public/ledger gates passed; any retained lookup gap remains explicit.
         write_json_atomic(out / "nintendo_master.json", master)
         write_json_atomic(out / "nintendo_upcoming.json", catalog)

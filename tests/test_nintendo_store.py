@@ -193,12 +193,14 @@ class Pages:
 
 
 def collected(previous=None, checked_at=CHECKED, start=START, schedules=None, prices=None, pages=None):
-    pages = pages or Pages()
-    descriptions = OfficialDescriptionClient(pages)
+    pages, cache = pages or Pages(), {}
+    # As in a run: the product pages read for languages are reused for the descriptions.
+    descriptions = OfficialDescriptionClient(pages, cache=cache)
     return collect(api(), start=start, checked_at=checked_at, previous=previous,
                    nintendo_schedule_client=schedules or Schedules(),
                    nintendo_price_client=prices or Prices({METAPHOR: price(), OCARINA: price(44900, 44900)}),
-                   official_description_client=descriptions), pages
+                   official_description_client=descriptions,
+                   nintendo_page_client=OfficialDescriptionClient(pages, cache=cache)), pages
 
 
 def test_collect_reads_the_schedules_and_prices_once_and_the_gate_rebuilds_every_row():
@@ -214,11 +216,19 @@ def test_collect_reads_the_schedules_and_prices_once_and_the_gate_rebuilds_every
     assert zelda["short_description"].startswith("居住在科奇里森林的少年林克")
     assert zelda["display_name"] == "薩爾達傳說 時之笛" and zelda["name_source"] == "IGDB game_localizations"
     assert zelda["platform_prices"]["NS2"]["final_cents"] == 44900 and "original_cents" not in zelda["platform_prices"]["NS2"]
-    assert prices.calls == [sorted([METAPHOR, OCARINA])] and OCARINA_URL in pages.calls
+    assert prices.calls == [sorted([METAPHOR, OCARINA])]
+    # Zelda's eShop page, read once for its languages and its description: its JSON-LD proves Chinese.
+    assert pages.calls.count(OCARINA_URL) == 1 and pages.calls.count(METAPHOR_URL) == 1
+    languages = zelda["platform_language_support"]["NS2"]
+    assert (languages["status"], languages["source"], languages["source_url"], languages["evidence_type"]) == (
+        "partial", "任天堂 eShop 香港", OCARINA_URL, "official_chinese_unspecified")
+    assert languages["languages"]["chinese"] is True and languages["languages"]["tchinese"] is None
+    assert meta["platform_language_support"]["NS2"]["status"] == "unknown"  # Its page did not answer.
     summary = status["nintendo_official"]
     assert summary["pages"][TW_URL] == {"status": "ok", "entry_count": 7}
     assert summary["platforms"]["NS2"] == {"game_count": 2, "matched_count": 2, "taiwan_date_count": 2,
-                                           "eshop_link_count": 2, "price_count": 2}
+                                           "eshop_link_count": 2, "price_count": 2, "eshop_language_count": 1}
+    assert summary["languages"] == {"due_count": 2, "request_count": 2, "outcomes": {"ok": 1, "unavailable": 1}}
     assert summary["official_name_count"] == 1 and summary["price"]["product_count"] == 2
     validate_bundle(dict(zip(FILES, (master, public, status))), now=NOW)
 
@@ -231,6 +241,10 @@ def test_collect_reads_the_schedules_and_prices_once_and_the_gate_rebuilds_every
     lambda master, public: [row.update(display_name="假名稱", name_zh_tw="假名稱") for row in (master, public)],
     lambda master, public: master["official_store"]["NS2"].update(price_checked_at="2026-11-20T00:31:00Z"),
     lambda master, public: master.pop("official_store"),
+    lambda master, public: master["official_store"]["NS2"].update(languages={
+        "nsuid": METAPHOR, "checked_at": CHECKED, "supported_languages": ["zh-Hant"], "complete": True,
+        "evidence_type": "official_product_languages", "official_title": "暗喻幻想"}),
+    lambda master, public: public["platform_language_support"]["NS2"]["languages"].update(tchinese=True),
 ])
 def test_nintendo_rows_cannot_be_forged(forge):
     (master, public, status), _ = collected()
@@ -248,3 +262,7 @@ def test_the_next_day_without_any_page_keeps_everything_and_a_failed_price_read_
     meta = next(row for row in public["games"] if row["igdb_id"] == 1001)
     assert meta["releases"][0]["date"] == "2026-11-12" and meta["platform_prices"]["NS2"]["checked_at"] == CHECKED
     assert status["nintendo_official"]["pages"][TW_URL]["status"] == "unavailable"
+    # Zelda's languages stay until its page is due again; Metaphor's unanswered page is read again.
+    zelda = next(row for row in public["games"] if row["igdb_id"] == 1002)
+    assert zelda["platform_language_support"]["NS2"]["checked_at"] == CHECKED
+    assert status["nintendo_official"]["languages"] == {"due_count": 1, "request_count": 1, "outcomes": {"unavailable": 1}}
