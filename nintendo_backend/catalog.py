@@ -313,7 +313,7 @@ def normalize_game(game, start: date, end: date, checked_at: str, *, previous=No
         playstation_urls.append(store_evidence["source_url"])
     languages = platform_language_support(game, tracked, language_registry)
     official_store.apply_languages(languages, store_evidence, confirmed_at)
-    official_store.apply_switch_languages(languages, switch_evidence, switch_confirmed_at)
+    official_store.apply_switch_languages(languages, store, checked_at)
     # Nintendo's own listings matched an eShop product: its Hong Kong eShop page
     # is the shop, and its official title a Chinese name the game may lack.
     products = official_store.nintendo_products(store)

@@ -4,6 +4,11 @@ A page is requested only for a reviewed registry product or, for a PS5 game,
 the PlayStation Store item that IGDB itself links to the game; that item must
 then name the same English game. Descriptions establish neither the game's
 supported languages nor a release date or platform version.
+
+The Hong Kong eShop page of a product Nintendo's own listings matched also
+lists the product's languages (parse_languages); the refresh reads it for them
+on its own cadence (official_store.languages_due), and the description stage
+reuses the page when both clients share one page cache.
 """
 from __future__ import annotations
 
@@ -17,6 +22,7 @@ from urllib.parse import unquote, urlsplit, urlunsplit
 
 import requests
 
+from .languages import LANGUAGE_NAMES
 from .playstation import (PRODUCT_ID as _SONY_PRODUCT, concept_id as sony_concept_id,
                           official_url as playstation_url, product_id as sony_product_id)
 
@@ -577,10 +583,163 @@ def parse_description(html, url, game_name, titles=None, *, platform=None):
             "official_title": extracted[0][0]}
 
 
+# A Hong Kong eShop product page (nintendo_eshop.title_url).
+_HK_TITLE = re.compile(r"/HK/zh/titles/7001[0-9]{10}")
+_LANGUAGE_CODE = re.compile(r"[a-z]{2,3}(?:-[a-z0-9]{2,8})*")
+_KNOWN_CODES = {code.lower(): code for code in LANGUAGE_NAMES}
+LANGUAGE_LABEL = "對應語言"
+
+
+class _LanguageRow(HTMLParser):
+    """The product details' 「對應語言」 row: one item per list entry, without
+    the hidden ", " separators. rows counts the label; items stays None until
+    the first label's value was read."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.rows, self.items = 0, None
+        self._texts = []  # the own text of each open div
+        self._after = None  # the div depth whose next child div is the value
+        self._value = None  # the value div's depth while it is read
+        self._item, self._hidden = None, 0
+
+    def _end_item(self):
+        if self._item is not None:
+            self.items.append("".join(self._item).strip())
+            self._item = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "div":
+            if self._value is None and self.items is None and self._after == len(self._texts):
+                self._value, self.items, self._after = len(self._texts) + 1, [], None
+            self._texts.append([])
+        elif self._value is not None:
+            if tag == "li":
+                self._end_item()
+                self._item = []
+            elif tag == "span" and dict(attrs).get("aria-hidden") == "true":
+                self._hidden += 1
+
+    def handle_endtag(self, tag):
+        if tag == "div" and self._texts:
+            text = "".join(self._texts.pop()).strip()
+            if self._after is not None and len(self._texts) < self._after:
+                self._after = None  # The label's row ended without a value.
+            if self._value is not None and len(self._texts) + 1 == self._value:
+                self._end_item()
+                self._value = None
+            elif text == LANGUAGE_LABEL:
+                self.rows += 1
+                self._after = len(self._texts)
+        elif self._value is not None:
+            if tag == "li":
+                self._end_item()
+            elif tag == "span" and self._hidden:
+                self._hidden -= 1
+
+    def handle_data(self, data):
+        if self._texts:
+            self._texts[-1].append(data)
+        if self._item is not None and not self._hidden:
+            self._item.append(data)
+
+
+def _chinese_script(item):
+    """zh-Hant or zh-Hans for an entry like 「中文 (繁體字)」, "" for any other
+    language, None for a Chinese entry that names no single script."""
+    text = unicodedata.normalize("NFKC", item)
+    if "中文" not in text:
+        return ""
+    traditional, simplified = "繁" in text, "簡" in text or "简" in text
+    return None if traditional == simplified else "zh-Hant" if traditional else "zh-Hans"
+
+
+def parse_languages(html, url, titles, *, platform):
+    """The languages a Hong Kong eShop product page lists, or None.
+
+    The page's JSON-LD game must have one of the titles (the product's names
+    from Nintendo's listings) and no other platform. Its details' 「對應語言」
+    row names each Chinese script; the row must agree with the JSON-LD
+    inLanguage list (as many entries, as many Chinese ones), and then is the
+    product's complete list (a list without Chinese: no Chinese). Some pages
+    render that row only in the browser: then the JSON-LD's "zh" proves Chinese
+    but not which script, and its absence proves nothing. Anything unclear gives
+    None.
+    """
+    safe = _official_url(url)
+    if (not safe or urlsplit(safe).hostname != "ec.nintendo.com" or not _HK_TITLE.fullmatch(urlsplit(safe).path)
+            or platform not in {"NS", "NS2"} or not isinstance(html, str) or len(html.encode("utf-8")) > MAX_HTML_BYTES):
+        return None
+    aliases = {_normalize_title(title) for title in titles or []}
+    aliases.discard(None)
+    if not aliases:
+        return None
+    page, row = _Page(), _LanguageRow()
+    try:
+        page.feed(html)
+        row.feed(html)
+    except (ValueError, RecursionError):
+        return None
+    found = set()
+    for kind, script in page.scripts:
+        if kind != "application/ld+json":
+            continue
+        try:
+            document = json.loads(script)
+        except (ValueError, RecursionError):
+            continue
+        for item in _jsonld_rows(document):
+            types = item.get("@type")
+            types = types if isinstance(types, list) else [types]
+            if (not any(value in {"Product", "VideoGame"} for value in types if isinstance(value, str))
+                    or _normalize_title(item.get("name")) not in aliases):
+                continue
+            if not _platform_matches(item.get("gamePlatform"), platform):
+                return None
+            languages = item.get("inLanguage")
+            languages = [languages] if isinstance(languages, str) else languages
+            if (not isinstance(languages, list) or not 0 < len(languages) <= 40
+                    or any(not isinstance(code, str) or not _LANGUAGE_CODE.fullmatch(code.strip().lower()) for code in languages)):
+                return None
+            found.add((item["name"].strip(), tuple(code.strip().lower() for code in languages)))
+    if len(found) != 1:
+        return None
+    [(title, codes)] = found
+    chinese = sum(code == "zh" or code.startswith("zh-") for code in codes)
+    if row.rows == 0:
+        if not chinese:
+            return None
+        return {"supported_languages": ["zh"], "complete": False, "evidence_type": "official_chinese_unspecified",
+                "official_title": title}
+    if row.rows != 1 or not row.items or len(row.items) != len(codes):
+        return None
+    scripts = [_chinese_script(item) for item in row.items]
+    named = [script for script in scripts if script]
+    if None in scripts or "" in row.items or len(named) != chinese or len(set(named)) != len(named):
+        return None
+    order, listed, complete = iter(named), [], True
+    for code in codes:
+        if code == "zh" or code.startswith("zh-"):
+            listed.append(next(order))  # The row names the script, in its own order.
+        elif code in _KNOWN_CODES:
+            listed.append(_KNOWN_CODES[code])
+        else:
+            complete = False
+    listed = list(dict.fromkeys(listed))
+    if not complete and not named:
+        return None  # A partial list without Chinese says nothing about Chinese.
+    return {"supported_languages": listed, "complete": complete, "evidence_type": "official_product_languages",
+            "official_title": title}
+
+
 class OfficialDescriptionClient:
-    """Small optional stage: no redirects, retries, search, or credential use."""
+    """Small optional stage: no redirects, retries, search, or credential use.
+
+    cache: pages by URL, shared by clients of one run (a page that failed is
+    None), so a page read for its languages is not requested again for its
+    description. Each client keeps its own request budget and deadline.
+    """
     def __init__(self, session=None, *, max_requests=MAX_REQUESTS, deadline_seconds=DEADLINE_SECONDS,
-                 timeout=TIMEOUT_SECONDS, clock=time.monotonic):
+                 timeout=TIMEOUT_SECONDS, clock=time.monotonic, cache=None):
         self.session = session or requests.Session()
         self._owns_session = session is None
         if self._owns_session:
@@ -591,7 +750,11 @@ class OfficialDescriptionClient:
         self.clock, self.deadline = clock, None
         self.request_count, self.failure_count = 0, 0
         self.stopped, self.rate_limited = False, False
-        self._cache = {}
+        self._cache = {} if cache is None else cache
+
+    def attempted(self, urls):
+        """Whether this run requested any of these pages (also for another client sharing the cache)."""
+        return any(url in self._cache for url in urls)
 
     def _fetch(self, url):
         if url in self._cache:
@@ -652,6 +815,20 @@ class OfficialDescriptionClient:
             if self.stopped:
                 break
         return None
+
+    def read_languages(self, url, titles, platform):
+        """A Hong Kong eShop product page's languages: {"status": "ok",
+        "languages": parse_languages(…) or None}, or {"status": why not}:
+        "skipped" (the budget or the deadline came first), "rate_limited" or
+        "unavailable"."""
+        safe = _official_url(url)
+        if (not safe or safe != url or urlsplit(safe).hostname != "ec.nintendo.com"
+                or not _HK_TITLE.fullmatch(urlsplit(safe).path)):
+            return {"status": "unavailable"}
+        html = self._fetch(safe)
+        if html is None:
+            return {"status": "skipped" if safe not in self._cache else "rate_limited" if self.rate_limited else "unavailable"}
+        return {"status": "ok", "languages": parse_languages(html, safe, titles, platform=platform)}
 
     def close(self):
         if self._owns_session:

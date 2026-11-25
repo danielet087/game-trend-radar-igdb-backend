@@ -93,7 +93,7 @@ IGDB `hypes` 是遊戲記錄的發售前關注數，跨平台不能拆成單一�
 
 Nintendo 支援語言另由 `data/nintendo_languages.json` 保存已核對的官方版本資料。每筆同時綁定 IGDB ID、英文全名與 NS／NS2，並保存來源地區、官方網址、完整語言清單及實際核對時間；任天堂台灣商品資料優先。Steam 語言、IGDB 全遊戲語言、另一個平台版本不能填入 Nintendo 版本。若官方商品是本體加 DLC、Deluxe 等不同名稱版本，官方描述明確包含同一款本體，且原生平台與商品身分均已核對，就可登錄該商品的語言表，並保存官方商品名稱、商品 ID 及身分對應證據；獨立 DLC、其他作品與 Cloud 版仍需分別核對。香港或其他官區的資料保留來源地區，不據此宣稱台灣版本。官方只寫「Chinese／中文」時只確認中文，繁／簡仍為未知；只有完整官方清單才能將未列出的語言標為不支援。
 
-既有收集流程載入這份登錄檔（`--nintendo-languages`），公開 `platform_language_support.NS／NS2`，發布前從本倉庫的可信登錄檔重建比對，防止公開清單自行宣稱確認。缺少證據的版本保留 `unknown` 與 `null`，不當成不支援；核對時間不會隨 IGDB 每日收集改成今天。這份登錄檔是已人工調查的官方快照，既有排程重用已核對資料，尚未自動重新爬取官方語言清單。新版本與日後的官方變更需更新登錄檔；未解項目的調查紀錄在 `data/nintendo_language_investigations.json`，不作為語言支援證據。
+既有收集流程載入這份登錄檔（`--nintendo-languages`），公開 `platform_language_support.NS／NS2`，發布前從本倉庫的可信登錄檔重建比對，防止公開清單自行宣稱確認。缺少證據的版本保留 `unknown` 與 `null`，不當成不支援；核對時間不會隨 IGDB 每日收集改成今天。這份登錄檔是已人工調查的官方快照，既有排程重用已核對資料，不自動重新爬取；2026-11-26 起，對到的香港 eShop 商品頁另由每天的收集自動讀語言（見「NS、NS2 任天堂台灣與香港官網」），登錄檔的完整清單仍優先。新版本與日後的官方變更需更新登錄檔；未解項目的調查紀錄在 `data/nintendo_language_investigations.json`，不作為語言支援證據。
 
 已核對的綑綁／Deluxe 商品另公開 `platform_editions.NS／NS2`，讓前端明示「本體＋擴充版」、「Deluxe 版」或「本體＋DLC」。登錄檔需明示 `edition_type`、`edition_label`、官方商品名稱與商品 ID，並提供 `identity_relation: base_game_included`、本體包含證據及官方證據網址；語言與版本標示分開保存。公開版本資料包含商品名稱、地區、商品網址及原核對時間，同樣由發布 gate 重新驗證。缺少已核對版本資料時不產生版本標示，不推定為普通本體版；日後原生 NS／NS2 對應改變或官方更改內容需重新核對。
 
@@ -141,7 +141,8 @@ PS5（IGDB 平台 ID `167`）沿用每日 08:30 同一收集器、hypes ≥ 30�
   - 商店連結：香港 eShop 商品頁（`https://ec.nintendo.com/HK/zh/titles/<編號>`）是該平台的商店（`platform_urls.NS`／`NS2`）。台灣沒有自己的 eShop，任天堂台灣官網的建議售價也是標港幣。
   - 中文名稱：遊戲沒有自己的繁中名稱時（簡中轉繁的會被換掉），用官網名稱的中文部分，台灣頁優先、Switch 2 優先（`name_source: 任天堂台灣官網`／`任天堂香港官網`，`name_evidence.provider: nintendo_official`）。英文、日文、簡體的名稱不用。
   - 中文簡介：香港 eShop 商品頁加入官方簡介的候選（排在已核對商品與 PS5 商店之後），沿用既有的頁面核對、每輪 60 頁與回查週期。
-- `nintendo_refresh_status.json.nintendo_taiwan` 記錄軟體一覽的讀取結果；`nintendo_official` 記錄三頁的讀取結果、各平台遊戲數、對到、採用台灣日期、商店連結與價格的筆數、補上的中文名稱數，以及價格讀取。
+  - 支援語言（2026-11-26 起）：讀香港 eShop 商品頁（`official_descriptions.parse_languages`）。頁面 JSON-LD 的遊戲名稱要等於這個商品在官網上的名稱、平台不能是另一台。詳細資料的「對應語言」列分得出「中文 (繁體字)」「中文 (簡體字)」，要跟 JSON-LD 的 `inLanguage` 一致（項目一樣多、中文一樣多），一致時就是這個商品的完整語言清單（沒有中文＝不支援中文）。有些頁面的伺服器 HTML 沒有這一列，只有 JSON-LD：有 `zh` 只記「有中文、字體待確認」，沒有 `zh` 不下結論。任何對不上的都不採用。結果存在 `official_store.<平台>.languages`（綁商品編號；換商品就重讀），公開為 `platform_language_support.<平台>`（`region: hong_kong`、`source: 任天堂 eShop 香港`、商品頁網址、讀取時間），讀取超過 30 天就不顯示。上市前每 3 天讀一次、上市後每 7 天，沒讀過的先讀，每輪最多 50 頁；讀不到時保留上次的結果。已核對的完整語言清單優先；已核對的部分清單只讓給完整的頁面清單。NS 有任天堂台灣「對應中文」標示、頁面清單卻沒有中文時，保留「有中文」；兩邊都只說「有中文」時用台灣的。簡介階段與這一步共用同一份頁面快取，同一頁不會讀兩次。
+- `nintendo_refresh_status.json.nintendo_taiwan` 記錄軟體一覽的讀取結果；`nintendo_official` 記錄三頁的讀取結果、各平台遊戲數、對到、採用台灣日期、商店連結、價格與香港 eShop 語言的筆數、補上的中文名稱數、價格讀取，以及商品頁語言讀取（`languages`：到期筆數、請求數、各結果數）。
 
 ## 主機價格
 
