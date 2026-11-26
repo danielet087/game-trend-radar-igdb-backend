@@ -661,9 +661,10 @@ def parse_languages(html, url, titles, *, platform):
     row names each Chinese script; the row must agree with the JSON-LD
     inLanguage list (as many entries, as many Chinese ones), and then is the
     product's complete list (a list without Chinese: no Chinese). Some pages
-    render that row only in the browser: then the JSON-LD's "zh" proves Chinese
-    but not which script, and its absence proves nothing. Anything unclear gives
-    None.
+    render that row only in the browser: then the JSON-LD's "zh" proves Chinese,
+    and two of them both scripts (Nintendo's only Chinese entries are 中文
+    (簡體字) and 中文 (繁體字), one "zh" each), but its other languages make a
+    partial list and their absence proves nothing. Anything unclear gives None.
     """
     safe = _official_url(url)
     if (not safe or urlsplit(safe).hostname != "ec.nintendo.com" or not _HK_TITLE.fullmatch(urlsplit(safe).path)
@@ -708,8 +709,13 @@ def parse_languages(html, url, titles, *, platform):
     if row.rows == 0:
         if not chinese:
             return None
-        return {"supported_languages": ["zh"], "complete": False, "evidence_type": "official_chinese_unspecified",
-                "official_title": title}
+        if chinese != 2 or codes.count("zh") != 2:
+            return {"supported_languages": ["zh"], "complete": False, "evidence_type": "official_chinese_unspecified",
+                    "official_title": title}
+        scripts = iter(("zh-Hans", "zh-Hant"))  # The row's own order.
+        listed = [next(scripts) if code == "zh" else _KNOWN_CODES[code] for code in codes if code == "zh" or code in _KNOWN_CODES]
+        return {"supported_languages": list(dict.fromkeys(listed)), "complete": False,
+                "evidence_type": "official_product_languages", "official_title": title}
     if row.rows != 1 or not row.items or len(row.items) != len(codes):
         return None
     scripts = [_chinese_script(item) for item in row.items]

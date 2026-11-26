@@ -54,6 +54,9 @@ NINTENDO_OUTCOMES = {"confirmed", "unconfirmed", "unavailable", "rate_limited"}
 # days until the platform's release day, weekly after it; the list is shown
 # while its last read is this recent.
 LANGUAGE_UPCOMING_DAYS, LANGUAGE_RELEASED_DAYS = 3, 7
+# Reads before this day kept a JSON-LD's two "zh" as Chinese without a script;
+# each such read is due once more (parse_languages now names both scripts).
+TWO_SCRIPTS_SINCE = date(2026, 11, 27)
 LANGUAGE_MAX_AGE = timedelta(days=30)
 LANGUAGE_FIELDS = ("nsuid", "checked_at", "supported_languages", "complete", "evidence_type", "official_title")
 _CHINESE = {"zh", "zh-Hant", "zh-Hans"}
@@ -333,8 +336,9 @@ def apply_switch_languages(languages, state, checked_at):
     """NS/NS2 languages from Nintendo's own pages, after the reviewed lists.
 
     The matched product's Hong Kong eShop page lists its languages (current_languages):
-    complete, with each Chinese script, from its 「對應語言」 row; only "Chinese"
-    from its JSON-LD alone. Nintendo Taiwan's 對應中文 mark proves Chinese for a
+    complete, with each Chinese script, from its 「對應語言」 row; from its JSON-LD
+    alone a partial list, with both scripts for two "zh" and otherwise only
+    "Chinese". Nintendo Taiwan's 對應中文 mark proves Chinese for a
     Switch game, not which script. A reviewed complete list stays; a reviewed
     partial one gives way only to a complete page list. Where the mark says
     Chinese and the page lists none, only the mark's Chinese stands; where both
@@ -368,15 +372,18 @@ def apply_switch_languages(languages, state, checked_at):
 
 def languages_due(entry, release_day, today):
     """Whether a platform's matched product page is due for its languages:
-    at once for a product not read yet, every LANGUAGE_UPCOMING_DAYS until the
-    platform's release day (or while it has none), every LANGUAGE_RELEASED_DAYS
-    from it. entry: the platform's state; release_day: the day the calendar shows."""
+    at once for a product not read yet (or a Chinese-only read from before
+    TWO_SCRIPTS_SINCE), every LANGUAGE_UPCOMING_DAYS until the platform's
+    release day (or while it has none), every LANGUAGE_RELEASED_DAYS from it.
+    entry: the platform's state; release_day: the day the calendar shows."""
     product = (entry or {}).get("product")
     if not product:
         return False
     read = entry.get("languages") or {}
     last = _day(read.get("checked_at"))
     if read.get("nsuid") != product["nsuid"] or last is None or last > today:
+        return True
+    if read.get("evidence_type") == "official_chinese_unspecified" and last < TWO_SCRIPTS_SINCE:
         return True
     released = release_day is not None and release_day <= today
     return (today - last).days >= (LANGUAGE_RELEASED_DAYS if released else LANGUAGE_UPCOMING_DAYS)
