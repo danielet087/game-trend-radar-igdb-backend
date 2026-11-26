@@ -31,15 +31,35 @@ def test_the_language_row_names_each_chinese_script_and_a_row_without_chinese_me
         "evidence_type": "official_product_languages", "official_title": "Re-Volt"}
 
 
-def test_without_the_row_the_json_ld_proves_chinese_but_not_its_script():
-    unspecified = {"supported_languages": ["zh"], "complete": False, "evidence_type": "official_chinese_unspecified"}
+CRYMELIGHT_LANGUAGES = '"inLanguage":["ja","en","ko","zh","zh"]'
+
+
+def crymelight(codes):
+    page = edit("crymelight", CRYMELIGHT_LANGUAGES, f'"inLanguage":{json.dumps(codes)}')
+    return parse_languages(page, URL(CRYMELIGHT), ["慟哭幽光／CRYMELIGHT"], platform="NS2")
+
+
+def test_without_the_row_the_json_ld_s_two_zh_are_both_scripts_in_a_partial_list():
+    """Nintendo's Chinese entries are 中文 (簡體字) and 中文 (繁體字), one "zh" each where the row is served."""
+    partial = {"complete": False, "evidence_type": "official_product_languages"}
     assert languages("crymelight", CRYMELIGHT, ["Crymelight", "慟哭幽光／CRYMELIGHT"], "NS2") == {
-        **unspecified, "official_title": "慟哭幽光／CRYMELIGHT"}
+        **partial, "supported_languages": ["ja", "en", "ko", "zh-Hans", "zh-Hant"], "official_title": "慟哭幽光／CRYMELIGHT"}
     assert languages("ocarina", "70010000130795", ["薩爾達傳說 時之笛"], "NS2") == {
-        **unspecified, "official_title": "薩爾達傳說 時之笛"}
-    # Without "zh" the JSON-LD alone says nothing.
-    page = PAGES["crymelight"].replace('"inLanguage":["ja","en","ko","zh","zh"]', '"inLanguage":["ja","en","ko"]')
-    assert parse_languages(page, URL(CRYMELIGHT), ["慟哭幽光／CRYMELIGHT"], platform="NS2") is None
+        **partial, "official_title": "薩爾達傳說 時之笛",
+        "supported_languages": ["ja", "en", "es", "fr", "pt", "de", "it", "nl", "ru", "ko", "zh-Hans", "zh-Hant", "pl"]}
+    # A language without a known code is left out; the list is partial anyway.
+    assert crymelight(["ja", "xx", "zh", "zh"]) == {
+        **partial, "supported_languages": ["ja", "zh-Hans", "zh-Hant"], "official_title": "慟哭幽光／CRYMELIGHT"}
+
+
+@pytest.mark.parametrize("codes", [["ja", "en", "ko", "zh"], ["zh", "zh", "zh"], ["en", "zh", "zh-hant"]])
+def test_without_the_row_other_chinese_entries_prove_chinese_but_not_its_script(codes):
+    assert crymelight(codes) == {"supported_languages": ["zh"], "complete": False,
+                                 "evidence_type": "official_chinese_unspecified", "official_title": "慟哭幽光／CRYMELIGHT"}
+
+
+def test_without_the_row_or_zh_the_json_ld_says_nothing():
+    assert crymelight(["ja", "en", "ko"]) is None
 
 
 def edit(name, old, new):
@@ -188,6 +208,11 @@ def test_the_page_list_is_the_version_s_languages_with_its_hong_kong_source():
     switch2 = support(state(read(**UNSPECIFIED), platform="NS2"), platform=508)
     assert (switch2["status"], switch2["languages"]["chinese"], switch2["languages"]["tchinese"]) == ("partial", True, None)
     assert switch2["evidence_type"] == "official_chinese_unspecified" and switch2["source_url"] == URL(SAKURA)
+    # JSON-LD's two "zh": both scripts, a partial list (what it does not list stays unknown).
+    scripts = support(state(read(("ja", "zh-Hans", "zh-Hant"), complete=False)))
+    assert (scripts["status"], scripts["complete"], scripts["evidence_type"]) == ("partial", False, "official_product_languages")
+    assert scripts["languages"] == {"tchinese": True, "schinese": True, "english": None, "chinese": True}
+    assert scripts["source"] == "任天堂 eShop 香港" and scripts["source_url"] == URL(SAKURA)
 
 
 def test_taiwan_s_chinese_mark_and_the_page_list_together():
@@ -197,8 +222,10 @@ def test_taiwan_s_chinese_mark_and_the_page_list_together():
     # The mark alone, as before; with only "Chinese" on the page Taiwan's comes first.
     assert summary(support(state(marked=True))) == {**taiwan, "chinese": True}
     assert summary(support(state(read(**UNSPECIFIED), marked=True))) == {**taiwan, "chinese": True}
-    # The page's complete list names the scripts.
+    # The page's complete list names the scripts; so does a partial one with both.
     assert support(state(read(), marked=True))["region"] == "hong_kong"
+    both = support(state(read(("ja", "zh-Hans", "zh-Hant"), complete=False), marked=True))
+    assert (both["region"], both["languages"]["tchinese"], both["languages"]["schinese"]) == ("hong_kong", True, True)
     # A page list without Chinese does not undo Taiwan's mark.
     assert summary(support(state(read(("ja", "en")), marked=True))) == {**taiwan, "chinese": True}
 
@@ -233,6 +260,11 @@ def test_reads_are_due_when_new_every_three_days_before_release_and_weekly_after
     released = {**entry, "languages": read(checked="2026-12-03T00:30:00Z")}
     assert not S.languages_due(released, release, date(2026, 12, 9)) and S.languages_due(released, release, date(2026, 12, 10))
     assert S.languages_due(entry, release, date(2026, 11, 25))  # A read "from the future" is read again.
+    # A Chinese-only read from before TWO_SCRIPTS_SINCE is read once more; one from it on keeps the cadence.
+    chinese = {**entry, "languages": read(**UNSPECIFIED)}
+    assert S.languages_due(chinese, release, date(2026, 11, 27)) and not S.languages_due(entry, release, date(2026, 11, 27))
+    again = {**entry, "languages": read(**UNSPECIFIED, checked="2026-11-27T00:30:00Z")}
+    assert not S.languages_due(again, release, date(2026, 11, 28)) and S.languages_due(again, release, date(2026, 11, 30))
 
 
 def test_a_read_replaces_the_list_only_when_the_page_answered_and_stays_with_its_product():

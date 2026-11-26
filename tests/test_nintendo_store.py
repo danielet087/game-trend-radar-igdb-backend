@@ -217,12 +217,14 @@ def test_collect_reads_the_schedules_and_prices_once_and_the_gate_rebuilds_every
     assert zelda["display_name"] == "薩爾達傳說 時之笛" and zelda["name_source"] == "IGDB game_localizations"
     assert zelda["platform_prices"]["NS2"]["final_cents"] == 44900 and "original_cents" not in zelda["platform_prices"]["NS2"]
     assert prices.calls == [sorted([METAPHOR, OCARINA])]
-    # Zelda's eShop page, read once for its languages and its description: its JSON-LD proves Chinese.
+    # Zelda's eShop page, read once for its languages and its description: its JSON-LD's two "zh"
+    # prove both scripts, in a partial list.
     assert pages.calls.count(OCARINA_URL) == 1 and pages.calls.count(METAPHOR_URL) == 1
     languages = zelda["platform_language_support"]["NS2"]
     assert (languages["status"], languages["source"], languages["source_url"], languages["evidence_type"]) == (
-        "partial", "任天堂 eShop 香港", OCARINA_URL, "official_chinese_unspecified")
-    assert languages["languages"]["chinese"] is True and languages["languages"]["tchinese"] is None
+        "partial", "任天堂 eShop 香港", OCARINA_URL, "official_product_languages")
+    assert languages["languages"] == {"tchinese": True, "schinese": True, "english": True, "chinese": True}
+    assert languages["complete"] is False and len(languages["supported_languages"]) == 13
     assert meta["platform_language_support"]["NS2"]["status"] == "unknown"  # Its page did not answer.
     summary = status["nintendo_official"]
     assert summary["pages"][TW_URL] == {"status": "ok", "entry_count": 7}
